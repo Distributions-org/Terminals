@@ -21,14 +21,20 @@
                             <table class="table table-condensed table-striped">
                                 <thead>
                                     <tr>
-                                        <th>User Name</th>
-                                        <th>Role</th>
+                                        <th>שם</th>
+                                        <th>שם משתמש</th>
+                                        <th>הרשאה</th>
+                                        <th>עריכה</th>
+                                        <th>מחיקה</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr data-ng-repeat="u in vm.users">
                                         <td>{{u.UserName}}</td>
+                                        <td>{{u.Email}}</td>
                                         <td>{{u.Role}}</td>
+                                        <td><button ng-click="vm.editUser(u.UserId)"  class="btn btn-xs btn-primary">ערוך</button></td>
+                                        <td><button ng-click="deletUser(u.UserId)" class="btn btn-xs btn-warning">מחק</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -45,7 +51,8 @@
                         <div class="widget-content text-center text-info">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div ng-click="form = !form" class="btn btn-info pull-right">הוסף חשבון</div>
+                                    <div ng-click="form = !form" id="addAcount" class="btn btn-info pull-right">הוסף חשבון</div>
+                                    <div ng-click="vm.cancelUpdate()" id="cancelUpdate" class="btn btn-warning pull-right hidden">בטל עדכון</div>
                                 </div>
                             </div>
                             <div ng-show="form" class="row ng-hide">
@@ -146,6 +153,8 @@
                                                                 <th>כמות</th>
                                                                 <th>מחיר א - ה</th>
                                                                 <th>מחיר ה - א</th>
+                                                                <th>עריכה</th>
+                                                                <th>מחיקה</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -154,6 +163,8 @@
                                                                 <td>{{product.Quantity}}</td>
                                                                 <td>{{product.Price}}</td>
                                                                 <td>{{product.WeekendPrice}}</td>
+                                                                <td><button ng-click="editUser" data-userid="{{u.UserId}}" class="btn btn-xs btn-primary">ערוך</button></td>
+                                                                <td><button ng-click="deletUser" data-userid="{{u.UserId}}" class="btn btn-xs btn-warning">מחק</button></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -162,7 +173,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="widget wlightblue">
-                                                <div data-cc-widget-header title="הוספת וערית מוצר"
+                                                <div data-cc-widget-header title="הוספת ועריכת מוצר"
                                                      allow-collapse="true"></div>
                                                 <div class="widget-content text-center text-info">
                                                     

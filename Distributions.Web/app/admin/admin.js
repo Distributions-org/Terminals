@@ -18,7 +18,8 @@
         vm.submitForm = addusersform;
         vm.products = {};
         vm.searchText = "";
-
+        vm.editUser = editUser;
+        vm.cancelUpdate = cancelUpdate;
         activate();
 
         function activate() {
@@ -80,6 +81,35 @@
         function getProducts() {
             vm.products = adminService.getAllProducts();
         };
+
+        function editUser(userId) {
+            var user = _.findWhere(vm.users, { UserId: userId });
+            if (user != null) {
+                vm.user.email = user.Email;
+                vm.user.fname = user.FName;
+                vm.user.lname = user.LName;
+                angular.element('.row.ng-hide').removeClass("ng-hide");
+                angular.element('form button').text("עדכן");
+                angular.element('form button').attr('data-action', 'update');
+                angular.element('form').find('#userId').remove();
+                angular.element('form').append("<input type=\"hidden\" id=\"userId\" value=\"" + user.UserId + "\"/>");
+                angular.element('#cancelUpdate').removeClass('hidden');
+                angular.element('#addAcount').addClass('disabled'); 
+            }
+        }
+
+        function cancelUpdate() {
+            vm.user.email = '';
+            vm.user.password = '';
+            vm.user.passwordConfirm = '';
+            vm.user.fname = '';
+            vm.user.lname = '';
+            angular.element('form button').text("הוסף");
+            angular.element('form').find('#userId').remove();
+            angular.element('form button').removeAttr('data-action');
+            angular.element('#cancelUpdate').addClass('hidden');
+            angular.element('#addAcount').removeClass('disabled');
+        }
     }
 
 

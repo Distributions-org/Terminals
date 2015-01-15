@@ -49,7 +49,10 @@ namespace Distributions.Web.Controllers
                 {
                     UserId = user.UserID.ToString(),
                     UserName = user.FirstName +" "+ user.LastName,
-                    Role = user.RoleID.ToString()
+                    LName = user.LastName,
+                    FName = user.FirstName,
+                    Role = user.RoleID.ToString(),
+                    Email = user.Email
                 });
             }
 
