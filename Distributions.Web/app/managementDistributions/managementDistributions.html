@@ -1,0 +1,42 @@
+﻿<section class="mainbar" data-ng-controller="managementDistributions as vm">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget wviolet">
+                    <div data-cc-widget-header title="{{vm.title}}"></div>
+                    <div class="widget-content user">
+                        <h3>ניהול הפצות</h3>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <span>בחר מפיץ:</span>
+                    <select class="form-control" ng-model="vm.distributorSelected" ng-options="distributor.UserName for distributor in vm.distributors"
+                            ng-change="vm.distributorSelectedSelectedChange(vm.distributorSelected)">
+                        <option value="">מפיץ</option>
+                    </select>
+                    <button ng-show="vm.update" class="btn btn-primary">עדכן</button>
+                </div>
+                <div class="col-sm-3">
+                    <p class="input-group date-picker">
+                        <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
+                               datepicker-options="vm.dateOptions"  show-weeks="false" show-button-bar="false" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="vm.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="grid" dir="rtl" ui-grid-edit ui-grid-exporter ui-grid="vm.gridOptions"></div>
+                    </div>
+
+                </div>
+            </div>
+    </section>
+</section>

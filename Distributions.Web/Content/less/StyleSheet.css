@@ -1,0 +1,7 @@
+﻿table td {
+  text-align: left;
+}
+.nav li small {
+  font-size: 13px !important;
+  color: #fff !important;
+}

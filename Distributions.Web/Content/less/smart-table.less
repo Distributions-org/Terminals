@@ -1,0 +1,86 @@
+/* SMART TABLES OVERRIDES
+**************************************************/
+
+
+
+table.smart-table {
+    border: none;
+
+    thead tr th {
+        border-bottom-width: 1px;
+    }
+    /*&.table-bordered { border-top: none; border-bottom: none;
+        tfoot > tr > td { border: none; }
+    }*/
+    thead tr td {
+        border: none;
+        padding: 8px 0px;
+    }
+
+    tfoot tr td {
+        border: none;
+    }
+}
+
+tr.smart-table-global-search-row {
+    div {
+        padding: 0px;
+    }
+
+    select, input, label {
+        display: inline-block !important;
+        width: 49%;
+    }
+
+    label {
+        font-weight: normal;
+    }
+}
+
+tr.smart-table-header-row {
+    th.sortable {
+        background-image: url('../images/sort-both.png');
+        background-repeat: no-repeat;
+        background-position: right center;
+
+        &.sort-ascent {
+            background-image: url('../images/sort-asc.png');
+        }
+
+        &.sort-descent {
+            background-image: url('../images/sort-desc.png');
+        }
+    }
+}
+
+tr.smart-table-footer-row {
+    td {
+        padding: 8px 0px !important;
+
+        div {
+            padding: 0px;
+        }
+
+        div.pagination {
+            margin: 0px;
+            text-align: right;
+            display: block;
+
+            ul {
+                .pagination {
+                    .pagination-sm {
+                        margin: 0px;
+                    }
+
+                    li {
+                        cursor: pointer;
+
+                        &.active {
+                            cursor: default;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
