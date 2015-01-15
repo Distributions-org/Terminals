@@ -10,7 +10,7 @@
         var logError = common.logger.getLogFn(controllerId, 'error');
         var vm = this;
         vm.isAdmin=false;
-        vm.title = 'Admin';
+        vm.title = 'תפריט ניהול - למנהל האתר';
         vm.users = {};
         vm.roles = {};
         vm.selectedRole = {};
@@ -20,6 +20,7 @@
         vm.searchText = "";
         vm.editUser = editUser;
         vm.cancelUpdate = cancelUpdate;
+        vm.deletUser = deleteUser;
         activate();
 
         function activate() {
@@ -54,7 +55,9 @@
 
         function addusersform(isValid) {
             if (isValid) {
+                var userIdToUpdate = "";
                 var params = {
+                    UserId: 0,
                     Email: vm.user.email,
                     Password: vm.user.password,
                     ConfirmPassword: vm.user.passwordConfirm,
@@ -62,14 +65,21 @@
                     FirstName: vm.user.fname,
                     LastName: vm.user.lname,
                 }
+                if (angular.element('form #updatedUserId') && angular.element('form[name=userForm] button').data('action')=="update") {
+                    userIdToUpdate = angular.element('form #updatedUserId').val();
+                    params.UserId = parseInt(userIdToUpdate);
+                    return adminService.updateUser(params).then(function (data) {
+                        logSuccess('העדכון בוצע בהצלחה!');
+                        getAllUsers();
+                        cancelUpdate();
+                    }, function (data) {
+                        logError(data.status + " " + data.statusText);
+                    });
+                }
                 return adminService.addUser(params).then(function (data) {
                     logSuccess('המשתמש נקלט בהצלחה!');
                     getAllUsers();
-                    vm.user.email = '';
-                    vm.user.password = '';
-                    vm.user.passwordConfirm = '';
-                    vm.user.fname = '';
-                    vm.user.lname = '';
+                    resetUserForm();
                 }, function (data) {
                     logError(data.status + " " + data.statusText);
                 });
@@ -78,9 +88,10 @@
             }
         }
 
-        function getProducts() {
-            vm.products = adminService.getAllProducts();
-        };
+        //function deleteUser(userId) {
+        //    var user = _.findWhere(vm.users, { UserId: userId });
+        //    return adminService.deleteUser(user)
+        //}
 
         function editUser(userId) {
             var user = _.findWhere(vm.users, { UserId: userId });
@@ -91,25 +102,35 @@
                 angular.element('.row.ng-hide').removeClass("ng-hide");
                 angular.element('form button').text("עדכן");
                 angular.element('form button').attr('data-action', 'update');
-                angular.element('form').find('#userId').remove();
-                angular.element('form').append("<input type=\"hidden\" id=\"userId\" value=\"" + user.UserId + "\"/>");
+                angular.element('form').find('#updatedUserId').remove();
+                angular.element('form[name=userForm]').append("<input type=\"hidden\" id=\"updatedUserId\" value=\"" + user.UserId + "\"/>");
                 angular.element('#cancelUpdate').removeClass('hidden');
-                angular.element('#addAcount').addClass('disabled'); 
+                angular.element('#addAcount').addClass('disabled');
             }
         }
 
         function cancelUpdate() {
+            resetUserForm();
+            angular.element('form button').text("הוסף");
+            angular.element('form').find('#updatedUserId').remove();
+            angular.element('form button').removeAttr('data-action');
+            angular.element('#cancelUpdate').addClass('hidden');
+            angular.element('#addAcount').removeClass('disabled');
+        }
+
+        function resetUserForm() {
             vm.user.email = '';
             vm.user.password = '';
             vm.user.passwordConfirm = '';
             vm.user.fname = '';
             vm.user.lname = '';
-            angular.element('form button').text("הוסף");
-            angular.element('form').find('#userId').remove();
-            angular.element('form button').removeAttr('data-action');
-            angular.element('#cancelUpdate').addClass('hidden');
-            angular.element('#addAcount').removeClass('disabled');
         }
+
+        function getProducts() {
+            vm.products = adminService.getAllProducts();
+        };
+
+        
     }
 
 

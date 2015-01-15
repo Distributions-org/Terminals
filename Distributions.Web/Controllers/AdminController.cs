@@ -140,9 +140,29 @@ namespace Distributions.Web.Controllers
             }
             else
                 return Request.CreateResponse(HttpStatusCode.NotAcceptable, errors);
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.NotAcceptable, "Error");
         }
 
-
+        [Route("UpdateUser")]
+        [AuthorizeUser(Roles = "Admin")]
+        public HttpResponseMessage UpdateUser(RegisterViewModel model)
+        {
+             if (ModelState.IsValid)
+             { 
+           var result = _userService.UpdateUser(new User
+                        {
+                            UserID = model.UserId,
+                            Email = model.Email,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            Password = model.Password,
+                            RoleID = (UserRoles.userRoles)model.Role
+                        });
+           if (result.ToString() == "Success")
+               return Request.CreateResponse(HttpStatusCode.OK);
+             return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
+             }
+             return Request.CreateResponse(HttpStatusCode.NotAcceptable, "Error");
+        }
     }
 }

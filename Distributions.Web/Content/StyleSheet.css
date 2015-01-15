@@ -96,6 +96,17 @@
     width: 1170px;
   }
 }
+.validation-summary-errors > div {
+  float: right;
+  color: maroon;
+  padding-left: 10px;
+}
+.validation-summary-errors > div :after {
+  content: " , ";
+}
+.validation-summary-errors > div:last-child :after {
+  content: "";
+}
 /*.ui-grid-column-menu-button
 {
     left:0;

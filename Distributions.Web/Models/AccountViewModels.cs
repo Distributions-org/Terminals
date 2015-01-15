@@ -83,7 +83,8 @@ namespace Distributions.Web.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        public int Role { get; set; }    
+        public int Role { get; set; }  
+        public int UserId { get; set; }
     }
 
     public class ResetPasswordViewModel

@@ -12,6 +12,7 @@
             getRoles: getRoles,
             addUser: addUser,
             getAllProducts: getAllProducts,
+            updateUser: updateUser
         };
 
         return service;
@@ -33,6 +34,15 @@
                 return data.d;
             })
             .error(function(data, status, headers, config) {
+                return status;
+            });
+        }
+
+        function updateUser(params) {
+            return $http.post("/UpdateUser", params).success(function (data) {
+                return data.d;
+            })
+            .error(function (data, status, headers, config) {
                 return status;
             });
         }

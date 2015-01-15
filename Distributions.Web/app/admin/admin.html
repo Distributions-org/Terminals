@@ -5,7 +5,7 @@
                 <div class="widget wviolet">
                     <div data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content user">
-                        <h3>TODO: Implement Your Features</h3>
+                        <h3>ניהול משתמשים, ניהול מוצרים, ניהול לקוחות</h3>
                     </div>
                     <div class="widget-foot">
                         <div class="clearfix"></div>
@@ -34,7 +34,7 @@
                                         <td>{{u.Email}}</td>
                                         <td>{{u.Role}}</td>
                                         <td><button ng-click="vm.editUser(u.UserId)"  class="btn btn-xs btn-primary">ערוך</button></td>
-                                        <td><button ng-click="deletUser(u.UserId)" class="btn btn-xs btn-warning">מחק</button></td>
+                                        <td><button ng-click="vm.deletUser(u.UserId)" class="btn btn-xs btn-warning">מחק</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -80,25 +80,25 @@
 
                                             </div>
                                             <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div ng-messages="userForm.Email.$error" style="color:maroon" ng-messages-multiple>
+                                                <div class="col-sm-12 validation-summary-errors">
+                                                    <div ng-messages="userForm.Email.$error"   ng-messages-multiple>
                                                         <div ng-message="required">שדה מייל חובה</div>
                                                         <div ng-message="email">מייל לא תקין</div>
                                                     </div>
-                                                    <div ng-messages="userForm.Password.$error" style="color:maroon" ng-messages-multiple>
+                                                    <div ng-messages="userForm.Password.$error"  ng-messages-multiple>
                                                         <div ng-message="required">שדה סיסמה חובה</div>
                                                     </div>
-                                                    <div ng-messages="userForm.PasswordConfirm.$error" style="color:maroon" ng-messages-multiple>
+                                                    <div ng-messages="userForm.PasswordConfirm.$error"  ng-messages-multiple>
                                                         <div ng-message="required">שדה סיסמה חובה</div>
                                                         <div ng-message="compareTo">אימות סיסמה לא תקין</div>
                                                     </div>
-                                                    <div ng-messages="userForm.Rolse.$error" style="color:maroon" ng-messages-multiple>
+                                                    <div ng-messages="userForm.Rolse.$error" ng-messages-multiple>
                                                         <div ng-message="required">בחר הרשאה</div>
                                                     </div>
-                                                    <div ng-messages="userForm.FName.$error" style="color:maroon" ng-messages-multiple>
+                                                    <div ng-messages="userForm.FName.$error" " ng-messages-multiple>
                                                         <div ng-message="required">שם חובה</div>
                                                     </div>
-                                                    <div ng-messages="userForm.LName.$error" style="color:maroon" ng-messages-multiple>
+                                                    <div ng-messages="userForm.LName.$error"  ng-messages-multiple>
                                                         <div ng-message="required">משפחה חובה</div>
                                                     </div>
                                                 </div>
