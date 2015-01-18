@@ -107,6 +107,15 @@
 .validation-summary-errors > div:last-child :after {
   content: "";
 }
+form[name=productsForm] .input-group {
+  margin-left: 10px;
+}
+form[name=productsForm] .input-group input[type="checkbox"] {
+  margin: 10px 0 0 5px !important;
+}
+form[name=productsForm] .input-group button {
+  margin: 4px 0;
+}
 /*.ui-grid-column-menu-button
 {
     left:0;

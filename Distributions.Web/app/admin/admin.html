@@ -176,7 +176,24 @@
                                                 <div data-cc-widget-header title="הוספת ועריכת מוצר"
                                                      allow-collapse="true"></div>
                                                 <div class="widget-content text-center text-info">
-                                                    
+                                                    <form name="productsForm" ng-submit="vm.submitProductsForm(productsForm.$valid)" class="form-inline text-right" novalidate>
+                                                        <div class="form-group" ng-class="{ 'has-error' : productsForm.produntName.$invalid}">
+                                                            <div class="input-group pull-right">
+                                                                <input type="text" ng-model="vm.product.productName" name="produntName" id="productName"
+                                                                       class="form-control input-validation-error" required placeholder="שם המוצר" />
+                                                            </div>
+                                                            <div class="input-group pull-right">
+                                                                <input type="checkbox" ng-model="vm.product.status" id="productStatus" name="productStatus" />
+                                                                <label for="productStatus">סטטוס לא פעיל</label>
+                                                            </div>
+                                                            <div class="input-group pull-left">
+                                                                <button ng-disabled="productsForm.$invalid" type="submit" class="btn btn-primary">
+                                                                    הוסף
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                   
                                                 </div>
                                             </div>
                                         </div>

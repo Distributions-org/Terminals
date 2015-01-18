@@ -15,12 +15,14 @@
         vm.roles = {};
         vm.selectedRole = {};
         vm.user = {};
+        vm.product = {};
         vm.submitForm = addusersform;
         vm.products = {};
         vm.searchText = "";
         vm.editUser = editUser;
         vm.cancelUpdate = cancelUpdate;
-        vm.deletUser = deleteUser;
+        vm.submitProductsForm = addProduct;
+        //vm.deletUser = deleteUser;
         activate();
 
         function activate() {
@@ -65,8 +67,8 @@
                     FirstName: vm.user.fname,
                     LastName: vm.user.lname,
                 }
-                if (angular.element('form #updatedUserId') && angular.element('form[name=userForm] button').data('action')=="update") {
-                    userIdToUpdate = angular.element('form #updatedUserId').val();
+                if (angular.element('form[name=userForm] #updatedUserId') && angular.element('form[name=userForm] button').data('action') == "update") {
+                    userIdToUpdate = angular.element('form[name=userForm] #updatedUserId').val();
                     params.UserId = parseInt(userIdToUpdate);
                     return adminService.updateUser(params).then(function (data) {
                         logSuccess('העדכון בוצע בהצלחה!');
@@ -100,8 +102,8 @@
                 vm.user.fname = user.FName;
                 vm.user.lname = user.LName;
                 angular.element('.row.ng-hide').removeClass("ng-hide");
-                angular.element('form button').text("עדכן");
-                angular.element('form button').attr('data-action', 'update');
+                angular.element('form[name=userForm] button').text("עדכן");
+                angular.element('form[name=userForm] button').attr('data-action', 'update');
                 angular.element('form').find('#updatedUserId').remove();
                 angular.element('form[name=userForm]').append("<input type=\"hidden\" id=\"updatedUserId\" value=\"" + user.UserId + "\"/>");
                 angular.element('#cancelUpdate').removeClass('hidden');
@@ -111,7 +113,7 @@
 
         function cancelUpdate() {
             resetUserForm();
-            angular.element('form button').text("הוסף");
+            angular.element('form[name=userForm] button').text("הוסף");
             angular.element('form').find('#updatedUserId').remove();
             angular.element('form button').removeAttr('data-action');
             angular.element('#cancelUpdate').addClass('hidden');
@@ -130,7 +132,46 @@
             vm.products = adminService.getAllProducts();
         };
 
-        
+        function addProduct(isValid) {
+            if(isValid){
+            var params= {
+                ProductName: vm.product.productName,
+                Status: vm.product.status
+            }
+            var productIdToUpdate = "";
+            if (angular.element('form[name=productsForm] #updatedProductId') && angular.element('form[name=productsForm] button').data('action') == "update") {
+                productIdToUpdate = angular.element('form[name=productsForm] #updatedProductId').val();
+                params.ProductId = parseInt(productIdToUpdate);
+                return adminService.updateProduct(params).then(function (data) {
+                    logSuccess('העדכון בוצע בהצלחה!');
+                    getProducts();
+                }, function (data) {
+                    logError(data.status + " " + data.statusText);
+                });
+            }
+            return adminService.addUser(params).then(function (data) {
+                logSuccess('המוצר נקלט בהצלחה!');
+                getProducts();
+            }, function (data) {
+                logError(data.status + " " + data.statusText);
+            });
+            } else {
+                logError('שגיאה בהזנת הנתונים!');
+            }
+        }
+
+        function editProduct(productId) {
+            var product = _.findWhere(vm.products, { ProductId: productId });
+            if (product != null) {
+                vm.product.productName = product.ProductName;
+                vm.product.status = product.Status;
+                angular.element('form[name=productsForm] button').text("עדכן");
+                angular.element('form[name=productsForm] button').attr('data-action', 'update');
+                angular.element('form[name=productsForm]').find('#updatedProductId').remove();
+                angular.element('form[name=productsForm]').append("<input type=\"hidden\" id=\"updatedProductId\" value=\"" + product.ProductId + "\"/>");
+                angular.element('#cancelProductUpdate').removeClass('hidden');
+            }
+        }
     }
 
 
