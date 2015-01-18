@@ -12,7 +12,9 @@
             getRoles: getRoles,
             addUser: addUser,
             getAllProducts: getAllProducts,
-            updateUser: updateUser
+            updateUser: updateUser,
+            addProduct: addProduct,
+            updateProduct: updateProduct
         };
 
         return service;
@@ -47,32 +49,64 @@
             });
         }
 
+        function addProduct(params) {
+            return $http.post("/AddProduct", params).success(function(data) {
+                    return data.d;
+                })
+                .error(function(data, status, headers, config) {
+                    return status;
+                });
+        }
+
+        function updateProduct(params) {
+            return $http.post("/UpdateProduct", params).success(function (data) {
+                return data.d;
+            })
+          .error(function (data, status, headers, config) {
+              return status;
+          });
+        }
+
         function getAllProducts() {
-            return [{
-                    "Name": "פיתות",
-                    "Quantity": "10",
-                    "Price": "25",
-                    "WeekendPrice":"30"
-                },
-                 {
-                    "Name": "פיתות קמח מלא",
-                    "Quantity": "10",
-                    "Price": "35",
-                    "WeekendPrice":"40"
-                },
-                 {
-                    "Name": "ג'בטה",
-                    "Quantity": "10",
-                    "Price": "45",
-                    "WeekendPrice":"50"
-                },
-                 {
-                    "Name": "ג'בטה קמח מלא",
-                    "Quantity": "10",
-                    "Price": "55",
-                    "WeekendPrice":"60"
-                }
-            ];
+            return $http.get("/GetProducts").success(function (data) {
+                return data;
+            })
+            .error(function (data, status, headers, config) {
+                return status;
+            });
+            //return [{
+            //    "ProductId":"1",
+            //    "ProductName": "פיתות",
+            //        "Quantity": "10",
+            //        "Price": "25",
+            //        "WeekendPrice": "30",
+            //    "ProductStatus":1
+            //    },
+            //     {
+            //         "ProductId": "2",
+            //         "ProductName": "פיתות קמח מלא",
+            //        "Quantity": "10",
+            //        "Price": "35",
+            //        "WeekendPrice": "40",
+            //        "ProductStatus": 1
+            //    },
+            //     {
+            //         "ProductId": "3",
+            //         "ProductName": "ג'בטה",
+            //        "Quantity": "10",
+            //        "Price": "45",
+            //        "WeekendPrice": "50",
+            //        "ProductStatus": 2
+            //    },
+            //     {
+            //         "ProductId": "4",
+            //         "ProductName": "ג'בטה קמח מלא",
+            //        "Quantity": "10",
+            //        "Price": "55",
+            //        "WeekendPrice": "60",
+            //        "ProductStatus": 2
+            //    }
+            //];
         }
     }
 })();

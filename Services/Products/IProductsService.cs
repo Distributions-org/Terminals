@@ -15,5 +15,6 @@ namespace Services
         FunctionReplay.functionReplay UpdateCustomerProductPrice(ProductToCustomer updateProduct);
         Core.Domain.Product GetProductById(int ProductID);
         List<Core.Domain.Product> GetProductByStatus(ProductStatus.productStatus pStatus);
+        List<Core.Domain.Product> GetProducts();
     }
 }

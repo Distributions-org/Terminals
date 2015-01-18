@@ -150,21 +150,17 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>שם מוצר</th>
-                                                                <th>כמות</th>
-                                                                <th>מחיר א - ה</th>
-                                                                <th>מחיר ה - א</th>
+                                                                <th>סטטוס</th>
                                                                 <th>עריכה</th>
                                                                 <th>מחיקה</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr data-ng-repeat="product in vm.products | filter:vm.searchText | orderBy:product.Name">
-                                                                <td>{{product.Name}}</td>
-                                                                <td>{{product.Quantity}}</td>
-                                                                <td>{{product.Price}}</td>
-                                                                <td>{{product.WeekendPrice}}</td>
-                                                                <td><button ng-click="editUser" data-userid="{{u.UserId}}" class="btn btn-xs btn-primary">ערוך</button></td>
-                                                                <td><button ng-click="deletUser" data-userid="{{u.UserId}}" class="btn btn-xs btn-warning">מחק</button></td>
+                                                            <tr data-ng-repeat="product in vm.products | filter:vm.searchText | orderBy:product.ProductName">
+                                                                <td>{{product.ProductName}}</td>
+                                                                <td><input type="checkbox" disabled="disabled" ng-checked="{{product.productStatus==1?'true':'false'}}" />{{product.productStatus==1?"פעיל":"לא פעיל"}}</td>
+                                                                <td><button ng-click="vm.editProduct(product.ProductID)" class="btn btn-xs btn-primary">ערוך</button></td>
+                                                                <td><button ng-click="vm.deleteProduct(product.ProductID)" class="btn btn-xs btn-warning">מחק</button></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -183,13 +179,14 @@
                                                                        class="form-control input-validation-error" required placeholder="שם המוצר" />
                                                             </div>
                                                             <div class="input-group pull-right">
-                                                                <input type="checkbox" ng-model="vm.product.status" id="productStatus" name="productStatus" />
-                                                                <label for="productStatus">סטטוס לא פעיל</label>
+                                                                <input type="checkbox" ng-change="vm.product.statusChange()" ng-true-value="'סטטוס פעיל'" ng-false-value="'סטטוס לא פעיל'" ng-model="vm.product.status" id="productStatus" name="productStatus" />
+                                                                <label for="productStatus">{{vm.product.status}}</label>
                                                             </div>
                                                             <div class="input-group pull-left">
                                                                 <button ng-disabled="productsForm.$invalid" type="submit" class="btn btn-primary">
                                                                     הוסף
                                                                 </button>
+                                                                <div ng-click="vm.cancelProductUpdate()" id="cancelProductUpdate" class="btn btn-warning pull-left hidden">בטל עדכון</div>
                                                             </div>
                                                         </div>
                                                     </form>

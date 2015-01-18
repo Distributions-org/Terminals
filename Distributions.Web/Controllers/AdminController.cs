@@ -2,21 +2,15 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-using System.Web.Security;
-using System.Web.SessionState;
+using Core.Domain;
 using Core.Domain.Users;
 using Core.Enums;
 using Distributions.Web.Authorize;
-using Distributions.Web.Extensions;
 using Distributions.Web.Models;
 using Distributions.Web.Utility;
-using Newtonsoft.Json.Schema;
 using Services;
 using Services.SessionManager;
-using HttpContextExtensions = Distributions.Web.Extensions.HttpContextExtensions;
 
 namespace Distributions.Web.Controllers
 {
@@ -25,11 +19,13 @@ namespace Distributions.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IDataPersistance<User> _userStorage;
-        
-        public AdminController(IUserService  userService, IDataPersistance<User> userStorage)
+        private readonly IProductsService _productsService;
+
+        public AdminController(IUserService  userService, IDataPersistance<User> userStorage,IProductsService productsService)
         {
             this._userService = userService;
             _userStorage = userStorage;
+            _productsService = productsService;
         }
 
 
@@ -74,10 +70,10 @@ namespace Distributions.Web.Controllers
         }
 
         // GET: api/Admin/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+       // public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
         
         [Route("GetRoles")]
@@ -106,7 +102,8 @@ namespace Distributions.Web.Controllers
 
 
         [Route("Register")]
-        [AuthorizeUser(Roles = "Admin")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        [HttpPost]
         public HttpResponseMessage Register(RegisterViewModel model)
         {
             var errors = new List<string>();
@@ -144,7 +141,8 @@ namespace Distributions.Web.Controllers
         }
 
         [Route("UpdateUser")]
-        [AuthorizeUser(Roles = "Admin")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        [HttpPost]
         public HttpResponseMessage UpdateUser(RegisterViewModel model)
         {
              if (ModelState.IsValid)
@@ -163,6 +161,59 @@ namespace Distributions.Web.Controllers
              return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
              }
              return Request.CreateResponse(HttpStatusCode.NotAcceptable, "Error");
+        }
+
+        [Route("GetProducts")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        public HttpResponseMessage GetProducts()
+        {
+            var products = _productsService.GetProducts();
+            if (products != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, products);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Products Not Founds");
+
+        }
+
+        [Route("UpdateProduct")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        [HttpPost]
+        public HttpResponseMessage UpdateProduct(Product model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = new List<string>();
+                errors = ModelErrorChecker.Check(ModelState);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+            }
+            var result = _productsService.UpdateProduct(model);
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
+
+        }
+
+        [Route("AddProduct")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        [HttpPost]
+        public HttpResponseMessage AddProduct(Product model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = new List<string>();
+                errors = ModelErrorChecker.Check(ModelState);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+            }
+            var result = _productsService.AddNewProduct(model);
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
+
         }
     }
 }

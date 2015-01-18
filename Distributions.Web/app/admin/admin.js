@@ -8,6 +8,7 @@
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
         var logError = common.logger.getLogFn(controllerId, 'error');
+        var logWarning = common.logger.getLogFn(controllerId, 'warning')
         var vm = this;
         vm.isAdmin=false;
         vm.title = 'תפריט ניהול - למנהל האתר';
@@ -22,6 +23,10 @@
         vm.editUser = editUser;
         vm.cancelUpdate = cancelUpdate;
         vm.submitProductsForm = addProduct;
+        vm.editProduct = editProduct;
+        vm.cancelProductUpdate = cancelProductUpdate;
+        vm.product.status = "סטטוס לא פעיל";
+        vm.product.statusChange = productStatusChange;
         //vm.deletUser = deleteUser;
         activate();
 
@@ -114,8 +119,8 @@
         function cancelUpdate() {
             resetUserForm();
             angular.element('form[name=userForm] button').text("הוסף");
-            angular.element('form').find('#updatedUserId').remove();
-            angular.element('form button').removeAttr('data-action');
+            angular.element('form[name=userForm]').find('#updatedUserId').remove();
+            angular.element('form[name=userForm] button').removeAttr('data-action');
             angular.element('#cancelUpdate').addClass('hidden');
             angular.element('#addAcount').removeClass('disabled');
         }
@@ -129,28 +134,37 @@
         }
 
         function getProducts() {
-            vm.products = adminService.getAllProducts();
+            return adminService.getAllProducts().then(function(response) {
+                vm.products = response.data;
+                }
+                , function (response) {
+                    logError(response.status + " "+response.statusText);
+            });
+            
         };
 
         function addProduct(isValid) {
             if(isValid){
-            var params= {
-                ProductName: vm.product.productName,
-                Status: vm.product.status
+                var params = {
+                    ProductID:0,
+                    ProductName: vm.product.productName,
+                    ProductStatus: angular.element('#productStatus').is(':checked')?1:2
             }
             var productIdToUpdate = "";
             if (angular.element('form[name=productsForm] #updatedProductId') && angular.element('form[name=productsForm] button').data('action') == "update") {
                 productIdToUpdate = angular.element('form[name=productsForm] #updatedProductId').val();
-                params.ProductId = parseInt(productIdToUpdate);
+                params.ProductID = parseInt(productIdToUpdate);
                 return adminService.updateProduct(params).then(function (data) {
                     logSuccess('העדכון בוצע בהצלחה!');
+                    cancelProductUpdate();
                     getProducts();
                 }, function (data) {
                     logError(data.status + " " + data.statusText);
                 });
             }
-            return adminService.addUser(params).then(function (data) {
+            return adminService.addProduct(params).then(function (data) {
                 logSuccess('המוצר נקלט בהצלחה!');
+                resetProductForm();
                 getProducts();
             }, function (data) {
                 logError(data.status + " " + data.statusText);
@@ -161,15 +175,37 @@
         }
 
         function editProduct(productId) {
-            var product = _.findWhere(vm.products, { ProductId: productId });
+            var product = _.findWhere(vm.products, { ProductID: productId });
             if (product != null) {
                 vm.product.productName = product.ProductName;
-                vm.product.status = product.Status;
+                vm.product.status = product.productStatus == 1 ? "סטטוס פעיל" : "סטטוס לא פעיל";
+                angular.element('#productStatus').attr('checked', product.productStatus == 1 ? true : false);
                 angular.element('form[name=productsForm] button').text("עדכן");
                 angular.element('form[name=productsForm] button').attr('data-action', 'update');
                 angular.element('form[name=productsForm]').find('#updatedProductId').remove();
-                angular.element('form[name=productsForm]').append("<input type=\"hidden\" id=\"updatedProductId\" value=\"" + product.ProductId + "\"/>");
+                angular.element('form[name=productsForm]').append("<input type=\"hidden\" id=\"updatedProductId\" value=\"" + product.ProductID + "\"/>");
                 angular.element('#cancelProductUpdate').removeClass('hidden');
+            }
+        }
+
+        function cancelProductUpdate() {
+            resetProductForm();
+            angular.element('form[name=productsForm] button').text("הוסף");
+            angular.element('form[name=productsForm]').find('#updatedProductId').remove();
+            angular.element('form[name=productsForm] button').removeAttr('data-action');
+            angular.element('#cancelProductUpdate').addClass('hidden');
+        }
+
+        function resetProductForm() {
+            vm.product.productName = '';
+            vm.product.status = "סטטוס לא פעיל";
+            angular.element('#productStatus').attr('checked',false);
+        }
+
+        function productStatusChange() {
+            var checked = angular.element('#productStatus').is(':checked');
+            if (!checked&& vm.product.productName!==undefined) {
+                logWarning('המוצר לא פעיל!!!')
             }
         }
     }
