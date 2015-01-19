@@ -27,11 +27,12 @@
         vm.cancelProductUpdate = cancelProductUpdate;
         vm.product.status = "סטטוס לא פעיל";
         vm.product.statusChange = productStatusChange;
+        vm.customers = {};
         //vm.deletUser = deleteUser;
         activate();
 
         function activate() {
-            var promises = [getAllUsers(), getRoles(), isAdminRole(), getProducts()];
+            var promises = [getAllUsers(), getRoles(), isAdminRole(), getProducts(),getCustomers()];
             common.activateController([promises], controllerId)
                 .then(function () { log('Activated Admin View'); });
         }
@@ -208,6 +209,17 @@
                 logWarning('המוצר לא פעיל!!!')
             }
         }
+
+
+        function getCustomers() {
+            return adminService.getAllCustomers().then(function (response) {
+                vm.customers = response.data;
+            }
+                , function (response) {
+                    logError(response.status + " " + response.statusText);
+                });
+
+        };
     }
 
 

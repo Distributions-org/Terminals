@@ -14,7 +14,8 @@
             getAllProducts: getAllProducts,
             updateUser: updateUser,
             addProduct: addProduct,
-            updateProduct: updateProduct
+            updateProduct: updateProduct,
+            getAllCustomers:getAllCustomers
         };
 
         return service;
@@ -107,6 +108,15 @@
             //        "ProductStatus": 2
             //    }
             //];
+        }
+
+        function getAllCustomers() {
+            return $http.get("/GetCustomers").success(function(data) {
+                    return data;
+                })
+                .error(function(data, status, headers, config) {
+                    return status;
+                });
         }
     }
 })();

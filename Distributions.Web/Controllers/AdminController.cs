@@ -11,6 +11,7 @@ using Distributions.Web.Models;
 using Distributions.Web.Utility;
 using Services;
 using Services.SessionManager;
+using Services.Users;
 
 namespace Distributions.Web.Controllers
 {
@@ -20,12 +21,14 @@ namespace Distributions.Web.Controllers
         private readonly IUserService _userService;
         private readonly IDataPersistance<User> _userStorage;
         private readonly IProductsService _productsService;
+        private readonly ICustomerService _customersService;
 
-        public AdminController(IUserService  userService, IDataPersistance<User> userStorage,IProductsService productsService)
+        public AdminController(IUserService  userService, IDataPersistance<User> userStorage,IProductsService productsService,ICustomerService customersService)
         {
             this._userService = userService;
             _userStorage = userStorage;
             _productsService = productsService;
+            _customersService = customersService;
         }
 
 
@@ -213,6 +216,19 @@ namespace Distributions.Web.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
+
+        }
+
+        [Route("GetCustomers")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        public HttpResponseMessage GetCustomers()
+        {
+            var customers = _customersService.GetValidCustomers();
+            if (customers != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, customers);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
 
         }
     }

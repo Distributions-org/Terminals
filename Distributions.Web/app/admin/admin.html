@@ -33,7 +33,7 @@
                                         <td>{{u.UserName}}</td>
                                         <td>{{u.Email}}</td>
                                         <td>{{u.Role}}</td>
-                                        <td><button ng-click="vm.editUser(u.UserId)"  class="btn btn-xs btn-primary">ערוך</button></td>
+                                        <td><button ng-click="vm.editUser(u.UserId)" class="btn btn-xs btn-primary">ערוך</button></td>
                                         <td><button ng-click="vm.deletUser(u.UserId)" class="btn btn-xs btn-warning">מחק</button></td>
                                     </tr>
                                 </tbody>
@@ -81,14 +81,14 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 validation-summary-errors">
-                                                    <div ng-messages="userForm.Email.$error"   ng-messages-multiple>
+                                                    <div ng-messages="userForm.Email.$error" ng-messages-multiple>
                                                         <div ng-message="required">שדה מייל חובה</div>
                                                         <div ng-message="email">מייל לא תקין</div>
                                                     </div>
-                                                    <div ng-messages="userForm.Password.$error"  ng-messages-multiple>
+                                                    <div ng-messages="userForm.Password.$error" ng-messages-multiple>
                                                         <div ng-message="required">שדה סיסמה חובה</div>
                                                     </div>
-                                                    <div ng-messages="userForm.PasswordConfirm.$error"  ng-messages-multiple>
+                                                    <div ng-messages="userForm.PasswordConfirm.$error" ng-messages-multiple>
                                                         <div ng-message="required">שדה סיסמה חובה</div>
                                                         <div ng-message="compareTo">אימות סיסמה לא תקין</div>
                                                     </div>
@@ -96,37 +96,37 @@
                                                         <div ng-message="required">בחר הרשאה</div>
                                                     </div>
                                                     <div ng-messages="userForm.FName.$error" " ng-messages-multiple>
-                                                        <div ng-message="required">שם חובה</div>
-                                                    </div>
-                                                    <div ng-messages="userForm.LName.$error"  ng-messages-multiple>
-                                                        <div ng-message="required">משפחה חובה</div>
-                                                    </div>
+                                                        <div ng-message=" required">שם חובה</div>
+                                                </div>
+                                                <div ng-messages="userForm.LName.$error" ng-messages-multiple>
+                                                    <div ng-message="required">משפחה חובה</div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-5">
-                                            <div class="form-group pull-right" ng-class="{ 'has-error' :userForm.Rolse.$invalid}">
-                                                <select class="form-control input-validation-error" name="Rolse" id="Rolse" ng-model="vm.user.selectedRole" ng-options="k as v for (k,v) in vm.roles" required>
-                                                    <option value="">סוג הרשאה</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <button ng-disabled="userForm.$invalid" type="submit" class="btn btn-primary pull-left">
-                                                    הוסף
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group pull-right" ng-class="{ 'has-error' :userForm.Rolse.$invalid}">
+                                        <select class="form-control input-validation-error" name="Rolse" id="Rolse" ng-model="vm.user.selectedRole" ng-options="k as v for (k,v) in vm.roles" required>
+                                            <option value="">סוג הרשאה</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button ng-disabled="userForm.$invalid" type="submit" class="btn btn-primary pull-left">
+                                            הוסף
+                                        </button>
+                                    </div>
+                                </div>
+                                </form>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="widget-foot">
-                            <div class="clearfix"></div>
-                        </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
     <section class="matter">
@@ -165,6 +165,9 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <div class="widget-foot">
+                                                    <div class="clearfix"></div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -173,9 +176,9 @@
                                                      allow-collapse="true"></div>
                                                 <div class="widget-content text-center text-info">
                                                     <form name="productsForm" ng-submit="vm.submitProductsForm(productsForm.$valid)" class="form-inline text-right" novalidate>
-                                                        <div class="form-group" ng-class="{ 'has-error' : productsForm.produntName.$invalid}">
+                                                        <div class="form-group" ng-class="{ 'has-error' : productsForm.productName.$invalid}">
                                                             <div class="input-group pull-right">
-                                                                <input type="text" ng-model="vm.product.productName" name="produntName" id="productName"
+                                                                <input type="text" ng-model="vm.product.productName" name="productName" id="productName"
                                                                        class="form-control input-validation-error" required placeholder="שם המוצר" />
                                                             </div>
                                                             <div class="input-group pull-right">
@@ -190,17 +193,102 @@
                                                             </div>
                                                         </div>
                                                     </form>
-                                                   
+                                                </div>
+                                                <div class="widget-foot">
+                                                    <div class="clearfix"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="widget-foot">
-                                        <div class="clearfix"></div>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>
                     </div>
     </section>
-</section>
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="widget wgreen">
+                            <div data-cc-widget-header title="ניהול לקוחות"></div>
+                            <div class="widget-content customers">
+                                <h3>כל הלקוחות</h3>
+                                <div>חיפוש: <input ng-model="vm.searchCustomerText"></div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="widget wgreen">
+                                                <div data-cc-widget-header title="טבלת לקוחות"
+                                                     allow-collapse="true"></div>
+                                                <div class="widget-content text-center text-info">
+                                                    <table class="table table-condensed table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>שם הלקוח</th>
+                                                                <th>לקוח HP</th>
+                                                                <th>סטטוס</th>
+                                                                <th>עריכה</th>
+                                                                <th>מחיקה</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr data-ng-repeat="customer in vm.customers | filter:vm.searchCustomerText | orderBy:customer.CustomerName">
+                                                                <td>{{customer.CustomerName}}</td>
+                                                                <td>{{customer.CustomerHP}}</td>
+                                                                <td><input type="checkbox" disabled="disabled" ng-checked="{{customer.Status==1?'true':'false'}}" />{{customer.Status==1?"פעיל":"לא פעיל"}}</td>
+                                                                <td><button ng-click="vm.editCustomer(customer.CustomerID)" class="btn btn-xs btn-primary">ערוך</button></td>
+                                                                <td><button ng-click="vm.deleteCustomer(customer.CustomerID)" class="btn btn-xs btn-warning">מחק</button></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="widget-foot">
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="widget wgreen">
+                                                <div data-cc-widget-header title="הוספת ועריכת לקוח"
+                                                     allow-collapse="true"></div>
+                                                <div class="widget-content text-center text-info">
+                                                    <form name="customersForm" ng-submit="vm.submitCustomersForm(customersForm.$valid)" class="form-inline text-right" novalidate>
+                                                        <div class="form-group" ng-class="{ 'has-error' : customersForm.customerName.$invalid}">
+                                                            <div class="input-group pull-right">
+                                                                <input type="text" ng-model="vm.customer.customerName" name="customerName" id="customerName"
+                                                                       class="form-control input-validation-error" required placeholder="שם הלקוח" />
+                                                            </div>
+                                                            <div class="input-group pull-right">
+                                                                <input type="text" ng-model="vm.customer.customerHP" name="customerHP" id="customerHP"
+                                                                       class="form-control input-validation-error" required placeholder="לקוח HP" />
+                                                            </div>
+                                                            <div class="input-group pull-right">
+                                                                <input type="checkbox" ng-change="vm.customer.statusChange()" ng-true-value="'סטטוס פעיל'" ng-false-value="'סטטוס לא פעיל'" ng-model="vm.customer.status" id="customerStatus" name="customerStatus" />
+                                                                <label for="productStatus">{{vm.customer.status}}</label>
+                                                            </div>
+                                                            <div class="input-group pull-left">
+                                                                <button ng-disabled="customersForm.$invalid" type="submit" class="btn btn-primary">
+                                                                    הוסף
+                                                                </button>
+                                                                <div ng-click="vm.cancelCustomerUpdate()" id="cancelCustomerUpdate" class="btn btn-warning pull-left hidden">בטל עדכון</div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="widget-foot">
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+    </section>
