@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'managementDistributions';
-    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService', managementDistributions]);
+    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService', 'adminService', managementDistributions]);
 
-        function managementDistributions($location, common, datacontext, managementDistributionsService) {
+    function managementDistributions($location, common, datacontext, managementDistributionsService, adminService) {
             var getLogFn = common.logger.getLogFn;
             var log = getLogFn(controllerId);
             var logSuccess = common.logger.getLogFn(controllerId, 'success');
@@ -15,8 +15,9 @@
             vm.customerSelected = {};
             vm.customerSelectedChange = customerSelected;
             vm.update = false;
-            
-            ////date picker
+            vm.products = {};
+
+        ////date picker
             
             //vm.today=today();
 
@@ -95,7 +96,7 @@
             activate();
 
             function activate() {
-                var promises = [isAdminRole(), getCustomers()];
+                var promises = [isAdminRole(), getValidCustomers(), getProducts()];
                 common.activateController([promises], controllerId)
                     .then(function() { log('Activated Management Distributions View'); });
             }
@@ -111,13 +112,23 @@
                 });
             }
 
-            function getCustomers() {
+            function getValidCustomers() {
                 return managementDistributionsService.getCustomers().then(function(result) {
                     return vm.customers = result.data;
                 }, function(status) {
                     logError(status);
                 });
             }
+
+            function getProducts() {
+                return adminService.getAllProducts().then(function (response) {
+                    vm.products = _.where(response.data, { productStatus: 1 });
+                }
+                    , function (response) {
+                        logError(response.status + " " + response.statusText);
+                    });
+
+            };
 
             function customerSelected(selected) {
                 if (selected != null) {
