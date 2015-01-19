@@ -8,13 +8,13 @@
         var $q = common.$q;
 
         var service = {
-            getDistributors: getDistributors,
+            getCustomers: getCustomers,
         };
 
         return service;
 
-        function getDistributors() {
-            return $http.get("/Distributors").success(function(data) {
+        function getCustomers() {
+            return $http.get("/GetActiveCustomers").success(function (data) {
                 return data;
             })
                 .error(function(data, status) {

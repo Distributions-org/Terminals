@@ -11,91 +11,91 @@
             var vm = this;
             vm.isAdmin = false;
             vm.title = 'Management Distributions';
-            vm.distributors = {};
-            vm.distributorSelected = {};
-            vm.distributorSelectedSelectedChange = distributorSelected;
+            vm.customers = {};
+            vm.customerSelected = {};
+            vm.customerSelectedChange = customerSelected;
             vm.update = false;
             
-            //date picker
+            ////date picker
             
-            vm.today=today();
+            //vm.today=today();
 
-            // Disable weekend selection
-            vm.disabled = function (date, mode) {
-                return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
-            };
+            //// Disable weekend selection
+            //vm.disabled = function (date, mode) {
+            //    return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+            //};
 
-            vm.open = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
+            //vm.open = function ($event) {
+            //    $event.preventDefault();
+            //    $event.stopPropagation();
 
-                vm.opened = true;
-            };
+            //    vm.opened = true;
+            //};
 
-            vm.dateOptions = {
-                formatYear: 'yyyy',
-                startingDay: 1,
-            };
+            //vm.dateOptions = {
+            //    formatYear: 'yyyy',
+            //    startingDay: 1,
+            //};
 
-            vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
-            vm.format = vm.formats[3];
+            //vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
+            //vm.format = vm.formats[3];
 
-            vm.gridOptions = {
-                columnDefs: [
-                 { name: 'id', enableCellEdit: false, width: '10%' },
-                 { name: 'firstname', displayName: 'Name (editable)', width: '20%' },
-                 { name: 'company', enableCellEdit: true },
-                { name: 'project' }
-                ],
-                //exporterLinkLabel: 'get your csv here',
-                exporterPdfDefaultStyle: { fontSize: 9 },
-                exporterPdfTableStyle: { margin: [30, 30, 30, 30] },
-                exporterPdfTableHeaderStyle: { fontSize: 12, bold: true, italics: true, color: 'red' },
-                exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
-                //exporterPdfFooter: function (currentPage, pageCount) {
-                //   return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
-                //},
-                exporterPdfCustomFormatter: function (docDefinition) {
-                    docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
-                    docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
-                    return docDefinition;
-                },
-                //exporterPdfOrientation: 'portrait',
-                //exporterPdfPageSize: 'LETTER',
-                //exporterPdfMaxGridWidth: 500,
-                exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
-                enableFiltering: true,
-                showFooter: true,
-                exporterMenuCsv: false,
-                enableGridMenu: true,
-                data:[
-                {
-                    "id": "1",
-                    "firstname": "Misko",
-                    "lastname": "Havery",
-                    "company": "Google",
-                    "project": "AngularJS"
-                }, {
-                    "id": "2",
-                    "firstname": "Srini",
-                    "lastname": "Kusunam",
-                    "company": "LibertyLeap",
-                    "project": "Backbone.Paginator"
-                }, {
-                    "id": "3",
-                    "firstname": "Derick",
-                    "lastname": "Bailey",
-                    "company": "Muted Solutions",
-                    "project": "Backbone.Marionette"
-                }
-                ]
-            };
+            //vm.gridOptions = {
+            //    columnDefs: [
+            //     { name: 'id', enableCellEdit: false, width: '10%' },
+            //     { name: 'firstname', displayName: 'Name (editable)', width: '20%' },
+            //     { name: 'company', enableCellEdit: true },
+            //    { name: 'project' }
+            //    ],
+            //    //exporterLinkLabel: 'get your csv here',
+            //    exporterPdfDefaultStyle: { fontSize: 9 },
+            //    exporterPdfTableStyle: { margin: [30, 30, 30, 30] },
+            //    exporterPdfTableHeaderStyle: { fontSize: 12, bold: true, italics: true, color: 'red' },
+            //    exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
+            //    //exporterPdfFooter: function (currentPage, pageCount) {
+            //    //   return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+            //    //},
+            //    exporterPdfCustomFormatter: function (docDefinition) {
+            //        docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
+            //        docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
+            //        return docDefinition;
+            //    },
+            //    //exporterPdfOrientation: 'portrait',
+            //    //exporterPdfPageSize: 'LETTER',
+            //    //exporterPdfMaxGridWidth: 500,
+            //    exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+            //    enableFiltering: true,
+            //    showFooter: true,
+            //    exporterMenuCsv: false,
+            //    enableGridMenu: true,
+            //    data:[
+            //    {
+            //        "id": "1",
+            //        "firstname": "Misko",
+            //        "lastname": "Havery",
+            //        "company": "Google",
+            //        "project": "AngularJS"
+            //    }, {
+            //        "id": "2",
+            //        "firstname": "Srini",
+            //        "lastname": "Kusunam",
+            //        "company": "LibertyLeap",
+            //        "project": "Backbone.Paginator"
+            //    }, {
+            //        "id": "3",
+            //        "firstname": "Derick",
+            //        "lastname": "Bailey",
+            //        "company": "Muted Solutions",
+            //        "project": "Backbone.Marionette"
+            //    }
+            //    ]
+            //};
 
 
             activate();
 
             function activate() {
-                var promises = [isAdminRole(), getDistributors()];
+                var promises = [isAdminRole(), getCustomers()];
                 common.activateController([promises], controllerId)
                     .then(function() { log('Activated Management Distributions View'); });
             }
@@ -111,15 +111,15 @@
                 });
             }
 
-            function getDistributors() {
-                return managementDistributionsService.getDistributors().then(function(result) {
-                    return vm.distributors = result.data;
+            function getCustomers() {
+                return managementDistributionsService.getCustomers().then(function(result) {
+                    return vm.customers = result.data;
                 }, function(status) {
                     logError(status);
                 });
             }
 
-            function distributorSelected(selected) {
+            function customerSelected(selected) {
                 if (selected != null) {
                     vm.update = true;
                 } else {

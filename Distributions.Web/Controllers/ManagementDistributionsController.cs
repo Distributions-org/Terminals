@@ -5,31 +5,35 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.OData.Extensions;
+using Core.Enums;
 using Distributions.Web.Authorize;
 using Distributions.Web.Models;
 using Microsoft.AspNet.Identity.Owin;
+using Services;
+using Services.Users;
 
 namespace Distributions.Web.Controllers
 {
-    [AuthorizeUser(Roles = "Admin")]
+    [AuthorizeUser(AccessRole = "Admin")]
     public class ManagementDistributionsController : BaseApiController
     {
-        [Route("Distributors")]
+        private readonly ICustomerService _customersService;
+
+        public ManagementDistributionsController(ICustomerService customersService)
+        {
+            _customersService = customersService;
+        }
+
+        [Route("GetActiveCustomers")]
         public HttpResponseMessage Get()
         {
-            if (UserManager != null)
+            var customers = _customersService.GetValidCustomers();
+            if (customers != null)
             {
-                var users = UserManager.Users.ToList();
-                var distributors = users.Where(x => x.Roles != null && x.Roles.First().RoleId == "2").ToList();
-                if (distributors.Any())
-                {
-                      var viewModels = new List<ManagerUserViewModel>();
-                    distributors.ForEach(user => viewModels.Add(new ManagerUserViewModel { UserId = user.Id, UserName = user.UserName, Role =  user.Roles.First().RoleId }));
-                    return Request.CreateResponse(HttpStatusCode.OK, viewModels);
-                }
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "distributors not found");
+                return Request.CreateResponse(HttpStatusCode.OK, customers);
             }
-            return Request.CreateErrorResponse(HttpStatusCode.Forbidden, new Exception("error"));
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
         }
+      
     }
 }
