@@ -15,7 +15,9 @@
             updateUser: updateUser,
             addProduct: addProduct,
             updateProduct: updateProduct,
-            getAllCustomers:getAllCustomers
+            getAllCustomers: getAllCustomers,
+            addCustomer: addCustomer,
+            updateCustomer: updateCustomer
         };
 
         return service;
@@ -117,6 +119,24 @@
                 .error(function(data, status, headers, config) {
                     return status;
                 });
+        }
+
+        function addCustomer(params) {
+            return $http.post("/AddCustomer", params).success(function (data) {
+                return data.d;
+            })
+                .error(function (data, status, headers, config) {
+                    return status;
+                });
+        }
+
+        function updateCustomer(params) {
+            return $http.post("/UpdateCustomer", params).success(function (data) {
+                return data.d;
+            })
+          .error(function (data, status, headers, config) {
+              return status;
+          });
         }
     }
 })();

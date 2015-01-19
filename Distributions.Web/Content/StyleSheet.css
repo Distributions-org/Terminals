@@ -107,16 +107,20 @@
 .validation-summary-errors > div:last-child :after {
   content: "";
 }
-form[name=productsForm] .input-group {
+form[name=productsForm] .input-group,
+form[name=customersForm] .input-group {
   margin-left: 10px;
 }
-form[name=productsForm] .input-group input[type="checkbox"] {
+form[name=productsForm] .input-group input[type="checkbox"],
+form[name=customersForm] .input-group input[type="checkbox"] {
   margin: 10px 0 0 5px !important;
 }
-form[name=productsForm] .input-group button {
+form[name=productsForm] .input-group button,
+form[name=customersForm] .input-group button {
   margin: 4px 0;
 }
-form[name=productsForm] .input-group div.btn {
+form[name=productsForm] .input-group div.btn,
+form[name=customersForm] .input-group div.btn {
   margin: 4px 10px;
 }
 /*.ui-grid-column-menu-button

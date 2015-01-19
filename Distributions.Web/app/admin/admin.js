@@ -16,18 +16,23 @@
         vm.roles = {};
         vm.selectedRole = {};
         vm.user = {};
-        vm.product = {};
-        vm.submitForm = addusersform;
         vm.products = {};
-        vm.searchText = "";
-        vm.editUser = editUser;
-        vm.cancelUpdate = cancelUpdate;
-        vm.submitProductsForm = addProduct;
-        vm.editProduct = editProduct;
-        vm.cancelProductUpdate = cancelProductUpdate;
-        vm.product.status = "סטטוס לא פעיל";
-        vm.product.statusChange = productStatusChange;
+        vm.product = {};
         vm.customers = {};
+        vm.customer = {};
+        vm.submitForm = addusersform;
+        vm.submitProductsForm = addProduct;
+        vm.submitCustomersForm = addCustomer;
+        vm.editUser = editUser;
+        vm.editProduct = editProduct;
+        vm.editCustomer = editCustomer;
+        vm.cancelUpdate = cancelUpdate;
+        vm.cancelProductUpdate = cancelProductUpdate;
+        vm.cancelCustomerUpdate = cancelCustomerUpdate;
+        vm.customer.status = vm.product.status = "סטטוס לא פעיל";
+        vm.product.statusChange = productStatusChange;
+        vm.customer.statusChange = customerStatusChange;
+       
         //vm.deletUser = deleteUser;
         activate();
 
@@ -220,6 +225,75 @@
                 });
 
         };
+
+        function addCustomer(isValid) {
+            if (isValid) {
+                var params = {
+                    CustomerID: 0,
+                    CustomerName: vm.customer.customerName,
+                    CustomerHP: vm.customer.customerHP,
+                    custStatus: angular.element('#customerStatus').is(':checked') ? 1 : 2
+                }
+                var customerIdToUpdate = "";
+                if (angular.element('form[name=customersForm] #updatedCustomerId') && angular.element('form[name=customersForm] button').data('action') == "update") {
+                    customerIdToUpdate = angular.element('form[name=customersForm] #updatedCustomersId').val();
+                    params.CustomerID = parseInt(customerIdToUpdate);
+                    return adminService.updateCustomer(params).then(function (data) {
+                        logSuccess('העדכון בוצע בהצלחה!');
+                        cancelCustomerUpdate();
+                        getCustomers();
+                    }, function (data) {
+                        logError(data.status + " " + data.statusText);
+                    });
+                }
+                return adminService.addCustomer(params).then(function (data) {
+                    logSuccess('הלקוח נקלט בהצלחה!');
+                    resetCustomerForm();
+                    getCustomers();
+                }, function (data) {
+                    logError(data.status + " " + data.statusText);
+                });
+            } else {
+                logError('שגיאה בהזנת הנתונים!');
+            }
+        }
+
+        function editCustomer(customerId) {
+            var customer = _.findWhere(vm.customers, { CustomerID: customerId });
+            if (customer != null) {
+                vm.customer.customerName = customer.CustomerName;
+                vm.customer.customerHP = customer.CustomerHP;
+                vm.customer.status = customer.custStatus == 1 ? "סטטוס פעיל" : "סטטוס לא פעיל";
+                angular.element('#customerStatus').attr('checked', customer.custStatus == 1 ? true : false);
+                angular.element('form[name=customersForm] button').text("עדכן");
+                angular.element('form[name=customersForm] button').attr('data-action', 'update');
+                angular.element('form[name=customersForm]').find('#updatedCustomerId').remove();
+                angular.element('form[name=customersForm]').append("<input type=\"hidden\" id=\"updatedCustomerId\" value=\"" + customer.CustomerID + "\"/>");
+                angular.element('#cancelCustomerUpdate').removeClass('hidden');
+            }
+        }
+
+        function cancelCustomerUpdate() {
+            resetCustomerForm();
+            angular.element('form[name=customersForm] button').text("הוסף");
+            angular.element('form[name=customersForm]').find('#updatedCustomerId').remove();
+            angular.element('form[name=customersForm] button').removeAttr('data-action');
+            angular.element('#cancelCustomerUpdate').addClass('hidden');
+        }
+
+        function customerStatusChange() {
+            var checked = angular.element('#customerStatus').is(':checked');
+            if (!checked && vm.customer.customerName !== undefined) {
+                logWarning('הלקוח לא פעיל!!!')
+            }
+        }
+
+        function resetCustomerForm() {
+            vm.customer.customerName = '';
+            vm.customer.customerHP = '';
+            vm.customer.status = "סטטוס לא פעיל";
+            angular.element('#customerStatus').attr('checked', false);
+        }
     }
 
 

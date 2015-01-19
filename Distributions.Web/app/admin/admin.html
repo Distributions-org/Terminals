@@ -136,7 +136,7 @@
                     <div class="row">
                         <div class="widget wlightblue">
                             <div data-cc-widget-header title="ניהול מוצרים"></div>
-                            <div class="widget-content user">
+                            <div class="widget-content">
                                 <h3>כל המוצרים</h3>
                                 <div>חיפוש: <input ng-model="vm.searchText"></div>
                                 <div class="container">
@@ -237,7 +237,7 @@
                                                             <tr data-ng-repeat="customer in vm.customers | filter:vm.searchCustomerText | orderBy:customer.CustomerName">
                                                                 <td>{{customer.CustomerName}}</td>
                                                                 <td>{{customer.CustomerHP}}</td>
-                                                                <td><input type="checkbox" disabled="disabled" ng-checked="{{customer.Status==1?'true':'false'}}" />{{customer.Status==1?"פעיל":"לא פעיל"}}</td>
+                                                                <td><input type="checkbox" disabled="disabled" ng-checked="{{customer.custStatus==1?'true':'false'}}" />{{customer.custStatus==1?"פעיל":"לא פעיל"}}</td>
                                                                 <td><button ng-click="vm.editCustomer(customer.CustomerID)" class="btn btn-xs btn-primary">ערוך</button></td>
                                                                 <td><button ng-click="vm.deleteCustomer(customer.CustomerID)" class="btn btn-xs btn-warning">מחק</button></td>
                                                             </tr>

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Core.Domain;
+using Core.Domain.Customers;
 using Core.Domain.Users;
 using Core.Enums;
 using Distributions.Web.Authorize;
@@ -229,6 +230,47 @@ namespace Distributions.Web.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, customers);
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
+
+        }
+
+        //[Route("UpdateCustomer")]
+        //[AuthorizeUser(AccessRole = "Admin")]
+        //[HttpPost]
+        //public HttpResponseMessage UpdateCustomer(Customers model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var errors = new List<string>();
+        //        errors = ModelErrorChecker.Check(ModelState);
+        //        return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+        //    }
+        //    var result = _customersService.(model);
+           
+        //    if (result.ToString() == "Success")
+        //    {
+        //        return Request.CreateResponse(HttpStatusCode.OK);
+        //    }
+        //    return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
+
+        //}
+
+        [Route("AddCustomer")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        [HttpPost]
+        public HttpResponseMessage AddCustomer(Customers model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = new List<string>();
+                errors = ModelErrorChecker.Check(ModelState);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+            }
+            var result = _customersService.AddNewCustomer(model);
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
 
         }
     }
