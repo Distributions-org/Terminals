@@ -61,6 +61,8 @@
     <Compile Include="Domain\Persons\Person.cs" />
     <Compile Include="Domain\Product\Product.cs" />
     <Compile Include="Domain\ProductTocustomer\ProductToCustomer.cs" />
+    <Compile Include="Domain\Reports\CustmerReports.cs" />
+    <Compile Include="Domain\Reports\ProductCustomerReport.cs" />
     <Compile Include="Domain\Rounds\CustomerRound.cs" />
     <Compile Include="Domain\Rounds\RoundProductCustomer.cs" />
     <Compile Include="Domain\Rounds\Rounds.cs" />

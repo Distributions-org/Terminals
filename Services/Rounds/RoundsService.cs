@@ -161,14 +161,14 @@ namespace Services
 
         }
 
-        //public FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount)
-        //{
-        //    RoundsCustomerProductTbl currentRoundCustomerProducts = _RoundsCustomerProductRepository.FindBy(x => x.RoundsCustomerProductID == RoundProductCustomerID).FirstOrDefault();
-        //    currentRoundCustomerProducts.DelieveredAmount = DeliveredAmount;
+        public FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount)
+        {
+            RoundsCustomerProductTbl currentRoundCustomerProducts = _RoundsCustomerProductRepository.FindBy(x => x.RoundsCustomerProductID == RoundProductCustomerID).FirstOrDefault();
+            currentRoundCustomerProducts.DelieveredAmount = DeliveredAmount;
 
-        //    _RoundsCustomerProductRepository.Update(currentRoundCustomerProducts);
+           return _RoundsCustomerProductRepository.Update(currentRoundCustomerProducts);
 
-        //}
+        }
 
         public bool CheckIfUserCanUseRound(int UserID)
         {
