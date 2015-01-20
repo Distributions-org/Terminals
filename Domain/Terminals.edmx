@@ -57,6 +57,7 @@
           <Property Name="RoundsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoundName" Type="nvarchar" MaxLength="450" />
           <Property Name="RoundDate" Type="datetime" />
+          <Property Name="RoundStatus" Type="int" />
         </EntityType>
         <EntityType Name="RoundsUserTbl">
           <Key>
@@ -112,11 +113,11 @@
           <EntitySet Name="UsersTbl" EntityType="TerminalsModel.UsersTbl" />
           <EntitySet Name="Products" EntityType="TerminalsModel.Product" />
           <EntitySet Name="sysdiagrams" EntityType="TerminalsModel.sysdiagram" />
-          <EntitySet Name="AspNetRoles" EntityType="TerminalsModel.AspNetRole" />
+          <!--<EntitySet Name="AspNetRoles" EntityType="TerminalsModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="TerminalsModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="TerminalsModel.AspNetUserLogin" />
-          <EntitySet Name="AspNetUsers" EntityType="TerminalsModel.AspNetUser" />
-          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="TerminalsModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <EntitySet Name="AspNetUsers" EntityType="TerminalsModel.AspNetUser" />-->
+          <!--<AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="TerminalsModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
           </AssociationSet>
@@ -127,7 +128,7 @@
           <AssociationSet Name="AspNetUserRoles" Association="TerminalsModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
-          </AssociationSet>
+          </AssociationSet>-->
         </EntityContainer>
         <EntityType Name="Customers">
           <Key>
@@ -173,6 +174,7 @@
           <Property Name="RoundsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="RoundName" Type="String" MaxLength="450" Unicode="true" FixedLength="false" />
           <Property Name="RoundDate" Type="DateTime" Precision="3" />
+          <Property Name="RoundStatus" Type="Int32" />
         </EntityType>
         <EntityType Name="RoundsUserTbl">
           <Key>
@@ -211,7 +213,7 @@
           <Property Type="Int32" Name="version" />
           <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="AspNetRole">
+        <!--<EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -291,7 +293,7 @@
         <Association Name="AspNetUserRoles">
           <End Type="TerminalsModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="TerminalsModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
-        </Association>
+        </Association>-->
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -342,6 +344,7 @@
           <EntitySetMapping Name="RoundsTbl">
             <EntityTypeMapping TypeName="TerminalsModel.RoundsTbl">
               <MappingFragment StoreEntitySet="RoundsTbl">
+                <ScalarProperty Name="RoundStatus" ColumnName="RoundStatus" />
                 <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
                 <ScalarProperty Name="RoundName" ColumnName="RoundName" />
                 <ScalarProperty Name="RoundDate" ColumnName="RoundDate" />
