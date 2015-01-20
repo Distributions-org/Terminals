@@ -16,6 +16,7 @@
             vm.customerSelectedChange = customerSelected;
             vm.update = false;
             vm.products = {};
+        vm.productsCustomer = {};
 
         ////date picker
             
@@ -132,16 +133,29 @@
 
             function customerSelected(selected) {
                 if (selected != null) {
-                    vm.update = true;
-                } else {
+                   return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
+                       //success
+                       
+                            vm.productsCustomer = response.data;
+                        vm.update = true;
+
+                    },
+                    function (response) {
+                        //error
+                        logError(response.status + " " + response.statusText);
+                    });
+                    
+                }
+                else {
                     vm.update = false;
+                    return null;
                 }
             }
-
-            function today() {
-                var date = new Date();
-                vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-            };
+        
+            //function today() {
+            //    var date = new Date();
+            //    vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            //};
             //function generateRandomItem(id) {
 
             //    var firstname = firstnames[Math.floor(Math.random() * 3)];

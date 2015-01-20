@@ -34,6 +34,17 @@ namespace Distributions.Web.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
         }
-      
+
+        [Route("GetProductsCustomer")]
+        [HttpGet]
+        public HttpResponseMessage GetProductsCustomer(int customerId)
+        {
+            var customersProdusts = _customersService.GetAllCustomerProducts(customerId);
+            if (customersProdusts != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, customersProdusts);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
+        }
     }
 }

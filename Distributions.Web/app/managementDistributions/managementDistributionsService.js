@@ -9,6 +9,7 @@
 
         var service = {
             getCustomers: getCustomers,
+            getProductsCustomer: getProductsCustomer,
         };
 
         return service;
@@ -20,6 +21,15 @@
                 .error(function(data, status) {
                 return status;
             });
+        }
+
+        function getProductsCustomer(customerId) {
+            return $http.get("/GetProductsCustomer?customerId="+customerId).success(function (data) {
+                return data;
+            })
+               .error(function (data, status) {
+                   return status;
+               });
         }
     }
 })();

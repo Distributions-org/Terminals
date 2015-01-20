@@ -48,7 +48,7 @@ namespace Services.Users
 
         public List<ProductToCustomer> GetAllCustomerProducts(int CustomerID)
         {
-            Mapper.AssertConfigurationIsValid();
+            //Mapper.AssertConfigurationIsValid();
             var allCustomerProducts = _ProductCustomerRepository.FindBy(x => x.CustomerID == CustomerID).ToList();
 
             Mapper.CreateMap<ProductCustomerTbl, ProductToCustomer>()
