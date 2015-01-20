@@ -16,5 +16,10 @@ namespace Core.Domain.Reports
         public int ProductID { get; set; }
         public string ProductName { get; set; }
         public double Cost { get; set; }
+
+        public CustmerReports()
+        {
+            AllCustomerProductReports = new List<ProductCustomerReport>();
+        }
     }
 }
