@@ -66,14 +66,20 @@ namespace Services
                     ProductCustomerReport newproductCustomerReport = new ProductCustomerReport();
                     int RoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                     newproductCustomerReport.currentDate = _RoundsRepository.FindBy(x => x.RoundsID == RoundID).FirstOrDefault().RoundDate.Value;
+                    
                     if (roundcustomerproduct.Amount < 0)
                     {
                         newproductCustomerReport.DelieveryTaken = roundcustomerproduct.Amount.Value;
+                        customerReport.TotalSum -= roundcustomerproduct.Amount.Value * customerReport.Cost;
+                        customerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
                     }
                     else
                     {
                         newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
+                        customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
+                        customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
                     }
+
                     customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
                     customerReports.Add(customerReport);
                 }
@@ -96,10 +102,14 @@ namespace Services
                         if (roundcustomerproduct.Amount < 0)
                         {
                             newproductCustomerReport.DelieveryTaken = roundcustomerproduct.Amount.Value;
+                            customerReport.TotalSum -= roundcustomerproduct.Amount.Value * customerReport.Cost;
+                            customerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
                         }
                         else
                         {
                             newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
+                            customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
+                            customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
                         }
                         customerReports.Add(customerReport);
                     }
@@ -110,10 +120,14 @@ namespace Services
                         if (roundcustomerproduct.Amount < 0)
                         {
                             currentProductCustomerReport.DelieveryTaken += roundcustomerproduct.Amount.Value;
+                            CurrentCustomerReport.TotalSum -= roundcustomerproduct.Amount.Value * CurrentCustomerReport.Cost;
+                            CurrentCustomerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
                         }
                         else
                         {
                             currentProductCustomerReport.DelieverySent -= roundcustomerproduct.Amount.Value;
+                            CurrentCustomerReport.TotalSum += roundcustomerproduct.Amount.Value * CurrentCustomerReport.Cost;
+                            CurrentCustomerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
                         }
                         CurrentCustomerReport.AllCustomerProductReports.Add(currentProductCustomerReport);
                     }
