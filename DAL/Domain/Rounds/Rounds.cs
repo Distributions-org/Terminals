@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Domain.Users;
+using Core.Enums;
 
 
 namespace Core.Domain.Rounds
@@ -15,5 +16,11 @@ namespace Core.Domain.Rounds
         public DateTime RoundDate { get; set; }
         public List<User> RoundUser { get; set; }
         public List<CustomerRound> custRound { get; set; }
+        public RoundStatus.roundStatus roundStatus { get; set; }
+
+        public Rounds()
+        {
+            roundStatus = RoundStatus.roundStatus.Open;
+        }
     }
 }
