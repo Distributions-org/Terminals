@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.OData.Extensions;
+using Core.Domain.ProductTocustomer;
 using Core.Enums;
 using Distributions.Web.Authorize;
 using Distributions.Web.Models;
@@ -18,10 +19,12 @@ namespace Distributions.Web.Controllers
     public class ManagementDistributionsController : BaseApiController
     {
         private readonly ICustomerService _customersService;
+        private readonly IProductsService _productsService;
 
-        public ManagementDistributionsController(ICustomerService customersService)
+        public ManagementDistributionsController(ICustomerService customersService,IProductsService productsService)
         {
             _customersService = customersService;
+            _productsService = productsService;
         }
 
         [Route("GetActiveCustomers")]
@@ -45,6 +48,18 @@ namespace Distributions.Web.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, customersProdusts);
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
+        }
+
+        [Route("AddProductsCustomer")]
+        [HttpPost]
+        public HttpResponseMessage AddProductsCustomer(ProductToCustomer productToCustomer)
+        {
+            var result = _productsService.AddProductTocustomer(productToCustomer);
+            if (result.ToString() =="Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result);
         }
     }
 }

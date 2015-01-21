@@ -16,8 +16,10 @@
             vm.customerSelectedChange = customerSelected;
             vm.update = false;
             vm.products = {};
-        vm.productsCustomer = {};
-
+            vm.productsCustomer = {};
+            vm.addProductToCustomer = addProductToCustomer;
+        vm.saveProductToCustomer = saveProductToCustomer;
+        
         ////date picker
             
             //vm.today=today();
@@ -151,7 +153,42 @@
                     return null;
                 }
             }
-        
+
+            function addProductToCustomer(productId) {
+                var product = _.findWhere(vm.products, { ProductID: productId });
+                if (_.findWhere(vm.productsCustomer, { ProductID: productId })!==undefined) {
+                    logError("המוצר קיים!!!");
+                    return false;
+                }
+                if (product!=null) {
+                    var productTocustomer = {
+                        ProductCustomerID: 0,
+                        CustomerID: vm.customerSelected.CustomerID,
+                        ProductID: product.ProductID,
+                        dayType: 1,
+                        Cost: 0,
+                        ProductName: product.ProductName,
+                        CustomerName: vm.customerSelected.CustomerName
+                    }
+                    return managementDistributionsService.addProductToCustomer(productTocustomer).then(
+                        function(response) {
+                            //success
+                            logSuccess("המוצר התווסף בהצלחה!");
+                            customerSelected(vm.customerSelected);
+                        },
+                        function(response) {
+                            //error
+                            logError(response.status + " " + response.statusText);
+                        });
+                }
+                logError("שגיאה בלתי צפוייה!");
+                return null;
+
+            }
+
+            function saveProductToCustomer(productId) {
+            
+        }
             //function today() {
             //    var date = new Date();
             //    vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());

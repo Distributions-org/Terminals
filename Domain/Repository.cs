@@ -11,7 +11,7 @@ using Core.Enums;
 
 namespace Data
 {
-    public class Repository<T>:IRepository<T> where T: class
+    public class Repository<T>:IRepository<T>,IDisposable where T: class
     {
         private readonly TerminalsEntities _context;
         private  IDbSet<T> _entities;
@@ -95,6 +95,13 @@ namespace Data
                 return _entities;
             }
         }
-       
+
+        public void Dispose()
+        {
+            if (this._context != null)
+            {
+                this._context.Dispose();
+            }
+        }
     }
 }

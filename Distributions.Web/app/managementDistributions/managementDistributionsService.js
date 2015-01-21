@@ -10,6 +10,7 @@
         var service = {
             getCustomers: getCustomers,
             getProductsCustomer: getProductsCustomer,
+            addProductToCustomer: addProductToCustomer
         };
 
         return service;
@@ -30,6 +31,15 @@
                .error(function (data, status) {
                    return status;
                });
+        }
+
+        function addProductToCustomer(parameters) {
+            return $http.post("/AddProductsCustomer", parameters).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                return status;
+            });
         }
     }
 })();

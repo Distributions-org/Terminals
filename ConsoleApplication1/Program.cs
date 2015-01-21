@@ -65,7 +65,7 @@ namespace Console.Test
         }
         private static void RegisterServices(IKernel kernal)
         {
-            kernal.Bind<TestContext>().ToSelf().InSingletonScope();
+            //kernal.Bind<TestContext>().ToSelf().InSingletonScope();
             kernal.Bind(typeof(IRepository<>)).To(typeof(Repository<>));
             kernal.Bind<IUserService>().To<UsersService>();
             kernal.Bind<ICustomerService>().To<CustomerService>();

@@ -30,7 +30,8 @@ namespace Distributions.Web
             builder.RegisterModule(new AutofacWebTypesModule());
 
             builder.RegisterType<TerminalsEntities>().InstancePerRequest();
-
+            builder.RegisterType<TerminalContext>().InstancePerRequest();
+            
             //builder.RegisterType<UserStore<ApplicationUser>>().As<IUserStore<ApplicationUser>>();
 
             //builder.RegisterType<UserManager<ApplicationUser>>();
