@@ -10,7 +10,8 @@
         var service = {
             getCustomers: getCustomers,
             getProductsCustomer: getProductsCustomer,
-            addProductToCustomer: addProductToCustomer
+            addProductToCustomer: addProductToCustomer,
+            saveProductToCustomer: saveProductToCustomer
         };
 
         return service;
@@ -40,6 +41,15 @@
                 .error(function(data, status) {
                 return status;
             });
+        }
+
+        function saveProductToCustomer(parameters) {
+            return $http.post("/UpdateProductsCustomer", parameters).success(function (data) {
+                return data;
+            })
+                .error(function (data, status) {
+                    return status;
+                });
         }
     }
 })();

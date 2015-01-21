@@ -61,5 +61,17 @@ namespace Distributions.Web.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, result);
         }
+
+        [Route("UpdateProductsCustomer")]
+        [HttpPost]
+        public HttpResponseMessage UpdateProductsCustomer(ProductToCustomer productToCustomer)
+        {
+            var result = _productsService.UpdateCustomerProductPrice(productToCustomer);
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result);
+        }
     }
 }

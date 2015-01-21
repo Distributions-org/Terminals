@@ -5,7 +5,6 @@
                 <div class="widget wviolet">
                     <div data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content">
-                        <h3>ניהול הפצות</h3>
                         <div class="row">
                             <div class="col-sm-2">
                                 <span>בחר לקוח:</span>
@@ -46,7 +45,7 @@
                                         <tr data-ng-repeat="product in vm.productsCustomer | orderBy:product.ProductName">
                                             <td>{{product.ProductName}}</td>
                                             <td><input type="text" ng-model="product.Cost" name="productCost" value="product.Cost" /></td>
-                                            <td><button ng-click="vm.saveProductToCustomer(product.ProductID)" class="btn btn-xs btn-success">שמור <i class="glyphicon glyphicon-save"></i></button></td>
+                                            <td><button ng-click="vm.saveProductToCustomer(product)" class="btn btn-xs btn-success">שמור <i class="glyphicon glyphicon-save"></i></button></td>
                                         </tr>
                                     </tbody>
                                 </table>

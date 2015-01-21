@@ -10,7 +10,7 @@
             var logError = common.logger.getLogFn(controllerId, 'error');
             var vm = this;
             vm.isAdmin = false;
-            vm.title = 'Management Distributions';
+            vm.title = 'ניהול מוצרים ללקוח';
             vm.customers = {};
             vm.customerSelected = {};
             vm.customerSelectedChange = customerSelected;
@@ -186,8 +186,20 @@
 
             }
 
-            function saveProductToCustomer(productId) {
-            
+            function saveProductToCustomer(product) {
+                if (product !== undefined) {
+                    return managementDistributionsService.saveProductToCustomer(product).then(function (response) {
+                        //success
+                        logSuccess("המוצר נשמר בהצלחה!");
+                    },
+                        function (response) {
+                            //error
+                            logError(response.status + " " + response.statusText);
+                    });
+                } else {
+                    logError("חלה שגיאה במהלך הפעולה!");
+                    return false;
+                }
         }
             //function today() {
             //    var date = new Date();
