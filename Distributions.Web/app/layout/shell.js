@@ -13,7 +13,7 @@
         vm.logout = logout;
         var events = config.events;
         vm.antiForgeryToken ="";
-        vm.busyMessage = 'Please wait ...';
+        vm.busyMessage = 'אנא המתן ...';
         vm.isBusy = true;
         vm.spinnerOptions = {
             radius: 40,
@@ -29,7 +29,7 @@
         activate();
 
         function activate() {
-            logSuccess('Distributions loaded!', null, true);
+            logSuccess('הדף נטען!', null, true);
             var promises = [getuserNameAndRole(), isAuthenticated(), getAntiForgeryToken()];
             common.activateController([promises], controllerId);
         }

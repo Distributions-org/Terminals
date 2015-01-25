@@ -137,6 +137,24 @@ form[name=customersForm] .input-group div.btn {
 .customersProducts table tr td button {
   float: left;
 }
+.bootstrap-timepicker-widget {
+  right: auto;
+}
+.bootstrap-timepicker-widget table td input {
+  width: 35px;
+}
+.bootstrap-timepicker #timepicker {
+  width: 77%;
+}
+.bootstrap-timepicker i {
+  margin-right: -25px;
+}
+.date-picker i.glyphicon-calendar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
 /*.ui-grid-column-menu-button
 {
     left:0;

@@ -20,11 +20,13 @@ namespace Distributions.Web.Controllers
     {
         private readonly ICustomerService _customersService;
         private readonly IProductsService _productsService;
+        private readonly IUserService _userService;
 
-        public ManagementDistributionsController(ICustomerService customersService,IProductsService productsService)
+        public ManagementDistributionsController(ICustomerService customersService,IProductsService productsService,IUserService userService)
         {
             _customersService = customersService;
             _productsService = productsService;
+            _userService = userService;
         }
 
         [Route("GetActiveCustomers")]
@@ -36,6 +38,17 @@ namespace Distributions.Web.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, customers);
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
+        }
+
+        [Route("GetWorkers")]
+        public HttpResponseMessage GetWorkers()
+        {
+            var workers = _userService.GetAllUsers().Where(x => x.RoleID == UserRoles.userRoles.Worker).ToList();
+            if (workers.Any())
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, workers);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Workers Not Founds");
         }
 
         [Route("GetProductsCustomer")]

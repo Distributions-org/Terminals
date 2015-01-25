@@ -11,7 +11,8 @@
             getCustomers: getCustomers,
             getProductsCustomer: getProductsCustomer,
             addProductToCustomer: addProductToCustomer,
-            saveProductToCustomer: saveProductToCustomer
+            saveProductToCustomer: saveProductToCustomer,
+            getWorkers: getWorkers
         };
 
         return service;
@@ -23,6 +24,15 @@
                 .error(function(data, status) {
                 return status;
             });
+        }
+
+        function getWorkers() {
+            return $http.get("/GetWorkers").success(function (data) {
+                return data;
+            })
+                .error(function (data, status) {
+                    return status;
+                });
         }
 
         function getProductsCustomer(customerId) {
