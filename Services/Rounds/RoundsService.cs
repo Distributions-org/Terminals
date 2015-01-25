@@ -161,6 +161,37 @@ namespace Services
 
         }
 
+        public List<RoundProductCustomer> CheckProductAmountPerRound(int ProductID, int RoundID, int TotalAmount)
+        {
+            List<int> RoundCustomerIDs = _RoundsCustomerRepository.FindBy(x =>  x.RoundsID == RoundID).Select(x => x.RoundsCustomersID).ToList();
+            List<RoundsCustomerProductTbl> productRoundPerCustomer = _RoundsCustomerProductRepository.FindBy(x => x.ProductID == ProductID && RoundCustomerIDs.Any(y => y == x.RoundsCustomersID)).ToList();
+
+            List<RoundProductCustomer> allroundProducts = new List<RoundProductCustomer>();
+
+            foreach (var item in productRoundPerCustomer)
+            {
+                RoundProductCustomer currentRound = new RoundProductCustomer();
+                ProductToCustomer currentCustomer = new ProductToCustomer();
+                currentCustomer.ProductID = item.ProductID.Value;
+
+                currentCustomer.ProductName = _ProductsRepository.FindBy(x => x.ProductID == item.ProductID).FirstOrDefault().ProductName;
+                currentCustomer.CustomerID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == item.RoundsCustomersID.Value).FirstOrDefault().CustomerID.Value;
+                currentCustomer.CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID).FirstOrDefault().CustomerName;
+                ProductCustomerTbl PCT = new ProductCustomerTbl();
+                PCT = _ProductCustomerRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID && x.ProductID == item.ProductID).FirstOrDefault();
+                currentCustomer.ProductCustomerID = PCT.ProductCustomerID;
+                currentCustomer.Cost = PCT.Cost.Value;
+
+                currentRound.CustomerRoundProduct = currentCustomer;
+                currentRound.Amount = item.Amount.Value;
+                currentRound.DeliveredAmount = item.DelieveredAmount.HasValue ? item.DelieveredAmount.Value : 0;
+                allroundProducts.Add(currentRound);
+            }
+
+            return allroundProducts;
+
+        }
+
         public FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount)
         {
             RoundsCustomerProductTbl currentRoundCustomerProducts = _RoundsCustomerProductRepository.FindBy(x => x.RoundsCustomerProductID == RoundProductCustomerID).FirstOrDefault();
@@ -182,7 +213,8 @@ namespace Services
 
         private void MappingToDB()
         {
-            Mapper.CreateMap<Rounds, RoundsTbl>();
+            Mapper.CreateMap<Rounds, RoundsTbl>()
+                .ForMember(a => a.RoundStatus, b => b.MapFrom(c => (int)c.roundStatus));
         }
 
         private void MappingToClass()

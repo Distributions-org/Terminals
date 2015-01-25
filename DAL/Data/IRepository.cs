@@ -13,7 +13,7 @@ namespace Core.Data
         IQueryable<T> GetAll();
         IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
         FunctionReplay.functionReplay Add(T entity);
-        void Delete(T entity);
+        FunctionReplay.functionReplay Delete(T entity);
         FunctionReplay.functionReplay Update(T entity);
         FunctionReplay.functionReplay Save();
     }

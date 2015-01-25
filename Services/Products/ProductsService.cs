@@ -40,6 +40,12 @@ namespace Services
             return _productsRepository.Update(currentProduct);
         }
 
+        public FunctionReplay.functionReplay RemoveProductToCustomer(int ProductCustomerID)
+        {
+            return _ProductCustomerRepository.Delete(_ProductCustomerRepository.FindBy(x => x.ProductCustomerID == ProductCustomerID).FirstOrDefault());
+
+        }
+
         public FunctionReplay.functionReplay AddProductTocustomer(ProductToCustomer addedProduct)
         {
             Mapper.CreateMap<ProductToCustomer, ProductCustomerTbl>()

@@ -71,6 +71,7 @@
     <Compile Include="Enums\DaysType.cs" />
     <Compile Include="Enums\FunctionReplay.cs" />
     <Compile Include="Enums\ProductStatus.cs" />
+    <Compile Include="Enums\RoundStatus.cs" />
     <Compile Include="Enums\UserRoles.cs" />
     <Compile Include="MD5\MD5Decrypt.cs" />
     <Compile Include="MD5\MD5Encrypt.cs" />

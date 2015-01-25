@@ -47,12 +47,22 @@ namespace Data
             }
         }
 
-        public void Delete(T entity)
+        public FunctionReplay.functionReplay Delete(T entity)
         {
-            if (entity == null)
-                throw new Exception("entity null");
+            try
+            {
+                if (entity == null)
+                    throw new Exception("entity null");
 
-            Entities.Remove(entity);
+                Entities.Remove(entity);
+                Save();
+                return FunctionReplay.functionReplay.Success;
+            }
+            catch (Exception)
+            {
+
+                return FunctionReplay.functionReplay.Failed;
+            }
         }
 
         public FunctionReplay.functionReplay Update(T entity)
