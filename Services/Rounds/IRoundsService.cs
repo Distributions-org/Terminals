@@ -18,7 +18,7 @@ namespace Services
 
         List<RoundProductCustomer> GetRoundCustomerProducts(int CustomerID, int RoundID);
 
-        //FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount);
+        FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount);
 
         bool CheckIfUserCanUseRound(int UserID);
     }

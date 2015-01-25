@@ -62,5 +62,17 @@ namespace Services.Users
             return allcustomers;
             
         }
+
+        public FunctionReplay.functionReplay UpdateCustomer(int CustomerID,Core.Domain.Customers.Customers UpdateCustomer)
+        {
+            Mapper.CreateMap<Core.Domain.Customers.Customers, Data.Customers>()
+                .ForMember(a => a.Status, b => b.MapFrom(z => (int)z.custStatus));
+            Data.Customers customerToUpdate = _CustomersRepository.FindBy(x => x.CustomerID == CustomerID).FirstOrDefault();
+            customerToUpdate.CustomerName = UpdateCustomer.CustomerName;
+            customerToUpdate.CustomerHP = UpdateCustomer.CustomerHP;
+            customerToUpdate.Status = (int)UpdateCustomer.custStatus;
+
+            return _CustomersRepository.Update(customerToUpdate);
+        }
     }
 }

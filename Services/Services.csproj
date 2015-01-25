@@ -56,6 +56,8 @@
     <Compile Include="Products\ProductsService.cs" />
     <Compile Include="Products\IProductsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\IReportsService.cs" />
+    <Compile Include="Reports\ReportsService.cs" />
     <Compile Include="Rounds\IRoundsService.cs" />
     <Compile Include="Rounds\RoundsService.cs" />
     <Compile Include="SessionManager\IDataPersistance.cs" />

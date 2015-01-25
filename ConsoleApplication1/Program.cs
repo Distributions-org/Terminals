@@ -19,6 +19,11 @@ namespace Console.Test
             var kernal = new StandardKernel();
             RegisterServices(kernal);
 
+            var reportService = kernal.Get<IReportsService>();
+            List<int> ProductIds = new List<int>();
+            ProductIds.Add(1);
+            reportService.GetCustomerProductsReports(ProductIds, 1, 2014, 12, 2015, 1);
+
             var userService = kernal.Get<IUserService>();
 
             //User NewUser = new User{FirstName = "Oren",LastName = "Naftaly", Email = "Naftalywork@gmail.com",Password = "orenn1",RoleID = Core.Enums.UserRoles.userRoles.admin};
@@ -71,6 +76,7 @@ namespace Console.Test
             kernal.Bind<ICustomerService>().To<CustomerService>();
             kernal.Bind<IProductsService>().To<ProductsService>();
             kernal.Bind<IRoundsService>().To<RoundsService>();
+            kernal.Bind<IReportsService>().To<ReportsService>();
         }
     }
 }

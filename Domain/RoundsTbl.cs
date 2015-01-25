@@ -17,5 +17,6 @@ namespace Data
         public int RoundsID { get; set; }
         public string RoundName { get; set; }
         public Nullable<System.DateTime> RoundDate { get; set; }
+        public Nullable<int> RoundStatus { get; set; }
     }
 }

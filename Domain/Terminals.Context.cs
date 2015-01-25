@@ -22,7 +22,7 @@ namespace Data
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //throw new UnintentionalCodeFirstException();
+            throw new UnintentionalCodeFirstException();
         }
     
         public DbSet<Customers> Customers { get; set; }
@@ -34,9 +34,5 @@ namespace Data
         public DbSet<UsersTbl> UsersTbl { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
-        public DbSet<AspNetRole> AspNetRoles { get; set; }
-        public DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public DbSet<AspNetUser> AspNetUsers { get; set; }
     }
 }
