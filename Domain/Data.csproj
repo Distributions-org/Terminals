@@ -133,7 +133,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Terminals.edmx</DependentUpon>
     </Compile>
-    <Compile Include="TestContext.cs" />
+    <None Include="TestContext.cs.old" />
     <Compile Include="UsersTbl.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>

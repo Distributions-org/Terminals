@@ -1,22 +1,26 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'managementDistributions';
-    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService', managementDistributions]);
+    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService', 'adminService', managementDistributions]);
 
-        function managementDistributions($location, common, datacontext, managementDistributionsService) {
+    function managementDistributions($location, common, datacontext, managementDistributionsService, adminService) {
             var getLogFn = common.logger.getLogFn;
             var log = getLogFn(controllerId);
             var logSuccess = common.logger.getLogFn(controllerId, 'success');
             var logError = common.logger.getLogFn(controllerId, 'error');
             var vm = this;
             vm.isAdmin = false;
-            vm.title = 'Management Distributions';
+            vm.title = 'ניהול מוצרים ללקוח';
             vm.customers = {};
             vm.customerSelected = {};
             vm.customerSelectedChange = customerSelected;
             vm.update = false;
-            
-            ////date picker
+            vm.products = {};
+            vm.productsCustomer = {};
+            vm.addProductToCustomer = addProductToCustomer;
+        vm.saveProductToCustomer = saveProductToCustomer;
+        
+        ////date picker
             
             //vm.today=today();
 
@@ -95,7 +99,7 @@
             activate();
 
             function activate() {
-                var promises = [isAdminRole(), getCustomers()];
+                var promises = [isAdminRole(), getValidCustomers(), getProducts()];
                 common.activateController([promises], controllerId)
                     .then(function() { log('Activated Management Distributions View'); });
             }
@@ -111,7 +115,7 @@
                 });
             }
 
-            function getCustomers() {
+            function getValidCustomers() {
                 return managementDistributionsService.getCustomers().then(function(result) {
                     return vm.customers = result.data;
                 }, function(status) {
@@ -119,18 +123,88 @@
                 });
             }
 
+            function getProducts() {
+                return adminService.getAllProducts().then(function (response) {
+                    vm.products = _.where(response.data, { productStatus: 1 });
+                }
+                    , function (response) {
+                        logError(response.status + " " + response.statusText);
+                    });
+
+            };
+
             function customerSelected(selected) {
                 if (selected != null) {
-                    vm.update = true;
-                } else {
+                   return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
+                       //success
+                       
+                            vm.productsCustomer = response.data;
+                        vm.update = true;
+
+                    },
+                    function (response) {
+                        //error
+                        logError(response.status + " " + response.statusText);
+                    });
+                    
+                }
+                else {
                     vm.update = false;
+                    return null;
                 }
             }
 
-            function today() {
-                var date = new Date();
-                vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-            };
+            function addProductToCustomer(productId) {
+                var product = _.findWhere(vm.products, { ProductID: productId });
+                if (_.findWhere(vm.productsCustomer, { ProductID: productId })!==undefined) {
+                    logError("המוצר קיים!!!");
+                    return false;
+                }
+                if (product!=null) {
+                    var productTocustomer = {
+                        ProductCustomerID: 0,
+                        CustomerID: vm.customerSelected.CustomerID,
+                        ProductID: product.ProductID,
+                        dayType: 1,
+                        Cost: 0,
+                        ProductName: product.ProductName,
+                        CustomerName: vm.customerSelected.CustomerName
+                    }
+                    return managementDistributionsService.addProductToCustomer(productTocustomer).then(
+                        function(response) {
+                            //success
+                            logSuccess("המוצר התווסף בהצלחה!");
+                            customerSelected(vm.customerSelected);
+                        },
+                        function(response) {
+                            //error
+                            logError(response.status + " " + response.statusText);
+                        });
+                }
+                logError("שגיאה בלתי צפוייה!");
+                return null;
+
+            }
+
+            function saveProductToCustomer(product) {
+                if (product !== undefined) {
+                    return managementDistributionsService.saveProductToCustomer(product).then(function (response) {
+                        //success
+                        logSuccess("המוצר נשמר בהצלחה!");
+                    },
+                        function (response) {
+                            //error
+                            logError(response.status + " " + response.statusText);
+                    });
+                } else {
+                    logError("חלה שגיאה במהלך הפעולה!");
+                    return false;
+                }
+        }
+            //function today() {
+            //    var date = new Date();
+            //    vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            //};
             //function generateRandomItem(id) {
 
             //    var firstname = firstnames[Math.floor(Math.random() * 3)];

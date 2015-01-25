@@ -48,7 +48,8 @@ namespace Services.Users
 
         public List<ProductToCustomer> GetAllCustomerProducts(int CustomerID)
         {
-            Mapper.AssertConfigurationIsValid();
+            Mapper.Reset();
+            //Mapper.AssertConfigurationIsValid();
             var allCustomerProducts = _ProductCustomerRepository.FindBy(x => x.CustomerID == CustomerID).ToList();
 
             Mapper.CreateMap<ProductCustomerTbl, ProductToCustomer>()
@@ -56,7 +57,8 @@ namespace Services.Users
                 .ForMember(p => p.dayType, b => b.MapFrom(z => (Core.Enums.DaysType.DayType)z.DayTypeID.Value))
                 .ForMember(a => a.CustomerName, b => b.MapFrom(z => _CustomersRepository.FindBy(x => x.CustomerID == z.CustomerID).FirstOrDefault().CustomerName));
 
-            List<ProductToCustomer> allcustomers = Mapper.Map<List<ProductCustomerTbl>, List<ProductToCustomer>>(allCustomerProducts);
+            
+            var allcustomers = Mapper.Map<List<ProductCustomerTbl>, List<ProductToCustomer>>(allCustomerProducts);
             return allcustomers;
             
         }
