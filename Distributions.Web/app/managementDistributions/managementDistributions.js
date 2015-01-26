@@ -21,30 +21,38 @@
         vm.saveProductToCustomer = saveProductToCustomer;
         vm.workers = {};
         vm.customerRoundSelectedChange = customerRoundSelected;
+        vm.customerRoundSelected = {};
+        vm.productsRoundCustomer = {};
+        vm.updateRound = false;
+        vm.dt = new Date();
+        vm.productsRoundCustomerSelected = [];
+        vm.addProductToRound = addProductToRound;
+        vm.time = "";
+        vm.removeProductRoundCustomer = removeProductRoundCustomer;
 
         ////date picker
 
-        //vm.today=today();
+        vm.today=today();
 
-        //// Disable weekend selection
-        //vm.disabled = function (date, mode) {
-        //    return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
-        //};
+        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
+        vm.format = vm.formats[3];
 
-        //vm.open = function ($event) {
-        //    $event.preventDefault();
-        //    $event.stopPropagation();
+        // Disable weekend selection
+        vm.disabled = function (date, mode) {
+            return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+        };
 
-        //    vm.opened = true;
-        //};
+        vm.open = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
 
-        //vm.dateOptions = {
-        //    formatYear: 'yyyy',
-        //    startingDay: 1,
-        //};
+            vm.opened = true;
+        };
 
-        //vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
-        //vm.format = vm.formats[3];
+        vm.dateOptions = {
+            formatYear: 'yyyy',
+            startingDay: 1,
+        };
 
         //vm.gridOptions = {
         //    columnDefs: [
@@ -110,8 +118,10 @@
             $('#timepicker').timepicker({
                 minuteStep: 5,
                 showInputs: true,
-                disableFocus: false
+                disableFocus: false,
+                showMeridian:false
             });
+            vm.time = $('#timepicker').val();
         }
 
         
@@ -160,7 +170,6 @@
             if (selected != null) {
                 return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
                     //success
-
                     vm.productsCustomer = response.data;
                     vm.update = true;
 
@@ -177,9 +186,39 @@
             }
         }
 
-        function customerRoundSelected(selected) {
-            
+        function addProductToRound(product) {
+            var p = _.findWhere(vm.productsRoundCustomerSelected, { ProductID: product.ProductID });
+            if (p !== undefined) {
+                logError("המוצר קיים!");
+                return;
+            }
+            vm.productsRoundCustomerSelected.push(product);
         }
+
+        function removeProductRoundCustomer(product) {
+            vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
+        }
+
+        function customerRoundSelected(selected) {
+            if (selected != null) {
+                return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
+                    //success
+                    vm.productsRoundCustomer = response.data;
+                    vm.updateRound = true;
+
+                },
+              function (response) {
+                  //error
+                  logError(response.status + " " + response.statusText);
+              });
+
+            }
+            else {
+                vm.updateRound = false;
+                return null;
+            }
+            }
+        
 
         function addProductToCustomer(productId) {
             var product = _.findWhere(vm.products, { ProductID: productId });
@@ -228,10 +267,10 @@
                 return false;
             }
         }
-        //function today() {
-        //    var date = new Date();
-        //    vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-        //};
+        function today() {
+            var date = new Date();
+            vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+        };
         //function generateRandomItem(id) {
 
         //    var firstname = firstnames[Math.floor(Math.random() * 3)];
