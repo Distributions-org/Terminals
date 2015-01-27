@@ -108,18 +108,25 @@
                                     <div allow-collapse="true" data-cc-widget-header title="יצירת סבב"></div>
                                     <div class="widget-content round">
                                         <div class="row">
-                                            <div class="col-sm-3">
-                                                <select class="form-control" ng-model="vm.workerSelected" ng-options="(worker.FirstName+' '+worker.LastName)  for worker in vm.workers track by worker.UserID"
-                                                        ng-change="vm.workerSelectedChange(vm.workerSelected)">
+                                            <div class="col-sm-4">
+                                                <label>שם:</label>
+                                                <input type="text" name="roundName" ng-model="vm.roundName" placeholder="שם לסבב" />
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label>מפיץ:</label>
+                                                <select class="form-control" ng-model="vm.workerSelected" ng-options="(worker.FirstName+' '+worker.LastName)  for worker in vm.workers track by worker.UserID">
                                                     <option value="">בחר מפיץ</option>
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
+                                                <label>לקוח:</label>
                                                 <select class="form-control" ng-model="vm.customerRoundSelected" ng-options="customer.CustomerName for customer in vm.customers track by customer.CustomerID"
                                                         ng-change="vm.customerRoundSelectedChange(vm.customerRoundSelected)">
                                                     <option value="">בחר לקוח</option>
                                                 </select>
                                             </div>
+                                        </div>
+                                        <div class="row addProduct">
                                             <div class="col-sm-3">
                                                 <div class="input-group date-picker">
                                                     <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
@@ -127,21 +134,19 @@
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3">
-                                                <div class="bootstrap-timepicker pull-left">
+                                            <div class="col-sm-2">
+                                                <div class="bootstrap-timepicker">
                                                     <input id="timepicker" ng-model="vm.time" type="text" class="form-control" />
                                                     <i class="glyphicon glyphicon-time"></i>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div ng-show="vm.productsRoundCustomer.length>0" class="row addProduct">
-                                            <div class="col-sm-4 col-sm-offset-2">
-                                                <span>בחר מוצר:</span>
+                                            <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
+                                                <label>בחר מוצר:</label>
                                                 <select class="form-control" ng-model="vm.productRoundSelected" ng-options="product.ProductName for product in vm.productsRoundCustomer track by product.ProductID">
                                                     <option value="">בחר מוצר</option>
                                                 </select>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-3">
                                                 <button ng-click="vm.addProductToRound(vm.productRoundSelected)" class="btn btn-info">הוסף מוצר לסבב<i class="glyphicon glyphicon-collapse-down"></i></button>
                                             </div>
                                         </div>
@@ -168,7 +173,7 @@
                                                 </table>
                                             </div>
                                             <div class="col-sm-12 text-center saveBtn">
-                                                <button ng-click="vm.saveProductRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
+                                                <button ng-click="vm.saveRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
                                             </div>
                                         </div>
                                     </div>

@@ -12,7 +12,8 @@
             getProductsCustomer: getProductsCustomer,
             addProductToCustomer: addProductToCustomer,
             saveProductToCustomer: saveProductToCustomer,
-            getWorkers: getWorkers
+            getWorkers: getWorkers,
+            newRound: newRound
         };
 
         return service;
@@ -60,6 +61,15 @@
                 .error(function (data, status) {
                     return status;
                 });
+        }
+
+        function newRound(round) {
+            return $http.post("/NewRound", round).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                return status;
+            });
         }
     }
 })();

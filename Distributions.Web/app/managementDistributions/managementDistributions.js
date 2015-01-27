@@ -20,6 +20,7 @@
         vm.addProductToCustomer = addProductToCustomer;
         vm.saveProductToCustomer = saveProductToCustomer;
         vm.workers = {};
+        vm.workerSelected = {};
         vm.customerRoundSelectedChange = customerRoundSelected;
         vm.customerRoundSelected = {};
         vm.productsRoundCustomer = {};
@@ -29,13 +30,15 @@
         vm.addProductToRound = addProductToRound;
         vm.time = "";
         vm.removeProductRoundCustomer = removeProductRoundCustomer;
+        vm.saveRound = saveRound;
+        vm.roundName = "";
 
         ////date picker
 
         vm.today=today();
 
         vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
-        vm.format = vm.formats[3];
+        vm.format = vm.formats[2];
 
         // Disable weekend selection
         vm.disabled = function (date, mode) {
@@ -203,6 +206,7 @@
             if (selected != null) {
                 return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
                     //success
+                        vm.productsRoundCustomerSelected = [];
                     vm.productsRoundCustomer = response.data;
                     vm.updateRound = true;
 
@@ -269,8 +273,64 @@
         }
         function today() {
             var date = new Date();
-            vm.dt = ((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            vm.dt = date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
         };
+
+        function saveRound() {
+
+            var roundcustomerProducts = [];
+            _.each(vm.productsRoundCustomerSelected, function(product) {
+                roundcustomerProducts.push({
+                    CustomerRoundProduct: {
+                        ProductCustomerID:product.ProductCustomerID,
+                        CustomerID:product.CustomerID,
+                        ProductID:product.ProductID,
+                        dayType:product.dayType,
+                        Cost:product.Cost,
+                        ProductName:product.ProductName,
+                        CustomerName: product.CustomerName
+                    },
+                    Amount:Number(product.Amount),
+                    DeliveredAmount:0
+                });
+            });
+
+            var customerRound= {
+                customerRound: vm.customerRoundSelected,
+                roundcustomerProducts: roundcustomerProducts
+            }
+            var round= {
+                RoundID:0,
+                RoundName:vm.roundName,
+                RoundDate: getRoundDate(),
+                RoundUser:[vm.workerSelected],
+                custRound: [customerRound],
+                roundStatus:1
+            }
+            
+            return managementDistributionsService.newRound(round).then(function() {
+                //success
+                logSuccess("הסבב נוצר בהצלחה.");
+                vm.productsRoundCustomerSelected=[];
+                vm.roundName = '';
+                },
+                function(status) {
+                    //error
+                    logError("!!!שגיאה " + status);
+                }
+            );
+        }
+
+        function getRoundDate() {
+            var date;
+            if (new Date(vm.dt) == 'Invalid Date') {
+                date = new Date();
+                date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
+                return date;
+            }
+            vm.dt.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
+            return vm.dt;
+        }
         //function generateRandomItem(id) {
 
         //    var firstname = firstnames[Math.floor(Math.random() * 3)];

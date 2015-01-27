@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.OData.Extensions;
 using Core.Domain.ProductTocustomer;
+using Core.Domain.Rounds;
 using Core.Enums;
 using Distributions.Web.Authorize;
 using Distributions.Web.Models;
@@ -21,12 +22,15 @@ namespace Distributions.Web.Controllers
         private readonly ICustomerService _customersService;
         private readonly IProductsService _productsService;
         private readonly IUserService _userService;
+        private readonly IRoundsService _roundsService;
 
-        public ManagementDistributionsController(ICustomerService customersService,IProductsService productsService,IUserService userService)
+        public ManagementDistributionsController(ICustomerService customersService,IProductsService productsService,IUserService userService,
+            IRoundsService roundsService)
         {
             _customersService = customersService;
             _productsService = productsService;
             _userService = userService;
+            _roundsService = roundsService;
         }
 
         [Route("GetActiveCustomers")]
@@ -80,6 +84,18 @@ namespace Distributions.Web.Controllers
         public HttpResponseMessage UpdateProductsCustomer(ProductToCustomer productToCustomer)
         {
             var result = _productsService.UpdateCustomerProductPrice(productToCustomer);
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result);
+        }
+
+        [Route("NewRound")]
+        [HttpPost]
+        public HttpResponseMessage NewRound(Rounds round)
+        {
+            var result = _roundsService.CreateNewRound(round);
             if (result.ToString() == "Success")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
