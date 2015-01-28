@@ -32,6 +32,7 @@
         vm.removeProductRoundCustomer = removeProductRoundCustomer;
         vm.saveRound = saveRound;
         vm.roundName = "";
+        vm.rounds = {};
 
         ////date picker
 
@@ -127,7 +128,16 @@
             vm.time = $('#timepicker').val();
         }
 
-        
+        function getRounds() {
+            return managementDistributionsService.getRounds().then(function(response) {
+                //success
+                    vm.rounds = response.data;
+                },
+                function(response) {
+                    //error
+                    logError(response.status + " " + response.statusText);
+                });
+        }
 
         function isAdminRole() {
             return datacontext.getUserNameAndRole().then(function (response) {
@@ -276,8 +286,24 @@
             vm.dt = date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
         };
 
-        function saveRound() {
+        function createNewRound() {
+            var round= {
+                RoundName: vm.roundName,
+                RoundDate: getRoundDate()
+            }
 
+            return managementDistributionsService.newRound(round).then(function(response) {
+                //success
+                if (response.data == "Success") {
+                    logSuccess("הסבב נוצר בהצלחה!");
+                }
+            }, function (response) {
+                //error
+            });
+        }
+
+        function saveRound() {
+            
             var roundcustomerProducts = [];
             _.each(vm.productsRoundCustomerSelected, function(product) {
                 roundcustomerProducts.push({
