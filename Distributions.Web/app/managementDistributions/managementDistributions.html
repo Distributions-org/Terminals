@@ -110,16 +110,16 @@
                                         <div class="row">
                                             <div class="col-sm-4">
                                                 <label>שם:</label>
-                                                <input type="text" name="roundName" ng-model="vm.roundName" placeholder="שם לסבב" />
+                                                <input type="text" ng-disabled="vm.customersRoundShow" name="roundName" ng-model="vm.roundName" placeholder="שם לסבב" />
                                             </div>
                                             <div class="col-sm-4">
                                                 <label>מפיץ:</label>
-                                                <select class="form-control" ng-model="vm.workerSelected" ng-options="(worker.FirstName+' '+worker.LastName)  for worker in vm.workers track by worker.UserID">
+                                                <select ng-disabled="vm.customersRoundShow" class="form-control" ng-model="vm.workerSelected" ng-options="(worker.FirstName+' '+worker.LastName)  for worker in vm.workers track by worker.UserID">
                                                     <option value="">בחר מפיץ</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-4">
-                                                <button ng-click="vm.createRound()" ng-disabled="(!vm.roundName.trim().length>0) || (vm.workerSelected.UserID==undefined)" class="btn btn-info">צור סבב <i class="glyphicon glyphicon-circle-arrow-left"></i></button>
+                                                <button ng-show="!vm.customersRoundShow" ng-click="vm.createRound()" ng-disabled="(!vm.roundName.trim().length>0) || (vm.workerSelected.UserID==undefined)" class="btn btn-info">צור סבב <i class="glyphicon glyphicon-circle-arrow-left"></i></button>
                                             </div>
                                            
                                         </div>
@@ -139,7 +139,7 @@
                                             </div>
                                         </div>
                                         <div class="row addProduct">
-                                            <div class="col-sm-4">
+                                            <div ng-show="vm.customersRoundShow" class="col-sm-4">
                                                 <label>לקוח:</label>
                                                 <select class="form-control" ng-model="vm.customerRoundSelected" ng-options="customer.CustomerName for customer in vm.customers track by customer.CustomerID"
                                                         ng-change="vm.customerRoundSelectedChange(vm.customerRoundSelected)">

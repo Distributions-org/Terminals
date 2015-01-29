@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.OData.Extensions;
 using Core.Domain.ProductTocustomer;
 using Core.Domain.Rounds;
+using Core.Domain.Users;
 using Core.Enums;
 using Distributions.Web.Authorize;
 using Distributions.Web.Models;
@@ -96,6 +97,18 @@ namespace Distributions.Web.Controllers
         public HttpResponseMessage NewRound(Rounds round)
         {
             var result = _roundsService.CreateNewRound(round);
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result);
+        }
+        
+        [Route("AddUserToRound")]
+        [HttpPost]
+        public HttpResponseMessage AddUserToRound(UsersToRoundModel roundModel)
+        {
+            var result = _roundsService.AddRoundUsersToRound(roundModel.RoundUser, roundModel.RoundId);
             if (result.ToString() == "Success")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);

@@ -13,7 +13,8 @@
             addProductToCustomer: addProductToCustomer,
             saveProductToCustomer: saveProductToCustomer,
             getWorkers: getWorkers,
-            newRound: newRound
+            newRound: newRound,
+            addUserToRound: addUserToRound
         };
 
         return service;
@@ -70,6 +71,15 @@
                 .error(function(data, status) {
                 return status;
             });
+        }
+
+        function addUserToRound(roundModel) {
+            return $http.post("/AddUserToRound", roundModel).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
         }
     }
 })();

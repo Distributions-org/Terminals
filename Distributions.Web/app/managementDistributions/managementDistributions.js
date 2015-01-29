@@ -33,6 +33,8 @@
         vm.saveRound = saveRound;
         vm.roundName = "";
         vm.rounds = {};
+        vm.createRound = createNewRound;
+        vm.customersRoundShow = false;
 
         ////date picker
 
@@ -294,11 +296,29 @@
 
             return managementDistributionsService.newRound(round).then(function(response) {
                 //success
-                if (response.data == "Success") {
                     logSuccess("הסבב נוצר בהצלחה!");
-                }
+                addUserToRound(1);
+
+            }, function(response) {
+                //error
+                logError(response.status + " " + response.statusText);
+            });
+        }
+
+        function addUserToRound(roundId) {
+            var roundModel = {
+                RoundId:roundId,
+                RoundUser:[vm.workerSelected]
+            }
+
+            return managementDistributionsService.addUserToRound(roundModel).then(function (response) {
+                //success
+                logSuccess("המפיץ שוייך לסבב בהצלחה.");
+                vm.customersRoundShow = true;
+                    
             }, function (response) {
                 //error
+                logError(response.status + " " + response.statusText);
             });
         }
 
@@ -334,15 +354,15 @@
                 roundStatus:1
             }
             
-            return managementDistributionsService.newRound(round).then(function() {
+            return managementDistributionsService.newRound(round).then(function (response) {
                 //success
                 logSuccess("הסבב נוצר בהצלחה.");
                 vm.productsRoundCustomerSelected=[];
                 vm.roundName = '';
                 },
-                function(status) {
+                function (response) {
                     //error
-                    logError("!!!שגיאה " + status);
+                    logError(response.status + " " + response.statusText);
                 }
             );
         }
