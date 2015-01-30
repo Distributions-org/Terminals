@@ -24,7 +24,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr data-ng-repeat="product in vm.products | orderBy:product.ProductName">
+                                        <tr data-ng-repeat="product in vm.products | orderBy:'ProductName'">
                                             <td>{{product.ProductName}}</td>
                                             <td><button ng-click="vm.addProductToCustomer(product.ProductID)" class="btn btn-xs btn-primary">הוסף מוצר ללקוח <i class="glyphicon glyphicon-arrow-left"></i></button></td>
                                         </tr>
@@ -42,7 +42,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr data-ng-repeat="product in vm.productsCustomer | orderBy:product.ProductName">
+                                        <tr data-ng-repeat="product in vm.productsCustomer | orderBy:'ProductName'">
                                             <td>{{product.ProductName}}</td>
                                             <td><input type="text" ng-model="product.Cost" name="productCost" value="product.Cost" /></td>
                                             <td><button ng-click="vm.saveProductToCustomer(product)" class="btn btn-xs btn-success">שמור <i class="glyphicon glyphicon-save"></i></button></td>
@@ -153,7 +153,7 @@
                                                 </select>
                                             </div>
                                             <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
-                                                <button ng-click="vm.addProductToRound(vm.productRoundSelected)" class="btn btn-info">הוסף מוצר לסבב<i class="glyphicon glyphicon-collapse-down"></i></button>
+                                                <button ng-disabled="vm.productRoundSelected===undefined" ng-click="vm.addProductToRound(vm.productRoundSelected)" class="btn btn-info">הוסף מוצר לסבב<i class="glyphicon glyphicon-collapse-down"></i></button>
                                             </div>
                                         </div>
                                             <div ng-show="vm.productsRoundCustomerSelected.length>0" class="row addProduct">
@@ -162,6 +162,7 @@
                                                     <table class="table table-condensed table-bordered table-hover table-striped">
                                                         <thead>
                                                             <tr>
+                                                                <th>לקוח</th>
                                                                 <th>שם מוצר</th>
                                                                 <th>מחיר</th>
                                                                 <th>כמות</th>
@@ -169,7 +170,8 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:product.ProductName">
+                                                            <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:'CustomerName' ">
+                                                                <td>{{product.CustomerName}}</td>
                                                                 <td>{{product.ProductName}}</td>
                                                                 <td>{{product.Cost}}</td>
                                                                 <td><input type="text" ng-model="product.Amount" name="productAmount" value="product.Amount" /></td>

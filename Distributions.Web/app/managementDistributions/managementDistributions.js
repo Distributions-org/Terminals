@@ -202,7 +202,7 @@
         }
 
         function addProductToRound(product) {
-            var p = _.findWhere(vm.productsRoundCustomerSelected, { ProductID: product.ProductID });
+            var p = _.findWhere(vm.productsRoundCustomerSelected, { ProductID: product.ProductID, CustomerID: product.CustomerID });
             if (p !== undefined) {
                 logError("המוצר קיים!");
                 return;
@@ -218,7 +218,7 @@
             if (selected != null) {
                 return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
                     //success
-                        vm.productsRoundCustomerSelected = [];
+                        //vm.productsRoundCustomerSelected = [];
                     vm.productsRoundCustomer = response.data;
                     vm.updateRound = true;
 
