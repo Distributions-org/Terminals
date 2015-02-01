@@ -35,10 +35,11 @@
         vm.rounds = {};
         vm.createRound = createNewRound;
         vm.customersRoundShow = false;
+        vm.resetRound = resetRound;
 
         ////date picker
 
-        vm.today=today();
+        vm.today = today();
 
         vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
         vm.format = vm.formats[2];
@@ -125,17 +126,17 @@
                 minuteStep: 5,
                 showInputs: true,
                 disableFocus: false,
-                showMeridian:false
+                showMeridian: false
             });
             vm.time = $('#timepicker').val();
         }
 
         function getRounds() {
-            return managementDistributionsService.getRounds().then(function(response) {
+            return managementDistributionsService.getRounds().then(function (response) {
                 //success
-                    vm.rounds = response.data;
-                },
-                function(response) {
+                vm.rounds = response.data;
+            },
+                function (response) {
                     //error
                     logError(response.status + " " + response.statusText);
                 });
@@ -155,8 +156,8 @@
         function getWorkers() {
             return managementDistributionsService.getWorkers().then(function (response) {
                 //success
-                    vm.workers = response.data;
-                },
+                vm.workers = response.data;
+            },
                 function (response) {
                     //error
                     logError(response.status + " " + response.statusText);
@@ -218,7 +219,7 @@
             if (selected != null) {
                 return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
                     //success
-                        //vm.productsRoundCustomerSelected = [];
+                    //vm.productsRoundCustomerSelected = [];
                     vm.productsRoundCustomer = response.data;
                     vm.updateRound = true;
 
@@ -233,8 +234,8 @@
                 vm.updateRound = false;
                 return null;
             }
-            }
-        
+        }
+
 
         function addProductToCustomer(productId) {
             var product = _.findWhere(vm.products, { ProductID: productId });
@@ -289,17 +290,16 @@
         };
 
         function createNewRound() {
-            var round= {
+            var round = {
                 RoundName: vm.roundName,
                 RoundDate: getRoundDate()
             }
-
-            return managementDistributionsService.newRound(round).then(function(response) {
+            return managementDistributionsService.newRound(round).then(function (response) {
                 //success
-                    logSuccess("הסבב נוצר בהצלחה!");
+                logSuccess("הסבב נוצר בהצלחה!");
                 addUserToRound(1);
 
-            }, function(response) {
+            }, function (response) {
                 //error
                 logError(response.status + " " + response.statusText);
             });
@@ -307,76 +307,126 @@
 
         function addUserToRound(roundId) {
             var roundModel = {
-                RoundId:roundId,
-                RoundUser:[vm.workerSelected]
+                RoundId: roundId,
+                RoundUser: [vm.workerSelected]
             }
-
             return managementDistributionsService.addUserToRound(roundModel).then(function (response) {
                 //success
                 logSuccess("המפיץ שוייך לסבב בהצלחה.");
                 vm.customersRoundShow = true;
-                    
+
             }, function (response) {
                 //error
                 logError(response.status + " " + response.statusText);
             });
         }
 
-        function saveRound() {
-            
-            var roundcustomerProducts = [];
-            _.each(vm.productsRoundCustomerSelected, function(product) {
-                roundcustomerProducts.push({
-                    CustomerRoundProduct: {
-                        ProductCustomerID:product.ProductCustomerID,
-                        CustomerID:product.CustomerID,
-                        ProductID:product.ProductID,
-                        dayType:product.dayType,
-                        Cost:product.Cost,
-                        ProductName:product.ProductName,
-                        CustomerName: product.CustomerName
-                    },
-                    Amount:Number(product.Amount),
-                    DeliveredAmount:0
-                });
-            });
 
-            var customerRound= {
-                customerRound: vm.customerRoundSelected,
-                roundcustomerProducts: roundcustomerProducts
+        function saveRound() {
+
+            var productsRoundCustomerGroping = _.groupBy(vm.productsRoundCustomerSelected, 'CustomerID');
+            _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
+                var roundCustomers = {
+                    RoundId: 1,
+                    RoundCustomers:[{
+                        customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
+                    roundcustomerProducts: createRoundcustomerProducts(productsRoundCustomer)
+                    }]
             }
-            var round= {
-                RoundID:0,
-                RoundName:vm.roundName,
-                RoundDate: getRoundDate(),
-                RoundUser:[vm.workerSelected],
-                custRound: [customerRound],
-                roundStatus:1
-            }
-            
-            return managementDistributionsService.newRound(round).then(function (response) {
-                //success
-                logSuccess("הסבב נוצר בהצלחה.");
-                vm.productsRoundCustomerSelected=[];
-                vm.roundName = '';
+                return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
+                    //success
+                    logSuccess(": הסבב נוצר בהצלחה.");
                 },
-                function (response) {
-                    //error
-                    logError(response.status + " " + response.statusText);
-                }
-            );
+                    function (response) {
+                        //error
+                        logError(response.status + " " + response.statusText);
+                    }
+                );
+            });
+            //var roundcustomerProducts = [];
+            //_.each(vm.productsRoundCustomerSelected, function(product) {
+            //    roundcustomerProducts.push({
+            //        CustomerRoundProduct: {
+            //            ProductCustomerID:product.ProductCustomerID,
+            //            CustomerID:product.CustomerID,
+            //            ProductID:product.ProductID,
+            //            dayType:product.dayType,
+            //            Cost:product.Cost,
+            //            ProductName:product.ProductName,
+            //            CustomerName: product.CustomerName
+            //        },
+            //        Amount:Number(product.Amount),
+            //        DeliveredAmount:0
+            //    });
+            //});
+
+            //var customerRound= {
+            //    customerRound: vm.customerRoundSelected,
+            //    roundcustomerProducts: roundcustomerProducts
+            //}
+            //var round= {
+            //    RoundID:0,
+            //    RoundName:vm.roundName,
+            //    RoundDate: getRoundDate(),
+            //    RoundUser:[vm.workerSelected],
+            //    custRound: [customerRound],
+            //    roundStatus:1
+            //}
+
+            //return managementDistributionsService.newRound(round).then(function (response) {
+            //    //success
+            //    logSuccess("הסבב נוצר בהצלחה.");
+            //    },
+            //    function (response) {
+            //        //error
+            //        logError(response.status + " " + response.statusText);
+            //    }
+            //);
         }
 
+        function createRoundcustomerProducts(products) {
+            var roundcustomerProducts = [];
+           _.each(products, function(product) {
+               roundcustomerProducts.push({
+                   CustomerRoundProduct:{
+                   ProductCustomerID: product.ProductCustomerID,
+                   CustomerID: product.CustomerID,
+                   ProductID: product.ProductID,
+                   dayType: product.dayType,
+                   Cost: product.Cost,
+                   ProductName: product.ProductName,
+                   CustomerName: product.CustomerName
+                   },
+                   Amount: product.Amount,
+                   DeliveredAmount:0
+               });
+           });
+            return roundcustomerProducts;
+        }
+
+        
+
         function getRoundDate() {
-            var date;
-            if (new Date(vm.dt) == 'Invalid Date') {
+            var date = new Date(vm.dt);
+            if (date == 'Invalid Date') {
                 date = new Date();
                 date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
                 return date;
             }
-            vm.dt.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
-            return vm.dt;
+            date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
+            return date;
         }
+
+        function resetRound() {
+            vm.roundName = '';
+            vm.customersRoundShow = false;
+            vm.productsRoundCustomerSelected = [];
+            vm.updateRound = false;
+            vm.workerSelected = {};
+            vm.productsRoundCustomer = {};
+        }
+
+
         //function generateRandomItem(id) {
 
         //    var firstname = firstnames[Math.floor(Math.random() * 3)];

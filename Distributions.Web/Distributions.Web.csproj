@@ -231,6 +231,7 @@
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Infrastructures\SessionableControllerHandler.cs" />
     <Compile Include="Infrastructures\SessionStateRouteHandler.cs" />
+    <Compile Include="Models\CustomersToRoundModel.cs" />
     <Compile Include="Models\ManagerUserViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

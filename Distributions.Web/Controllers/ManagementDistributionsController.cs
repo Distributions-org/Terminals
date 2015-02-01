@@ -115,5 +115,37 @@ namespace Distributions.Web.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, result);
         }
+
+        [Route("AddCustomerRound")]
+        [HttpPost]
+        public HttpResponseMessage AddCustomerRound(CustomersToRoundModel model)
+        {
+            var roundProductsResult = "";
+            var result = _roundsService.AddCustomersToRound(model.RoundCustomers, model.RoundId);
+            if (result.ToString() == "Success")
+            {
+                if (model.RoundCustomers.Count > 0)
+                {
+                    foreach (var roundCustomer in model.RoundCustomers)
+                    {
+                         roundProductsResult = _roundsService.AddRoundProductCustomer(roundCustomer.roundcustomerProducts, model.RoundId).ToString();
+                    }
+
+                    //model.RoundCustomers.ForEach(roundProducts =>
+                    //{
+                    //  var roundProductsResult =  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId);
+                    //});
+
+
+                }
+            }
+
+
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result);
+        }
     }
 }

@@ -108,6 +108,11 @@
                                     <div allow-collapse="true" data-cc-widget-header title="יצירת סבב"></div>
                                     <div class="widget-content round">
                                         <div class="row">
+                                            <div class="col-sm-12">
+                                                <button ng-click="vm.resetRound()" class="btn btn-warning pull-left">חדש <i class="glyphicon glyphicon-refresh"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-sm-4">
                                                 <label>שם:</label>
                                                 <input type="text" ng-disabled="vm.customersRoundShow" name="roundName" ng-model="vm.roundName" placeholder="שם לסבב" />
@@ -156,35 +161,35 @@
                                                 <button ng-disabled="vm.productRoundSelected===undefined" ng-click="vm.addProductToRound(vm.productRoundSelected)" class="btn btn-info">הוסף מוצר לסבב<i class="glyphicon glyphicon-collapse-down"></i></button>
                                             </div>
                                         </div>
-                                            <div ng-show="vm.productsRoundCustomerSelected.length>0" class="row addProduct">
-                                                <div class="col-sm-12">
-                                                    <div class="text-center custumer-header-tbl">סבב חדש, מפיץ: {{vm.workerSelected.FirstName + " " + vm.workerSelected.LastName}} | לקוח: {{vm.customerRoundSelected.CustomerName}} | תאריך ושעה: {{(vm.dt.toLocaleDateString("he-IL")!==undefined?vm.dt.toLocaleDateString("he-IL"):vm.dt) +","+vm.time}}</div>
-                                                    <table class="table table-condensed table-bordered table-hover table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>לקוח</th>
-                                                                <th>שם מוצר</th>
-                                                                <th>מחיר</th>
-                                                                <th>כמות</th>
-                                                                <th>מחיקה</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:'CustomerName' ">
-                                                                <td>{{product.CustomerName}}</td>
-                                                                <td>{{product.ProductName}}</td>
-                                                                <td>{{product.Cost}}</td>
-                                                                <td><input type="text" ng-model="product.Amount" name="productAmount" value="product.Amount" /></td>
-                                                                <td><button ng-click="vm.removeProductRoundCustomer(product)" class="btn btn-xs btn-danger">מחק <i class="glyphicon glyphicon-remove"></i></button></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="col-sm-12 text-center saveBtn">
-                                                    <button ng-click="vm.saveRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
-                                                </div>
+                                        <div ng-show="vm.productsRoundCustomerSelected.length>0" class="row addProduct">
+                                            <div class="col-sm-12">
+                                                <div class="text-center custumer-header-tbl">סבב חדש, מפיץ: {{vm.workerSelected.FirstName + " " + vm.workerSelected.LastName}} | לקוח: {{vm.customerRoundSelected.CustomerName}} | תאריך ושעה: {{(vm.dt.toLocaleDateString("he-IL")!==undefined?vm.dt.toLocaleDateString("he-IL"):vm.dt) +","+vm.time}}</div>
+                                                <table class="table table-condensed table-bordered table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>לקוח</th>
+                                                            <th>שם מוצר</th>
+                                                            <th>מחיר</th>
+                                                            <th>כמות</th>
+                                                            <th>מחיקה</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:'CustomerName' ">
+                                                            <td>{{product.CustomerName}}</td>
+                                                            <td>{{product.ProductName}}</td>
+                                                            <td>{{product.Cost}}</td>
+                                                            <td><input type="text" ng-model="product.Amount" name="productAmount" value="product.Amount" /></td>
+                                                            <td><button ng-click="vm.removeProductRoundCustomer(product)" class="btn btn-xs btn-danger">מחק <i class="glyphicon glyphicon-remove"></i></button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-sm-12 text-center saveBtn">
+                                                <button ng-click="vm.saveRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
                                             </div>
                                         </div>
+                                    </div>
                                     <div class="widget-foot">
                                         <div class="clearfix"></div>
                                     </div>

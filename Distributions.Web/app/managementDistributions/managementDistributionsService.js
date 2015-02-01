@@ -14,7 +14,8 @@
             saveProductToCustomer: saveProductToCustomer,
             getWorkers: getWorkers,
             newRound: newRound,
-            addUserToRound: addUserToRound
+            addUserToRound: addUserToRound,
+            addCustomerRound: addCustomerRound
         };
 
         return service;
@@ -81,5 +82,15 @@
                   return status;
               });
         }
+
+        function addCustomerRound(roundCustomersModel) {
+            return $http.post("/AddCustomerRound", roundCustomersModel).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+        
     }
 })();
