@@ -220,6 +220,7 @@
                 return managementDistributionsService.getProductsCustomer(selected.CustomerID).then(function (response) {
                     //success
                     //vm.productsRoundCustomerSelected = [];
+                    vm.productRoundSelected = {};
                     vm.productsRoundCustomer = response.data;
                     vm.updateRound = true;
 
@@ -325,24 +326,27 @@
         function saveRound() {
 
             var productsRoundCustomerGroping = _.groupBy(vm.productsRoundCustomerSelected, 'CustomerID');
-            _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
+            _.each(productsRoundCustomerGroping, function(productsRoundCustomer) {
                 var roundCustomers = {
                     RoundId: 1,
-                    RoundCustomers:[{
-                        customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
-                    roundcustomerProducts: createRoundcustomerProducts(productsRoundCustomer)
-                    }]
-            }
-                return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
-                    //success
-                    logSuccess(": הסבב נוצר בהצלחה.");
-                },
-                    function (response) {
+                    RoundCustomers: [
+                        {
+                            customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
+                            roundcustomerProducts: createRoundcustomerProducts(productsRoundCustomer)
+                        }
+                    ]
+                }
+                return managementDistributionsService.addCustomerRound(roundCustomers).then(function(response) {
+                        //success
+                        logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
+                    },
+                    function(response) {
                         //error
                         logError(response.status + " " + response.statusText);
                     }
                 );
             });
+            resetRound();
             //var roundcustomerProducts = [];
             //_.each(vm.productsRoundCustomerSelected, function(product) {
             //    roundcustomerProducts.push({
@@ -386,25 +390,25 @@
 
         function createRoundcustomerProducts(products) {
             var roundcustomerProducts = [];
-           _.each(products, function(product) {
-               roundcustomerProducts.push({
-                   CustomerRoundProduct:{
-                   ProductCustomerID: product.ProductCustomerID,
-                   CustomerID: product.CustomerID,
-                   ProductID: product.ProductID,
-                   dayType: product.dayType,
-                   Cost: product.Cost,
-                   ProductName: product.ProductName,
-                   CustomerName: product.CustomerName
-                   },
-                   Amount: product.Amount,
-                   DeliveredAmount:0
-               });
-           });
+            _.each(products, function (product) {
+                roundcustomerProducts.push({
+                    CustomerRoundProduct: {
+                        ProductCustomerID: product.ProductCustomerID,
+                        CustomerID: product.CustomerID,
+                        ProductID: product.ProductID,
+                        dayType: product.dayType,
+                        Cost: product.Cost,
+                        ProductName: product.ProductName,
+                        CustomerName: product.CustomerName
+                    },
+                    Amount: product.Amount,
+                    DeliveredAmount: 0
+                });
+            });
             return roundcustomerProducts;
         }
 
-        
+
 
         function getRoundDate() {
             var date = new Date(vm.dt);

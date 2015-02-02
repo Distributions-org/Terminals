@@ -124,7 +124,7 @@ namespace Distributions.Web.Controllers
             var result = _roundsService.AddCustomersToRound(model.RoundCustomers, model.RoundId);
             if (result.ToString() == "Success")
             {
-                if (model.RoundCustomers.Count > 0)
+                if (model.RoundCustomers.Any())
                 {
                     foreach (var roundCustomer in model.RoundCustomers)
                     {

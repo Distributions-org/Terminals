@@ -110,6 +110,7 @@ namespace Services
         {
             try
             {
+                Mapper.Reset();
                 Mapper.CreateMap<RoundProductCustomer, RoundsCustomerProductTbl>()
                     .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == RoundID && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
                     .ForMember(a => a.ProductID, b => b.MapFrom(c => c.CustomerRoundProduct.ProductID))
