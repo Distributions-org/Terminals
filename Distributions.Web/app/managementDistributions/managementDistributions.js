@@ -36,6 +36,7 @@
         vm.createRound = createNewRound;
         vm.customersRoundShow = false;
         vm.resetRound = resetRound;
+        vm.roundId = 0;
 
         ////date picker
 
@@ -298,7 +299,8 @@
             return managementDistributionsService.newRound(round).then(function (response) {
                 //success
                 logSuccess("הסבב נוצר בהצלחה!");
-                addUserToRound(1);
+                vm.roundId = response.data;
+                addUserToRound(vm.roundId);
 
             }, function (response) {
                 //error
@@ -328,7 +330,7 @@
             var productsRoundCustomerGroping = _.groupBy(vm.productsRoundCustomerSelected, 'CustomerID');
             _.each(productsRoundCustomerGroping, function(productsRoundCustomer) {
                 var roundCustomers = {
-                    RoundId: 1,
+                    RoundId: vm.roundId,
                     RoundCustomers: [
                         {
                             customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
@@ -428,6 +430,7 @@
             vm.updateRound = false;
             vm.workerSelected = {};
             vm.productsRoundCustomer = {};
+            vm.roundId = 0;
         }
 
 

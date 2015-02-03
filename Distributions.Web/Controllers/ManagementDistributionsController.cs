@@ -97,11 +97,11 @@ namespace Distributions.Web.Controllers
         public HttpResponseMessage NewRound(Rounds round)
         {
             var result = _roundsService.CreateNewRound(round);
-            if (result.ToString() == "Success")
+            if (result!=0)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
-            return Request.CreateResponse(HttpStatusCode.Forbidden, result);
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Error");
         }
         
         [Route("AddUserToRound")]
@@ -126,7 +126,12 @@ namespace Distributions.Web.Controllers
             {
                 if (model.RoundCustomers.Any())
                 {
-                    model.RoundCustomers.ForEach(roundProducts =>  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId));
+                    foreach (var roundCustomer in model.RoundCustomers)
+                    {
+                        _roundsService.AddRoundProductCustomer(roundCustomer.roundcustomerProducts, model.RoundId);
+                    }
+
+                   // model.RoundCustomers.ForEach(roundProducts =>  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId));
                 }
             }
             if (result.ToString() == "Success")

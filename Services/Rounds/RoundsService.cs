@@ -75,6 +75,7 @@ namespace Services
         {
             try
             {
+                Mapper.Reset();
                 Mapper.CreateMap<CustomerRound, RoundsCustomerTbl>()
                  .ForMember(a => a.RoundsID, b => b.MapFrom(c => RoundID))
                  .ForMember(a => a.CustomerID, b => b.MapFrom(c => c.customerRound.CustomerID));
