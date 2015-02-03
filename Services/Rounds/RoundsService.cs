@@ -12,6 +12,7 @@ using Core.Domain.ProductTocustomer;
 using Core.Domain;
 using Core.Domain.Rounds;
 using Core.Domain.Customers;
+using System;
 
 namespace Services
 {
@@ -39,12 +40,12 @@ namespace Services
             _RoundsCustomerProductRepository = RoundsCustomerProductRepository;
         }
 
-        public FunctionReplay.functionReplay CreateNewRound(Rounds NewRound)
+        public int CreateNewRound(Rounds NewRound)
         {
-
             MappingToDB();
             RoundsTbl newDBRound = Mapper.Map<Rounds, RoundsTbl>(NewRound);
-            return _RoundsRepository.Add(newDBRound);
+            _RoundsRepository.Add(newDBRound);
+            return _RoundsRepository.GetAll().OrderByDescending(x => x.RoundsID).Select(x => x.RoundsID).FirstOrDefault();
         }
 
         public FunctionReplay.functionReplay AddRoundUsersToRound(List<User> RoundUsers, int RoundID)
@@ -161,6 +162,14 @@ namespace Services
             return allroundProducts;
 
         }
+
+        //public List<RoundProductCustomer> GetAllRounds(DateTime startdate,DateTime enddate)
+        //{
+        //    RoundsTbl roundTbl = _RoundsRepository.FindBy(x => x.RoundDate >= startdate && x.RoundDate <= enddate).ToList();
+
+
+
+        //}
 
         public List<RoundProductCustomer> CheckProductAmountPerRound(int ProductID, int RoundID, int TotalAmount)
         {
