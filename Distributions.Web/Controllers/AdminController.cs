@@ -233,26 +233,26 @@ namespace Distributions.Web.Controllers
 
         }
 
-        //[Route("UpdateCustomer")]
-        //[AuthorizeUser(AccessRole = "Admin")]
-        //[HttpPost]
-        //public HttpResponseMessage UpdateCustomer(Customers model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var errors = new List<string>();
-        //        errors = ModelErrorChecker.Check(ModelState);
-        //        return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
-        //    }
-        //    var result = _customersService.(model);
+        [Route("UpdateCustomer")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        [HttpPost]
+        public HttpResponseMessage UpdateCustomer(Customers model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = new List<string>();
+                errors = ModelErrorChecker.Check(ModelState);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+            }
+            var result = _customersService.UpdateCustomer(model.CustomerID,model);
            
-        //    if (result.ToString() == "Success")
-        //    {
-        //        return Request.CreateResponse(HttpStatusCode.OK);
-        //    }
-        //    return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            return Request.CreateResponse(HttpStatusCode.NotAcceptable, result.ToString());
 
-        //}
+        }
 
         [Route("AddCustomer")]
         [AuthorizeUser(AccessRole = "Admin")]

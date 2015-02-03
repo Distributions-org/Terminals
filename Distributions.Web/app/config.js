@@ -12,12 +12,13 @@
 
     var events = {
         controllerActivateSuccess: 'controller.activateSuccess',
-        spinnerToggle: 'spinner.toggle'
+        spinnerToggle: 'spinner.toggle',
+        serviceCall:'serviceCall'
     };
 
     var config = {
         appErrorPrefix: '[HT Error] ', //Configure the exceptionHandler decorator
-        docTitle: 'Terminales: ',
+        docTitle: 'Terminal: ',
         events: events,
         remoteServiceName: remoteServiceName,
         version: '2.1.0'
@@ -36,6 +37,7 @@
     app.config(['commonConfigProvider', function (cfg) {
         cfg.config.controllerActivateSuccessEvent = config.events.controllerActivateSuccess;
         cfg.config.spinnerToggleEvent = config.events.spinnerToggle;
+        cfg.config.serviceCallEvent = config.events.serviceCall;
     }]);
     //#endregion
 })();

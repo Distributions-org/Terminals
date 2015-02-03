@@ -34,7 +34,9 @@
             common.activateController([promises], controllerId);
         }
 
-        function toggleSpinner(on) { vm.isBusy = on; }
+        function toggleSpinner(on) {
+             vm.isBusy = on;
+        }
 
         function getuserNameAndRole() {
             return datacontext.getUserNameAndRole().then(function (response) {
@@ -59,15 +61,27 @@
         }
 
         $rootScope.$on('$routeChangeStart',
-            function (event, next, current) { toggleSpinner(true); }
+            function(event, next, current) {
+                 toggleSpinner(true);
+            }
         );
         
         $rootScope.$on(events.controllerActivateSuccess,
-            function (data) { toggleSpinner(false); }
+            function(data) {
+                 toggleSpinner(false);
+            }
         );
 
         $rootScope.$on(events.spinnerToggle,
-            function (data) { toggleSpinner(data.show); }
+            function(data) {
+                 toggleSpinner(data.show);
+            }
+        );
+
+        $rootScope.$on(events.serviceCall,
+            function (scope, isBusy) {
+                toggleSpinner(isBusy);
+            }
         );
     };
 })();

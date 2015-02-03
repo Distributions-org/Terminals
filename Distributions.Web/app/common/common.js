@@ -41,7 +41,8 @@
             debouncedThrottle: debouncedThrottle,
             isNumber: isNumber,
             logger: logger, // for accessibility
-            textContains: textContains
+            textContains: textContains,
+            serviceCallPreloader: serviceCallPreloader
         };
 
         return service;
@@ -55,6 +56,10 @@
 
         function $broadcast() {
             return $rootScope.$broadcast.apply($rootScope, arguments);
+        }
+
+        function serviceCallPreloader(isBusy) {
+            $broadcast(commonConfig.config.serviceCallEvent, isBusy);
         }
 
         function createSearchThrottle(viewmodel, list, filteredList, filter, delay) {

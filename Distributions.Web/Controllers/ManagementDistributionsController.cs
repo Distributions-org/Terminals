@@ -126,21 +126,9 @@ namespace Distributions.Web.Controllers
             {
                 if (model.RoundCustomers.Any())
                 {
-                    foreach (var roundCustomer in model.RoundCustomers)
-                    {
-                         roundProductsResult = _roundsService.AddRoundProductCustomer(roundCustomer.roundcustomerProducts, model.RoundId).ToString();
-                    }
-
-                    //model.RoundCustomers.ForEach(roundProducts =>
-                    //{
-                    //  var roundProductsResult =  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId);
-                    //});
-
-
+                    model.RoundCustomers.ForEach(roundProducts =>  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId));
                 }
             }
-
-
             if (result.ToString() == "Success")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
