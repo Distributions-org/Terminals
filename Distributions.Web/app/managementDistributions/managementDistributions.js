@@ -305,6 +305,7 @@
             }, function (response) {
                 //error
                 logError(response.status + " " + response.statusText);
+                resetRound();
             });
         }
 
