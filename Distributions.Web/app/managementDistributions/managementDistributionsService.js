@@ -11,7 +11,11 @@
             getCustomers: getCustomers,
             getProductsCustomer: getProductsCustomer,
             addProductToCustomer: addProductToCustomer,
-            saveProductToCustomer: saveProductToCustomer
+            saveProductToCustomer: saveProductToCustomer,
+            getWorkers: getWorkers,
+            newRound: newRound,
+            addUserToRound: addUserToRound,
+            addCustomerRound: addCustomerRound
         };
 
         return service;
@@ -23,6 +27,15 @@
                 .error(function(data, status) {
                 return status;
             });
+        }
+
+        function getWorkers() {
+            return $http.get("/GetWorkers").success(function (data) {
+                return data;
+            })
+                .error(function (data, status) {
+                    return status;
+                });
         }
 
         function getProductsCustomer(customerId) {
@@ -51,5 +64,33 @@
                     return status;
                 });
         }
+
+        function newRound(round) {
+            return $http.post("/NewRound", round).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                return status;
+            });
+        }
+
+        function addUserToRound(roundModel) {
+            return $http.post("/AddUserToRound", roundModel).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+
+        function addCustomerRound(roundCustomersModel) {
+            return $http.post("/AddCustomerRound", roundCustomersModel).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+        
     }
 })();

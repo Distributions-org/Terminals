@@ -156,7 +156,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr data-ng-repeat="product in vm.products | filter:vm.searchText | orderBy:product.ProductName">
+                                                            <tr data-ng-repeat="product in vm.products | filter:vm.searchText | orderBy:'ProductName'">
                                                                 <td>{{product.ProductName}}</td>
                                                                 <td><input type="checkbox" disabled="disabled" ng-checked="{{product.productStatus==1?'true':'false'}}" />{{product.productStatus==1?"פעיל":"לא פעיל"}}</td>
                                                                 <td><button ng-click="vm.editProduct(product.ProductID)" class="btn btn-xs btn-primary">ערוך</button></td>
@@ -234,7 +234,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr data-ng-repeat="customer in vm.customers | filter:vm.searchCustomerText | orderBy:customer.CustomerName">
+                                                            <tr data-ng-repeat="customer in vm.customers | filter:vm.searchCustomerText | orderBy:'CustomerName'">
                                                                 <td>{{customer.CustomerName}}</td>
                                                                 <td>{{customer.CustomerHP}}</td>
                                                                 <td><input type="checkbox" disabled="disabled" ng-checked="{{customer.custStatus==1?'true':'false'}}" />{{customer.custStatus==1?"פעיל":"לא פעיל"}}</td>

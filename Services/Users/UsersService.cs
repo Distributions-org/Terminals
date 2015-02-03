@@ -61,7 +61,7 @@ namespace Services
             Mapper.CreateMap<UsersTbl, User>()
                 .ForMember(a => a.RoleID, b => b.MapFrom(c => (UserRoles.userRoles)c.RoleID));
 
-            List<UsersTbl> allUsers = _usersRepository.FindBy(x => x.RoleID == 1).ToList();
+            List<UsersTbl> allUsers = _usersRepository.GetAll().ToList();
             return Mapper.Map<List<UsersTbl>, List<User>>(allUsers);
 
         }

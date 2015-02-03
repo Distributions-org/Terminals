@@ -17,7 +17,7 @@
 
     var config = {
         appErrorPrefix: '[HT Error] ', //Configure the exceptionHandler decorator
-        docTitle: 'HotTowel: ',
+        docTitle: 'Terminales: ',
         events: events,
         remoteServiceName: remoteServiceName,
         version: '2.1.0'

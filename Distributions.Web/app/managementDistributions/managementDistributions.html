@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="widget wviolet">
-                    <div data-cc-widget-header title="{{vm.title}}"></div>
+                    <div allow-collapse="true" data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content">
                         <div class="row">
                             <div class="col-sm-2">
@@ -24,7 +24,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr data-ng-repeat="product in vm.products | orderBy:product.ProductName">
+                                        <tr data-ng-repeat="product in vm.products | orderBy:'ProductName'">
                                             <td>{{product.ProductName}}</td>
                                             <td><button ng-click="vm.addProductToCustomer(product.ProductID)" class="btn btn-xs btn-primary">הוסף מוצר ללקוח <i class="glyphicon glyphicon-arrow-left"></i></button></td>
                                         </tr>
@@ -42,7 +42,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr data-ng-repeat="product in vm.productsCustomer | orderBy:product.ProductName">
+                                        <tr data-ng-repeat="product in vm.productsCustomer | orderBy:'ProductName'">
                                             <td>{{product.ProductName}}</td>
                                             <td><input type="text" ng-model="product.Cost" name="productCost" value="product.Cost" /></td>
                                             <td><button ng-click="vm.saveProductToCustomer(product)" class="btn btn-xs btn-success">שמור <i class="glyphicon glyphicon-save"></i></button></td>
@@ -50,38 +50,156 @@
                                     </tbody>
                                 </table>
                             </div>
-                            </div>
                         </div>
+                    </div>
                     <div class="widget-foot">
                         <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
-           <!-- <div class="row">
-                <div class="col-sm-3">
-                    <span>בחר מפיץ:</span>
-                    <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers"
-                            ng-change="vm.customerSelectedChange(vm.customerSelected)">
-                        <option value="">מפיץ</option>
-                    </select>
-                    <button ng-show="vm.update" class="btn btn-primary">עדכן</button>
-                </div>
-                <div class="col-sm-3">
-                    <p class="input-group date-picker">
-                        <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
-                               datepicker-options="vm.dateOptions"  show-weeks="false" show-button-bar="false" />
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="vm.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
-                    </p>
-                </div>
-            </div>
+            <!-- <div class="row">
+                     <div class="col-sm-3">
+                         <span>בחר מפיץ:</span>
+                         <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers"
+                                 ng-change="vm.customerSelectedChange(vm.customerSelected)">
+                             <option value="">מפיץ</option>
+                         </select>
+                         <button ng-show="vm.update" class="btn btn-primary">עדכן</button>
+                     </div>
+                     <div class="col-sm-3">
+                         <p class="input-group date-picker">
+                             <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
+                                    datepicker-options="vm.dateOptions"  show-weeks="false" show-button-bar="false" />
+                             <span class="input-group-btn">
+                                 <button type="button" class="btn btn-default" ng-click="vm.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                             </span>
+                         </p>
+                     </div>
+                 </div>
                 <!--<div class="row">
-                    <div class="col-sm-12">
-                        <div class="grid" dir="rtl" ui-grid-edit ui-grid-exporter ui-grid="vm.gridOptions"></div>
-                    </div>
+                        <div class="col-sm-12">
+                            <div class="grid" dir="rtl" ui-grid-edit ui-grid-exporter ui-grid="vm.gridOptions"></div>
+                        </div>
 
-                </div>-->
+                    </div>-->
+        </div>
+    </section>
+
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget wblue">
+                    <div allow-collapse="true" data-cc-widget-header title="ניהול סבבים"></div>
+                    <div class="widget-content">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="widget wblue">
+                                    <div allow-collapse="true" data-cc-widget-header title="סבבים פעילים"></div>
+                                    <div class="widget-content">
+
+                                    </div>
+                                    <div class="widget-foot">
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="widget wblue">
+                                    <div allow-collapse="true" data-cc-widget-header title="יצירת סבב"></div>
+                                    <div class="widget-content round">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <button ng-click="vm.resetRound()" class="btn btn-warning pull-left">חדש <i class="glyphicon glyphicon-refresh"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label>שם:</label>
+                                                <input type="text" ng-disabled="vm.customersRoundShow" name="roundName" ng-model="vm.roundName" placeholder="שם לסבב" />
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label>מפיץ:</label>
+                                                <select ng-disabled="vm.customersRoundShow" class="form-control" ng-model="vm.workerSelected" ng-options="(worker.FirstName+' '+worker.LastName)  for worker in vm.workers track by worker.UserID">
+                                                    <option value="">בחר מפיץ</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button ng-show="!vm.customersRoundShow" ng-click="vm.createRound()" ng-disabled="(!vm.roundName.trim().length>0) || (vm.workerSelected.UserID==undefined)" class="btn btn-info">צור סבב <i class="glyphicon glyphicon-circle-arrow-left"></i></button>
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="row addProduct">
+                                            <div class="col-sm-4 col-sm-offset-2">
+                                                <div class="input-group date-picker">
+                                                    <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
+                                                           datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="bootstrap-timepicker">
+                                                    <input id="timepicker" ng-model="vm.time" type="text" class="form-control" />
+                                                    <i class="glyphicon glyphicon-time"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row addProduct">
+                                            <div ng-show="vm.customersRoundShow" class="col-sm-4">
+                                                <label>לקוח:</label>
+                                                <select class="form-control" ng-model="vm.customerRoundSelected" ng-options="customer.CustomerName for customer in vm.customers track by customer.CustomerID"
+                                                        ng-change="vm.customerRoundSelectedChange(vm.customerRoundSelected)">
+                                                    <option value="">בחר לקוח</option>
+                                                </select>
+                                            </div>
+                                            <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
+                                                <label>בחר מוצר:</label>
+                                                <select class="form-control" ng-model="vm.productRoundSelected" ng-options="product.ProductName for product in vm.productsRoundCustomer track by product.ProductID">
+                                                    <option value="">בחר מוצר</option>
+                                                </select>
+                                            </div>
+                                            <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
+                                                <button ng-disabled="vm.productRoundSelected===undefined" ng-click="vm.addProductToRound(vm.productRoundSelected)" class="btn btn-info">הוסף מוצר לסבב<i class="glyphicon glyphicon-collapse-down"></i></button>
+                                            </div>
+                                        </div>
+                                        <div ng-show="vm.productsRoundCustomerSelected.length>0" class="row addProduct">
+                                            <div class="col-sm-12">
+                                                <div class="text-center custumer-header-tbl">סבב חדש, מפיץ: {{vm.workerSelected.FirstName + " " + vm.workerSelected.LastName}} | לקוח: {{vm.customerRoundSelected.CustomerName}} | תאריך ושעה: {{(vm.dt.toLocaleDateString("he-IL")!==undefined?vm.dt.toLocaleDateString("he-IL"):vm.dt) +","+vm.time}}</div>
+                                                <table class="table table-condensed table-bordered table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>לקוח</th>
+                                                            <th>שם מוצר</th>
+                                                            <th>מחיר</th>
+                                                            <th>כמות</th>
+                                                            <th>מחיקה</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:'CustomerName' ">
+                                                            <td>{{product.CustomerName}}</td>
+                                                            <td>{{product.ProductName}}</td>
+                                                            <td>{{product.Cost}}</td>
+                                                            <td><input type="text" ng-model="product.Amount" name="productAmount" value="product.Amount" /></td>
+                                                            <td><button ng-click="vm.removeProductRoundCustomer(product)" class="btn btn-xs btn-danger">מחק <i class="glyphicon glyphicon-remove"></i></button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-sm-12 text-center saveBtn">
+                                                <button ng-click="vm.saveRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-foot">
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+        </div>
     </section>
 </section>
