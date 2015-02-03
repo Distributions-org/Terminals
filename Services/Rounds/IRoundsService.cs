@@ -10,7 +10,7 @@ namespace Services
 {
     public interface IRoundsService
     {
-        FunctionReplay.functionReplay CreateNewRound(Rounds NewRound);
+        int CreateNewRound(Rounds NewRound)
         FunctionReplay.functionReplay AddRoundUsersToRound(List<User> RoundUsers, int RoundID);
         FunctionReplay.functionReplay AddCustomersToRound(List<CustomerRound> RoundCustomers, int RoundID);
         List<ProductToCustomer> GetCustomerProducts(int CustomerID, DaysType.DayType currentDayType);
