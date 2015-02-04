@@ -13,6 +13,7 @@ using Core.Domain;
 using Core.Domain.Rounds;
 using Core.Domain.Customers;
 using System;
+using Services.Users;
 
 namespace Services
 {
@@ -25,11 +26,14 @@ namespace Services
         private readonly IRepository<RoundsUserTbl> _RoundsUserRepository;
         private readonly IRepository<RoundsCustomerTbl> _RoundsCustomerRepository;
         private readonly IRepository<RoundsCustomerProductTbl> _RoundsCustomerProductRepository;
+        private readonly IUserService _userService;
+        private readonly ICustomerService _customerService;
 
         public RoundsService(IRepository<Data.RoundsTbl> RoundsRepository, IRepository<Data.Customers> CustomersRepository,
             IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository
             , IRepository<Data.RoundsUserTbl> RoundsUserRepository,
-            IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository)
+            IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository,
+            IUserService userService,ICustomerService customerService)
         {
             _RoundsRepository = RoundsRepository;
             _CustomersRepository = CustomersRepository;
@@ -38,6 +42,8 @@ namespace Services
             _RoundsUserRepository = RoundsUserRepository;
             _RoundsCustomerRepository = RoundsCustomerRepository;
             _RoundsCustomerProductRepository = RoundsCustomerProductRepository;
+            _userService = userService;
+            _customerService = customerService;
         }
 
         public int CreateNewRound(Rounds NewRound)
@@ -164,6 +170,34 @@ namespace Services
 
         }
 
+
+        public List<Rounds> GetAllRounds(bool today)
+        {
+            var rounds = new List<Rounds>();
+            if (!today)
+            {
+                var tmpRounds = _RoundsRepository.GetAll().ToList();
+                if (tmpRounds.Any())
+                {
+                    tmpRounds.ForEach(round => rounds.Add(new Rounds
+                    {
+                            RoundID = round.RoundsID,
+                            roundStatus = (RoundStatus.roundStatus)round.RoundStatus.GetValueOrDefault(),
+                            RoundDate = round.RoundDate.GetValueOrDefault(),
+                            RoundName = round.RoundName,
+                            RoundUser = _userService.GetAllUsers().Where(x=>
+                            {
+                                var firstOrDefault = _RoundsUserRepository.FindBy(u=>u.RoundsID==round.RoundsID).FirstOrDefault();
+                                return firstOrDefault != null && x.UserID==firstOrDefault.UserID;
+                            }).ToList(),
+                            custRound = MapRoundCustomer(_RoundsCustomerRepository.FindBy(x => x.RoundsID == round.RoundsID).ToList())
+
+                    }));
+                }
+            }
+            return rounds;
+        }
+
         //public List<RoundProductCustomer> GetAllRounds(DateTime startdate,DateTime enddate)
         //{
         //    RoundsTbl roundTbl = _RoundsRepository.FindBy(x => x.RoundDate >= startdate && x.RoundDate <= enddate).ToList();
@@ -254,6 +288,19 @@ namespace Services
                 .ForMember(a => a.Status, b => b.MapFrom(z => (int)z.custStatus));
         }
 
-       
+        private  List<CustomerRound> MapRoundCustomer(List<RoundsCustomerTbl> roundsCustomerTbl)
+        {
+            var customerRoundTmp = new List<CustomerRound>();
+            if (roundsCustomerTbl.Any())
+            {
+                roundsCustomerTbl.Each(roundsCustomer => customerRoundTmp.Add(new CustomerRound
+                {
+                    customerRound = _customerService.GetValidCustomers().FirstOrDefault(x => x.CustomerID == roundsCustomer.CustomerID),
+                    roundcustomerProducts = GetRoundCustomerProducts(roundsCustomer.CustomerID.GetValueOrDefault(), roundsCustomer.RoundsID.GetValueOrDefault())
+                }));
+            }
+
+            return customerRoundTmp;
+        }
     }
 }

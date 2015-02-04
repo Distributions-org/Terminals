@@ -15,7 +15,8 @@
             getWorkers: getWorkers,
             newRound: newRound,
             addUserToRound: addUserToRound,
-            addCustomerRound: addCustomerRound
+            addCustomerRound: addCustomerRound,
+            getRounds: getRounds
         };
 
         return service;
@@ -27,6 +28,15 @@
                 .error(function(data, status) {
                 return status;
             });
+        }
+
+        function getRounds() {
+            return $http.get("/GetRounds").success(function (data) {
+                return data;
+            })
+                .error(function (data, status) {
+                    return status;
+                });
         }
 
         function getWorkers() {

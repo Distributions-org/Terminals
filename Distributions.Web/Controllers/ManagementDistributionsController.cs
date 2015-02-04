@@ -45,6 +45,18 @@ namespace Distributions.Web.Controllers
             return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
         }
 
+
+        [Route("GetRounds")]
+        public HttpResponseMessage GetRounds(bool today=false)
+        {
+            var rounds = _roundsService.GetAllRounds(today);
+            if (rounds != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, rounds);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Rounds Not Founds");
+        }
+
         [Route("GetWorkers")]
         public HttpResponseMessage GetWorkers()
         {

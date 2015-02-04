@@ -117,7 +117,7 @@
         activate();
 
         function activate() {
-            var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), init()];
+            var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), init()];
             common.activateController([promises], controllerId)
                 .then(function () { log('Activated Management Distributions View'); });
         }

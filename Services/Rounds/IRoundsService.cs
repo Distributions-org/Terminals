@@ -21,5 +21,7 @@ namespace Services
         FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount);
 
         bool CheckIfUserCanUseRound(int UserID);
+
+        List<Rounds> GetAllRounds(bool today);
     }
 }
