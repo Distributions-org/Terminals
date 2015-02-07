@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Core.Data;
 using Core.Domain.Persons;
@@ -244,6 +245,18 @@ namespace Services
 
            return _RoundsCustomerProductRepository.Update(currentRoundCustomerProducts);
 
+        }
+
+        public FunctionReplay.functionReplay UpdateRoundStatus(int roundId, int roundStatus)
+        {
+            var round = _RoundsRepository.FindBy(x => x.RoundsID == roundId).FirstOrDefault();
+            if (round == null) return FunctionReplay.functionReplay.Failed;
+            round.RoundStatus = roundStatus;
+            var result = _RoundsRepository.Update(round);
+            if (result.ToString()=="Success")
+                return FunctionReplay.functionReplay.Success;
+
+            return FunctionReplay.functionReplay.Failed;
         }
 
         public bool CheckIfUserCanUseRound(int UserID)

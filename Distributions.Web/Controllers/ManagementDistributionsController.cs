@@ -152,5 +152,18 @@ namespace Distributions.Web.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, result);
         }
+
+         [Route("ChangeRoundStatus")]
+        [HttpPost]
+        public HttpResponseMessage ChangeRoundStatus(Rounds round)
+         {
+             var result = _roundsService.UpdateRoundStatus(round.RoundID, (int) round.roundStatus);
+            if (result.ToString()=="Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, round);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result.ToString());
+        }
+        
     }
 }

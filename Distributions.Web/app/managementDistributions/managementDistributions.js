@@ -8,6 +8,7 @@
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
         var logError = common.logger.getLogFn(controllerId, 'error');
+        var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
         vm.isAdmin = false;
         vm.title = 'ניהול מוצרים ללקוח';
@@ -38,7 +39,7 @@
         vm.resetRound = resetRound;
         vm.roundId = 0;
         vm.roundStatusChange = roundStatusChange;
-
+        vm.editRound = editRound;
         ////date picker
 
         vm.today = today();
@@ -412,7 +413,18 @@
             return roundcustomerProducts;
         }
 
-
+        function editRound(round) {
+            resetRound();
+            vm.roundName = round.RoundName;
+            vm.workerSelected = round.RoundUser[0];
+            vm.dt = round.RoundDate;
+            //vm.customersRoundShow = true;
+            //vm.productsRoundCustomerSelected = [];
+            //vm.updateRound = false;
+            //vm.workerSelected = {};
+            //vm.productsRoundCustomer = {};
+            //vm.roundId = 0;
+        }
 
         function getRoundDate() {
             var date = new Date(vm.dt);
@@ -441,11 +453,27 @@
             } else {
                 round.roundStatus = 1;
             }
+
+           changeRoundStatus(round);
         }
 
-        function changeRoundStatus(parameters) {
-            
+        function changeRoundStatus(round) {
+            return managementDistributionsService.changeRoundStatus(round).then(function(response) {
+                //success
+                if (response.data.roundStatus === 1) {
+                    logSuccess("הסבב פעיל");
+                } else {
+                    logWarning("הסבב לא פעיל");
+                }
+            }, function (response) {
+                //error
+                logError(response.status + " " + response.statusText);
+            });
         }
+
+        
+
+
         //function generateRandomItem(id) {
 
         //    var firstname = firstnames[Math.floor(Math.random() * 3)];

@@ -8,7 +8,7 @@
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
         var logError = common.logger.getLogFn(controllerId, 'error');
-        var logWarning = common.logger.getLogFn(controllerId, 'warning')
+        var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
         vm.isBusy = common.serviceCallPreloader;
         vm.isAdmin=false;
