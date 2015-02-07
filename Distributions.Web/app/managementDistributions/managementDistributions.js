@@ -424,6 +424,7 @@
             //vm.workerSelected = {};
             //vm.productsRoundCustomer = {};
             //vm.roundId = 0;
+
         }
 
         function getRoundDate() {
