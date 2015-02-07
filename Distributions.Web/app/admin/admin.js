@@ -40,7 +40,7 @@
         function activate() {
             var promises = [getAllUsers(), getRoles(), isAdminRole(), getProducts(),getCustomers()];
             common.activateController([promises], controllerId)
-                .then(function () { log('Activated Admin View'); });
+                .then(function () { log('מסך ניהול פעיל'); });
         }
 
         function isAdminRole() {

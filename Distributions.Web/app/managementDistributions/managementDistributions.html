@@ -96,7 +96,30 @@
                                 <div class="widget wblue">
                                     <div allow-collapse="true" data-cc-widget-header title="סבבים פעילים"></div>
                                     <div class="widget-content">
-
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <table class="table table-condensed table-bordered table-hover table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>תאריך</th>
+                                                            <th>שם</th>
+                                                            <th>סטטוס</th>
+                                                            <th>מפיץ</th>
+                                                            <th>עריכה</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="round in vm.rounds | orderBy:'RoundDate':true">
+                                                            <td>{{round.RoundDate | date:'dd-MM-yyyy'}}</td>
+                                                            <td>{{round.RoundName}}</td>
+                                                            <td><input type="checkbox" ng-click="vm.roundStatusChange(round)"  ng-checked="{{round.roundStatus==1?'true':'false'}}" />{{round.roundStatus==1?"פעיל":"לא פעיל"}}</td>
+                                                            <td>{{round.RoundUser[0].FirstName + ' '+ round.RoundUser[0].LastName}}</td>
+                                                            <td><button ng-click="vm.editRound(round)" class="btn btn-xs btn-info">ערוך <i class="glyphicon glyphicon-edit"></i></button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="widget-foot">
                                         <div class="clearfix"></div>

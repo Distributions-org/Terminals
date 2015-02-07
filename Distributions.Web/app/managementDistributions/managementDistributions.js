@@ -37,6 +37,7 @@
         vm.customersRoundShow = false;
         vm.resetRound = resetRound;
         vm.roundId = 0;
+        vm.roundStatusChange = roundStatusChange;
 
         ////date picker
 
@@ -434,7 +435,17 @@
             vm.roundId = 0;
         }
 
+        function roundStatusChange(round) {
+            if (round.roundStatus == 1) {
+                round.roundStatus = 0;
+            } else {
+                round.roundStatus = 1;
+            }
+        }
 
+        function changeRoundStatus(parameters) {
+            
+        }
         //function generateRandomItem(id) {
 
         //    var firstname = firstnames[Math.floor(Math.random() * 3)];
