@@ -17,7 +17,9 @@
             addUserToRound: addUserToRound,
             addCustomerRound: addCustomerRound,
             getRounds: getRounds,
-            changeRoundStatus: changeRoundStatus
+            changeRoundStatus: changeRoundStatus,
+            updateRound: updateRound,
+            updateCustomerRound: updateCustomerRound
         };
 
         return service;
@@ -105,6 +107,24 @@
 
         function changeRoundStatus(round) {
             return $http.post("/ChangeRoundStatus", round).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+        
+        function updateRound(round) {
+            return $http.post("/UpdateRound", round).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+
+        function updateCustomerRound(roundCustomersModel) {
+            return $http.post("/UpdateCustomerRound", roundCustomersModel).success(function (data) {
                 return data;
             })
               .error(function (data, status) {

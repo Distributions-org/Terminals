@@ -94,7 +94,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="widget wblue">
-                                    <div allow-collapse="true" data-cc-widget-header title="סבבים פעילים"></div>
+                                    <div allow-collapse="true" data-cc-widget-header title="כל הסבבים"></div>
                                     <div class="widget-content">
                                         <div class="row">
                                             <div class="col-sm-12">
@@ -186,7 +186,7 @@
                                         </div>
                                         <div ng-show="vm.productsRoundCustomerSelected.length>0" class="row addProduct">
                                             <div class="col-sm-12">
-                                                <div class="text-center custumer-header-tbl">סבב חדש, מפיץ: {{vm.workerSelected.FirstName + " " + vm.workerSelected.LastName}} | לקוח: {{vm.customerRoundSelected.CustomerName}} | תאריך ושעה: {{(vm.dt.toLocaleDateString("he-IL")!==undefined?vm.dt.toLocaleDateString("he-IL"):vm.dt) +","+vm.time}}</div>
+                                                <div class="text-center custumer-header-tbl">סבב , מפיץ: {{vm.workerSelected.FirstName + " " + vm.workerSelected.LastName}} |  תאריך ושעה: {{(vm.dt.toLocaleDateString("he-IL")!==undefined?vm.dt.toLocaleDateString("he-IL"):vm.dt | date:'dd.MM.yyyy') +","+vm.time}}</div>
                                                 <table class="table table-condensed table-bordered table-hover table-striped">
                                                     <thead>
                                                         <tr>
@@ -209,7 +209,8 @@
                                                 </table>
                                             </div>
                                             <div class="col-sm-12 text-center saveBtn">
-                                                <button ng-click="vm.saveRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
+                                                <button ng-show="!vm.roundBtnUpdateShow" ng-click="vm.saveRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
+                                                <button ng-show="vm.roundBtnUpdateShow" ng-click="vm.updateProductsRound(vm.roundId)" class="btn btn-success">עדכן סבב <i class="glyphicon glyphicon-floppy-disk"></i></button>
                                             </div>
                                         </div>
                                     </div>

@@ -25,7 +25,8 @@ namespace Distributions.Web.Controllers
         private readonly IUserService _userService;
         private readonly IRoundsService _roundsService;
 
-        public ManagementDistributionsController(ICustomerService customersService,IProductsService productsService,IUserService userService,
+        public ManagementDistributionsController(ICustomerService customersService, IProductsService productsService,
+            IUserService userService,
             IRoundsService roundsService)
         {
             _customersService = customersService;
@@ -47,7 +48,7 @@ namespace Distributions.Web.Controllers
 
 
         [Route("GetRounds")]
-        public HttpResponseMessage GetRounds(bool today=false)
+        public HttpResponseMessage GetRounds(bool today = false)
         {
             var rounds = _roundsService.GetAllRounds(today);
             if (rounds != null)
@@ -85,7 +86,7 @@ namespace Distributions.Web.Controllers
         public HttpResponseMessage AddProductsCustomer(ProductToCustomer productToCustomer)
         {
             var result = _productsService.AddProductTocustomer(productToCustomer);
-            if (result.ToString() =="Success")
+            if (result.ToString() == "Success")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
@@ -109,13 +110,13 @@ namespace Distributions.Web.Controllers
         public HttpResponseMessage NewRound(Rounds round)
         {
             var result = _roundsService.CreateNewRound(round);
-            if (result!=0)
+            if (result != 0)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, "Error");
         }
-        
+
         [Route("AddUserToRound")]
         [HttpPost]
         public HttpResponseMessage AddUserToRound(UsersToRoundModel roundModel)
@@ -143,7 +144,7 @@ namespace Distributions.Web.Controllers
                         _roundsService.AddRoundProductCustomer(roundCustomer.roundcustomerProducts, model.RoundId);
                     }
 
-                   // model.RoundCustomers.ForEach(roundProducts =>  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId));
+                    // model.RoundCustomers.ForEach(roundProducts =>  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId));
                 }
             }
             if (result.ToString() == "Success")
@@ -153,17 +154,51 @@ namespace Distributions.Web.Controllers
             return Request.CreateResponse(HttpStatusCode.Forbidden, result);
         }
 
-         [Route("ChangeRoundStatus")]
+        [Route("ChangeRoundStatus")]
         [HttpPost]
         public HttpResponseMessage ChangeRoundStatus(Rounds round)
-         {
-             var result = _roundsService.UpdateRoundStatus(round.RoundID, (int) round.roundStatus);
-            if (result.ToString()=="Success")
+        {
+            var result = _roundsService.UpdateRoundStatus(round.RoundID, (int) round.roundStatus);
+            if (result.ToString() == "Success")
             {
                 return Request.CreateResponse(HttpStatusCode.OK, round);
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, result.ToString());
         }
-        
+
+        [Route("UpdateRound")]
+        [HttpPost]
+        public HttpResponseMessage UpdateRound(Rounds round)
+        {
+            var result = _roundsService.UpdateRound(round);
+            if (result.ToString() == "Success")
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, round);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result.ToString());
+        }
+
+        [Route("UpdateCustomerRound")]
+        [HttpPost]
+        public HttpResponseMessage UpdateCustomerRound(CustomersToRoundModel model)
+        {
+            var result = _roundsService.UpdateCustomersToRound(model.RoundCustomers, model.RoundId);
+
+            if (result.ToString() == "Success")
+            {
+                if (model.RoundCustomers.Any())
+                {
+                    foreach (var roundCustomer in model.RoundCustomers)
+                    {
+                        _roundsService.UpdateRoundProductCustomer(roundCustomer.roundcustomerProducts, model.RoundId);
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, model);
+                }
+                return Request.CreateResponse(HttpStatusCode.NoContent, "empty round customer");
+            }
+
+            return Request.CreateResponse(HttpStatusCode.InternalServerError, result.ToString());
+        }
     }
 }
+

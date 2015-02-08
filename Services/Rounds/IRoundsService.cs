@@ -21,6 +21,12 @@ namespace Services
         FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount);
 
         FunctionReplay.functionReplay UpdateRoundStatus(int roundId, int roundStatus);
+        FunctionReplay.functionReplay UpdateRound(Rounds round);
+
+        FunctionReplay.functionReplay UpdateCustomersToRound(List<CustomerRound> roundCustomers, int roundId);
+        FunctionReplay.functionReplay UpdateRoundProductCustomer(List<RoundProductCustomer> updateProductToCustomerRound, int roundId);
+        
+        
 
         bool CheckIfUserCanUseRound(int UserID);
 
