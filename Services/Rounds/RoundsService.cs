@@ -266,12 +266,20 @@ namespace Services
             {
                 Mapper.Reset();
                 Mapper.CreateMap<CustomerRound, RoundsCustomerTbl>()
+                    .ForMember(a=>a.RoundsCustomersID,b=>b.MapFrom(c=>_RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.customerRound.CustomerID).FirstOrDefault().RoundsCustomersID))
                  .ForMember(a => a.RoundsID, b => b.MapFrom(c => roundId))
                  .ForMember(a => a.CustomerID, b => b.MapFrom(c => c.customerRound.CustomerID));
                 List<RoundsCustomerTbl> newRoundCust = Mapper.Map<List<CustomerRound>, List<RoundsCustomerTbl>>(roundCustomers);
                 foreach (var roundCust in newRoundCust)
                 {
+                    if(roundCust.RoundsCustomersID!=0)
+                    {
                     _RoundsCustomerRepository.Update(roundCust);
+                    }
+                    else
+                    {
+                        _RoundsCustomerRepository.Add(roundCust);
+                    }
                 }
                 return FunctionReplay.functionReplay.Success;
             }
@@ -289,12 +297,20 @@ namespace Services
                 Mapper.CreateMap<RoundProductCustomer, RoundsCustomerProductTbl>()
                     .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
                     .ForMember(a => a.ProductID, b => b.MapFrom(c => c.CustomerRoundProduct.ProductID))
-                    .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount));
+                    .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount))
+                    .ForMember(a=>a.DelieveredAmount,b=>b.MapFrom(c=>c.DeliveredAmount==null?0:c.DeliveredAmount));
 
                 var updateRoundsCustomerProductTbl = Mapper.Map<List<RoundProductCustomer>, List<RoundsCustomerProductTbl>>(updateProductToCustomerRound);
                 foreach (var item in updateRoundsCustomerProductTbl)
                 {
-                    _RoundsCustomerProductRepository.Update(item);
+                    if (item.RoundsCustomerProductID != 0)
+                    {
+                        _RoundsCustomerProductRepository.Update(item);
+                    }
+                    else
+                    {
+                        _RoundsCustomerProductRepository.Add(item);
+                    }
                 }
 
                 return FunctionReplay.functionReplay.Success;

@@ -466,6 +466,7 @@
                         ProductName: product.ProductName,
                         CustomerName: product.CustomerName
                     },
+                    RoundsCustomerProductID: product.RoundsCustomerProductID,
                     Amount: product.Amount,
                     DeliveredAmount: 0
                 });
@@ -491,7 +492,8 @@
                             dayType: product.CustomerRoundProduct.dayType,
                             Cost: product.CustomerRoundProduct.Cost,
                             ProductName: product.CustomerRoundProduct.ProductName,
-                            CustomerName: product.CustomerRoundProduct.CustomerName
+                            CustomerName: product.CustomerRoundProduct.CustomerName,
+                            RoundsCustomerProductID: product.RoundsCustomerProductID
                         });
                     });
                 });

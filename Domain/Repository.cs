@@ -3,10 +3,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using Core.Data;
-using Microsoft.AspNet.Identity.Owin;
-using System.Security.Claims;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using Core.Enums;
 
 namespace Data
@@ -38,8 +34,8 @@ namespace Data
                     throw new Exception("entity null");
             
                 Entities.Add(entity);
-                Save();
-                return FunctionReplay.functionReplay.Success;
+
+                return Save();
             }
             catch (Exception ex)
             {
@@ -55,8 +51,8 @@ namespace Data
                     throw new Exception("entity null");
 
                 Entities.Remove(entity);
-                Save();
-                return FunctionReplay.functionReplay.Success;
+
+                return Save();
             }
             catch (Exception)
             {
@@ -69,13 +65,11 @@ namespace Data
         {
             try
             {
-                
                 if (entity == null)
                     throw new Exception("entity null");
-
                 _context.Entry(entity).State = EntityState.Modified;
-                Save();
-                return FunctionReplay.functionReplay.Success;
+
+                return Save();
             }
             catch (Exception)
             {
@@ -87,7 +81,7 @@ namespace Data
         {
             try
             {
-                _context.SaveChanges();
+              int x =  _context.SaveChanges();
                 return FunctionReplay.functionReplay.Success;
             }
             catch (Exception)
