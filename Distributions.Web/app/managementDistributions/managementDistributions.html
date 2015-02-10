@@ -97,11 +97,37 @@
                                     <div allow-collapse="true" data-cc-widget-header title="כל הסבבים"></div>
                                     <div class="widget-content">
                                         <div class="row">
+                                            <div class="col-sm-2">
+                                                סנן: מתאריך - 
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="input-group date-picker">
+                                                    <input type="text" class="form-control" min-date="vm.minDate" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart"
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                עד תאריך -
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="input-group date-picker">
+                                                    <input type="text" class="form-control" min-date="vm.minDate" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd"
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button ng-click="vm.filterRoundDate()" class="btn btn-info">סנן <i class="glyphicon glyphicon-search"></i></button>
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-sm-12">
-                                                <table class="table table-condensed table-bordered table-hover table-striped">
+                                                <table class="table date-filter table-condensed table-bordered table-hover table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th>תאריך</th>
+                                                            <th>תאריך ושעה</th>
                                                             <th>שם</th>
                                                             <th>סטטוס</th>
                                                             <th>מפיץ</th>
@@ -110,11 +136,14 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr data-ng-repeat="round in vm.rounds | orderBy:'RoundDate':true">
-                                                            <td>{{round.RoundDate | date:'dd-MM-yyyy'}}</td>
+                                                            <td>{{round.RoundDate | date:'dd-MM-yyyy HH:mm'}}</td>
                                                             <td>{{round.RoundName}}</td>
                                                             <td><input type="checkbox" ng-click="vm.roundStatusChange(round)"  ng-checked="{{round.roundStatus==1?'true':'false'}}" />{{round.roundStatus==1?"פעיל":"לא פעיל"}}</td>
                                                             <td>{{round.RoundUser[0].FirstName + ' '+ round.RoundUser[0].LastName}}</td>
-                                                            <td><button ng-click="vm.editRound(round)" class="btn btn-xs btn-info">ערוך <i class="glyphicon glyphicon-edit"></i></button></td>
+                                                            <td>
+                                                                <button ng-click="vm.copyRound(round)" class="btn btn-xs btn-warning">שכפל <i class="glyphicon glyphicon-cloud-upload"></i></button>
+                                                                <button ng-click="vm.editRound(round)" class="btn btn-xs btn-info">ערוך <i class="glyphicon glyphicon-edit"></i></button>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -155,7 +184,7 @@
                                             <div class="col-sm-4 col-sm-offset-2">
                                                 <div class="input-group date-picker">
                                                     <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
-                                                           datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </div>
                                             </div>
@@ -208,7 +237,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="col-sm-12 text-center saveBtn">
+                                            <div class="col-sm-12 text-center saveBtn" ng-show="vm.customersRoundShow">
                                                 <button ng-show="!vm.roundBtnUpdateShow" ng-click="vm.saveRound()" class="btn btn-success">שמור סבב <i class="glyphicon glyphicon-save"></i></button>
                                                 <button ng-show="vm.roundBtnUpdateShow" ng-click="vm.updateProductsRound(vm.roundId)" class="btn btn-success">עדכן סבב <i class="glyphicon glyphicon-floppy-disk"></i></button>
                                             </div>

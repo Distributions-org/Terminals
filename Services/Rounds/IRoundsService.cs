@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Core.Domain.Users;
 using Core.Enums;
@@ -30,6 +31,6 @@ namespace Services
 
         bool CheckIfUserCanUseRound(int UserID);
 
-        List<Rounds> GetAllRounds(bool today);
+        List<Rounds> GetAllRounds(bool today, DateTime? startDate, DateTime? endDate);
     }
 }

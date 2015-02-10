@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'managementDistributions';
-    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService', 'adminService', managementDistributions]);
+    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'managementDistributionsService', 'adminService', managementDistributions]);
 
-    function managementDistributions($location, common, datacontext, managementDistributionsService, adminService) {
+    function managementDistributions($location, $filter, common, datacontext, managementDistributionsService, adminService) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
@@ -25,8 +25,11 @@
         vm.customerRoundSelectedChange = customerRoundSelected;
         vm.customerRoundSelected = {};
         vm.productsRoundCustomer = {};
-        vm.updateRound = false;
         vm.dt = new Date();
+        vm.stratDate = today();
+        vm.endDate = today();
+        vm.minDate = new Date();
+        vm.filterRoundDate = filterRoundDate;
         vm.productsRoundCustomerSelected = [];
         vm.addProductToRound = addProductToRound;
         vm.time = "";
@@ -43,16 +46,22 @@
         vm.editRound = editRound;
         vm.roundBtnUpdateShow = false;
         vm.updateProductsRound = updateProductsRound;
+        vm.copyRound = copyRound;
+        vm.roundFilter= {
+            Today: true,
+            StartDate: null,
+            EndDate:null
+        }
         ////date picker
 
         vm.today = today();
 
-        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
-        vm.format = vm.formats[2];
+        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
+        vm.format = vm.formats[3];
 
         // Disable weekend selection
         vm.disabled = function (date, mode) {
-            return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+            return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
 
         vm.open = function ($event) {
@@ -138,8 +147,17 @@
             vm.time = $('#timepicker').val();
         }
 
+        function filterRoundDate() {
+            vm.roundFilter = {
+                Today: false,
+                StartDate: $filter('date')(vm.stratDate,'MM-dd-yyyy'),
+                EndDate: $filter('date')(vm.endDate, 'MM-dd-yyyy')
+            }
+            getRounds();
+        }
+
         function getRounds() {
-            return managementDistributionsService.getRounds().then(function (response) {
+            return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
                 //success
                 vm.rounds = response.data;
             },
@@ -229,8 +247,6 @@
                     //vm.productsRoundCustomerSelected = [];
                     vm.productRoundSelected = {};
                     vm.productsRoundCustomer = response.data;
-                    vm.updateRound = true;
-
                 },
               function (response) {
                   //error
@@ -239,7 +255,6 @@
 
             }
             else {
-                vm.updateRound = false;
                 return null;
             }
         }
@@ -294,7 +309,8 @@
         }
         function today() {
             var date = new Date();
-            vm.dt = date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            vm.dt = $filter('date')(date, 'MM.dd.yyyy'); // date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            return $filter('date')(date, 'MM.dd.yyyy');
         };
 
         function createNewRound() {
@@ -314,7 +330,7 @@
                 resetRound();
             });
         }
-        
+
         function addUserToRound(roundId) {
             var roundModel = {
                 RoundId: roundId,
@@ -335,7 +351,7 @@
         function saveRound() {
 
             var productsRoundCustomerGroping = _.toArray(_.groupBy(vm.productsRoundCustomerSelected, 'CustomerID'));
-            _.each(productsRoundCustomerGroping, function(productsRoundCustomer) {
+            _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                 var roundCustomers = {
                     RoundId: vm.roundId,
                     RoundCustomers: [
@@ -345,15 +361,15 @@
                         }
                     ]
                 }
-                return managementDistributionsService.addCustomerRound(roundCustomers).then(function(response) {
-                        //success
+                return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
+                    //success
                     logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
                     if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
                         getRounds();
                         resetRound();
                     }
-                    },
-                    function(response) {
+                },
+                    function (response) {
                         //error
                         logError(response.status + " " + response.statusText);
                     }
@@ -432,7 +448,7 @@
                 function (response) {
                     //error
                     resetRound();
-            });
+                });
         }
 
         function updateRoundById(roundId) {
@@ -481,37 +497,63 @@
             vm.roundName = round.RoundName;
             vm.workerSelected = round.RoundUser[0];
             vm.dt = round.RoundDate;
-            $('#timepicker').timepicker('setTime', new Date(round.RoundDate));// new Date(round.RoundDate).toTimeString().slice(0, 5);
-            _.each(round.custRound, function(custRound) {
-                    _.each(custRound.roundcustomerProducts, function(product) {
-                        roundcustomerProducts.push({
-                            Amount:product.Amount,
-                            ProductCustomerID: product.CustomerRoundProduct.ProductCustomerID,
-                            CustomerID: product.CustomerRoundProduct.CustomerID,
-                            ProductID: product.CustomerRoundProduct.ProductID,
-                            dayType: product.CustomerRoundProduct.dayType,
-                            Cost: product.CustomerRoundProduct.Cost,
-                            ProductName: product.CustomerRoundProduct.ProductName,
-                            CustomerName: product.CustomerRoundProduct.CustomerName,
-                            RoundsCustomerProductID: product.RoundsCustomerProductID
-                        });
+            $('#timepicker').timepicker('setTime', $filter('date')(round.RoundDate, 'HH:mm'));// new Date(round.RoundDate).toTimeString().slice(0, 5);
+            _.each(round.custRound, function (custRound) {
+                _.each(custRound.roundcustomerProducts, function (product) {
+                    roundcustomerProducts.push({
+                        Amount: product.Amount,
+                        ProductCustomerID: product.CustomerRoundProduct.ProductCustomerID,
+                        CustomerID: product.CustomerRoundProduct.CustomerID,
+                        ProductID: product.CustomerRoundProduct.ProductID,
+                        dayType: product.CustomerRoundProduct.dayType,
+                        Cost: product.CustomerRoundProduct.Cost,
+                        ProductName: product.CustomerRoundProduct.ProductName,
+                        CustomerName: product.CustomerRoundProduct.CustomerName,
+                        RoundsCustomerProductID: product.RoundsCustomerProductID
                     });
                 });
+            });
             vm.productsRoundCustomerSelected = roundcustomerProducts;
             vm.customersRoundShow = true;
-            vm.updateRound = false;
             vm.roundBtnUpdateShow = true;
             vm.round = round;
         }
 
+        function copyRound(round) {
+            var roundcustomerProducts = [];
+            resetRound();
+            vm.roundId = 0;
+            vm.roundName = round.RoundName;
+            vm.workerSelected = round.RoundUser[0];
+            vm.dt = round.RoundDate;
+            $('#timepicker').timepicker('setTime', $filter('date')(round.RoundDate, 'HH:mm'));// new Date(round.RoundDate).toTimeString().slice(0, 5);
+            _.each(round.custRound, function (custRound) {
+                _.each(custRound.roundcustomerProducts, function (product) {
+                    roundcustomerProducts.push({
+                        Amount: product.Amount,
+                        CustomerID: product.CustomerRoundProduct.CustomerID,
+                        ProductID: product.CustomerRoundProduct.ProductID,
+                        dayType: product.CustomerRoundProduct.dayType,
+                        Cost: product.CustomerRoundProduct.Cost,
+                        ProductName: product.CustomerRoundProduct.ProductName,
+                        CustomerName: product.CustomerRoundProduct.CustomerName
+                    });
+                });
+            });
+            vm.productsRoundCustomerSelected = roundcustomerProducts;
+            vm.customersRoundShow = false;
+            vm.roundBtnUpdateShow = false;
+            vm.round = round;
+        }
+
         function getRoundDate() {
-            var date = new Date(vm.dt);
-            if (date == 'Invalid Date') {
+            var date = $filter('date')(vm.dt, 'MM-dd-yyyy') + " " + vm.time.split(':')[0] + ":" + vm.time.split(':')[1];
+            if (new Date(date) == 'Invalid Date') {
                 date = new Date();
                 date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
-                return date;
+                return date.toUTCString();
             }
-            date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
+            // date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
             return date;
         }
 
@@ -519,7 +561,6 @@
             vm.roundName = '';
             vm.customersRoundShow = false;
             vm.productsRoundCustomerSelected = [];
-            vm.updateRound = false;
             vm.workerSelected = {};
             vm.productsRoundCustomer = {};
             vm.today = today();
@@ -537,11 +578,11 @@
                 round.roundStatus = 1;
             }
 
-           changeRoundStatus(round);
+            changeRoundStatus(round);
         }
 
         function changeRoundStatus(round) {
-            return managementDistributionsService.changeRoundStatus(round).then(function(response) {
+            return managementDistributionsService.changeRoundStatus(round).then(function (response) {
                 //success
                 if (response.data.roundStatus === 1) {
                     logSuccess("הסבב פעיל");
@@ -554,7 +595,7 @@
             });
         }
 
-        
+
 
 
         //function generateRandomItem(id) {

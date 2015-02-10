@@ -33,8 +33,8 @@
             });
         }
 
-        function getRounds() {
-            return $http.get("/GetRounds").success(function (data) {
+        function getRounds(model) {
+            return $http.post("/GetRounds",model).success(function (data) {
                 return data;
             })
                 .error(function (data, status) {

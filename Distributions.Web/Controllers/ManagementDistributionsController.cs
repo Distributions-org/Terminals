@@ -48,9 +48,10 @@ namespace Distributions.Web.Controllers
 
 
         [Route("GetRounds")]
-        public HttpResponseMessage GetRounds(bool today = false)
+        [HttpPost]
+        public HttpResponseMessage GetRounds(RoundFilterModel model)
         {
-            var rounds = _roundsService.GetAllRounds(today);
+            var rounds = _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate);
             if (rounds != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, rounds);

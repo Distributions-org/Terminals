@@ -162,16 +162,9 @@ form[name=customersForm] .input-group div.btn {
 .round .saveBtn {
   margin-top: 10px;
 }
-/*.ui-grid-column-menu-button
-{
-    left:0;
-    right:0;
+table.date-filter {
+  margin-top: 3px !important;
 }
-.ui-grid-icon-angle-down{
-    float:left;
+table.date-filter thead > tr:first-child {
+  border-top: 1px solid #ccc !important;
 }
-.ui-grid-filter-container{
-     .ui-grid-filter-button [class^="ui-grid-icon"]{
-         right :240px;
-     }
-     }*/

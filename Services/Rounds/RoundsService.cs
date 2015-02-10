@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using Core.Data;
 using Core.Domain.Persons;
@@ -173,13 +175,26 @@ namespace Services
         }
 
 
-        public List<Rounds> GetAllRounds(bool today)
+        public List<Rounds> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate)
         {
             var rounds = new List<Rounds>();
-            if (!today)
+            var tmpRounds=new List<RoundsTbl>();
+
+            if (startDate != null && endDate != null)
             {
-                var tmpRounds = _RoundsRepository.GetAll().ToList();
-                if (tmpRounds.Any())
+                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) >= DbFunctions.TruncateTime(startDate)
+                    && DbFunctions.TruncateTime(x.RoundDate) <= DbFunctions.TruncateTime(endDate)).ToList();
+            }
+            else if (!today)
+            {
+                tmpRounds = _RoundsRepository.GetAll().ToList();
+            }
+            else
+            {
+                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) == DbFunctions.TruncateTime(DateTime.Now)).ToList();
+            }
+           
+            if (tmpRounds.Any())
                 {
                     tmpRounds.ForEach(round => rounds.Add(new Rounds
                     {
@@ -196,7 +211,7 @@ namespace Services
 
                     }));
                 }
-            }
+            
             return rounds;
         }
 
