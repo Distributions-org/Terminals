@@ -49,6 +49,16 @@
                         content: '<i class="fa fa-truck"></i> ניהול הפצות'
                     }
                 }
+            }, {
+                url: '/reports',
+                config: {
+                    title: 'reports - Terminal',
+                    templateUrl: '../app/reports/reports.html',
+                    settings: {
+                        nav: 4,
+                        content: '<i class="fa fa-file-text-o"></i> דוחות'
+                    }
+                }
             }
         ];
     }

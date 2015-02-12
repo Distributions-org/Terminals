@@ -190,10 +190,10 @@
         }
 
         function getValidCustomers() {
-            return managementDistributionsService.getCustomers().then(function (result) {
-                return vm.customers = result.data;
-            }, function (status) {
-                logError(status);
+            return managementDistributionsService.getCustomers().then(function (response) {
+                return vm.customers = response.data;
+            }, function (response) {
+                logError(response.status + " " + response.statusText);
             });
         }
 
@@ -307,6 +307,7 @@
                 return false;
             }
         }
+
         function today() {
             var date = new Date();
             vm.dt = $filter('date')(date, 'MM.dd.yyyy'); // date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
