@@ -41,8 +41,12 @@ namespace Services
             _RoundsCustomerProductRepository = RoundsCustomerProductRepository;
         }
 
-        public List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, int year, int month,int endYear,int endMonth)
+        public List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, int year, int month, int endYear, int endMonth)
         {
+            if (month == endMonth && endMonth < 12)
+            {
+                endMonth++;
+            }
             DateTime startOftheMonth = new DateTime(year, month, 1);
             DateTime endOfthMonth = new DateTime(endYear, endMonth, 1);
             List<Data.Product> AllProducts = _ProductsRepository.GetAll().ToList();
@@ -66,7 +70,7 @@ namespace Services
                     ProductCustomerReport newproductCustomerReport = new ProductCustomerReport();
                     int RoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                     newproductCustomerReport.currentDate = _RoundsRepository.FindBy(x => x.RoundsID == RoundID).FirstOrDefault().RoundDate.Value;
-                    
+
                     if (roundcustomerproduct.Amount < 0)
                     {
                         newproductCustomerReport.DelieveryTaken = roundcustomerproduct.Amount.Value;

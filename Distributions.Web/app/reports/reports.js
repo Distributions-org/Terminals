@@ -3,9 +3,9 @@
 
     var controllerId = "reports";
     angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'reportsService', 'managementDistributionsService', reports]);
-    
 
-    function reports($location,$filter, common, datacontext, reportsService, managementDistributionsService) {
+
+    function reports($location, $filter, common, datacontext, reportsService, managementDistributionsService) {
         /* jshint validthis:true */
         //reportsService.$inject = [];
 
@@ -24,7 +24,10 @@
         vm.productsCustomer = {};
         vm.showDate = false;
         ////date picker
-        vm.today = today();
+        vm.stratDate = today();
+        vm.endDate = today();
+        vm.getReport = getReport;
+        vm.report = {};
 
         vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
         vm.format = vm.formats[3];
@@ -34,11 +37,17 @@
             return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
 
-        vm.open = function ($event) {
+        vm.openeStart = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
 
-            vm.opened = true;
+            vm.openedStart = true;
+        };
+        vm.openeEnd = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.openedEnd = true;
         };
 
         vm.dateOptions = {
@@ -46,23 +55,23 @@
             startingDay: 1,
         };
 
-        function toggleMin () {
+        function toggleMin() {
             vm.minDate = (vm.minDate) ? null : new Date();
         };
 
         function today() {
             var date = new Date();
-            vm.dt = $filter('date')(date, 'MM.dd.yyyy'); // date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            //vm.dt = $filter('date')(date, 'MM.dd.yyyy'); // date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
             return $filter('date')(date, 'MM.dd.yyyy');
         };
 
-        
+
         activate();
-        
+
         function activate() {
             var promises = [isAdminRole(), getValidCustomers(), toggleMin()];
             common.activateController([promises], controllerId)
-                .then(function () { log('מסך '+vm.title+' פעיל'); });
+                .then(function () { log('מסך ' + vm.title + ' פעיל'); });
         }
 
         function isAdminRole() {
@@ -102,6 +111,36 @@
                 vm.showDate = false;
                 return null;
             }
+        }
+
+        function getReport() {
+            var sdate = new Date(vm.stratDate);
+            var edate = new Date(vm.endDate);
+            //var productsIDs = _.pluck(vm.productsCustomer, 'ProductCustomerID');
+            //var cutomerId = vm.customerSelected.CustomerID;
+            //var year = $filter('date')(sdate, "yyyy");
+            //var month = $filter('date')(sdate, "MM");
+            //var endYear = $filter('date')(edate, "yyyy");
+            //var endMonth = $filter('date')(edate, "MM");
+
+            var model = {
+                ProductIDs: _.pluck(vm.productsCustomer, 'ProductCustomerID'),
+                CustomerId: vm.customerSelected.CustomerID,
+                Year: parseInt($filter('date')(sdate, "yyyy")),
+                Month: parseInt($filter('date')(sdate, "MM")),
+                EndYear: parseInt($filter('date')(edate, "yyyy")),
+                EndMonth: parseInt($filter('date')(edate, "MM")),
+            }
+
+            return reportsService.reports(model)
+                .then(function (response) {
+                    //success
+                    vm.report = response.data;
+                    logSuccess('הדוח נטען בהצלחה');
+                }, function (response) {
+                    //error
+                    logError(response.status + " " + response.statusText);
+                });
         }
     }
 })();

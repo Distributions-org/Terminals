@@ -228,6 +228,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementDistributionsController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Extensions\HttpContextExtensions.cs" />
     <Compile Include="Infrastructures\SessionableControllerHandler.cs" />
     <Compile Include="Infrastructures\SessionStateRouteHandler.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\RoundFilterModel.cs" />
     <Compile Include="Models\UsersToRoundModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -439,6 +441,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

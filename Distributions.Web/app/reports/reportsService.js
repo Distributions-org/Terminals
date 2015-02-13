@@ -11,15 +11,18 @@
 
         //function getData() { }
         var service = {
-            getReports: getReports,
+            reports: reports
         }
 
         return service;
 
-        function getReports() {
-            return $http.post("/GetRoles").then(function (response) {
-                return response.data;
-            });
+        function reports(model) {
+            return $http.post("/ManageReport", model).success(function (data) {
+                return data;
+            })
+                .error(function (data, status) {
+                    return status;
+                });
         }
     }
 })();

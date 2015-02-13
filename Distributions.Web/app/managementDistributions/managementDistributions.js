@@ -28,7 +28,6 @@
         vm.dt = new Date();
         vm.stratDate = today();
         vm.endDate = today();
-        vm.minDate = new Date();
         vm.filterRoundDate = filterRoundDate;
         vm.productsRoundCustomerSelected = [];
         vm.addProductToRound = addProductToRound;
@@ -74,6 +73,10 @@
         vm.dateOptions = {
             formatYear: 'yyyy',
             startingDay: 1,
+        };
+
+        function toggleMin() {
+            vm.minDate = (vm.minDate) ? null : new Date();
         };
 
         //vm.gridOptions = {
@@ -131,7 +134,7 @@
         activate();
 
         function activate() {
-            var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), init()];
+            var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), toggleMin(), init()];
             common.activateController([promises], controllerId)
                 .then(function () { log('Activated Management Distributions View'); });
         }
