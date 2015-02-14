@@ -2,12 +2,12 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div  class="widget wviolet">
+                <div class="widget wviolet">
                     <div allow-collapse="true" data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content report">
                         <div class="row date">
                             <div class="col-sm-2">
-                                <span>בחר לקוח:</span>
+                                <label>בחר לקוח:</label>
                                 <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers"
                                         ng-change="vm.customerSelectedChange(vm.customerSelected)">
                                     <option value="">לקוח</option>
@@ -19,27 +19,45 @@
                                     <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart" datepicker-options="vm.dateoptions"
                                            date-disabled="vm.disabled(date, mode)" show-button-bar="false" show-weeks="false" close-text="סגור" />
                                 </p>
-                                <button type="button" class="btn btn-default" ng-click="vm.openeStart($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default btn-date" ng-click="vm.openeStart($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>
                             <div ng-show="vm.showDate" class="col-sm-4">
                                 <label>עד תאריך: </label>
                                 <p class="input-group date-picker">
-                                    <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd"   datepicker-options="vm.dateoptions"
+                                    <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd" datepicker-options="vm.dateoptions"
                                            date-disabled="vm.disabled(date, mode)" show-button-bar="false" show-weeks="false" close-text="סגור" />
                                 </p>
-                                <button type="button" class="btn btn-default" ng-click="vm.openeEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default btn-date" ng-click="vm.openeEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>
                             <div ng-show="vm.showDate" class="col-sm-2">
                                 <button type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
                             </div>
                         </div>
+                        <div class="row">
+                            <div ng-show="vm.showDate" class="col-sm-12">
+                                <table class="table table-condensed table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>תאריך</th>
+                                            <th data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.ProductName}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-ng-repeat="report in vm.report | orderBy:'ProductName'">
+                                            <td>{{report.AllCustomerProductReports[0].currentDate | date:'dd-MM-yyyy HH:mm'}}</td>
+                                            <td data-ng-repeat="allCustomerProductReports in vm.report | orderBy:'ProductName'"> נשלח: {{report.AllCustomerProductReports[0].DelieverySent}}</td>
+                                            <!--<td> החזרות: {{report.AllCustomerProductReports[0].DelieveryTaken}}</td>-->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="widget-foot">
-                        <div class="clearfix"></div>
-                    </div>
+                </div>
+                <div class="widget-foot">
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
-        </section>
     </section>
+</section>

@@ -171,14 +171,21 @@ table.date-filter thead > tr:first-child {
 .report .date .date-picker {
   width: 30%;
   display: block;
+  display: inline-block;
   padding: 0 !important;
 }
-.report .date .btn {
+.report .date .btn.btn-date {
   margin: 0;
   padding: 6px 10px 8px 10px;
+  position: absolute;
+  top: 1px;
 }
-.report .date .btn i {
+.report .date .btn.btn-date i {
   margin: 0;
+}
+.report .date label {
+  vertical-align: top;
+  padding-top: 4px;
 }
 .report .date .btn-group {
   display: none;

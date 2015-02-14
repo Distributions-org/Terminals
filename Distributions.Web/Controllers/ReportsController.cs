@@ -22,11 +22,7 @@ namespace Distributions.Web.Controllers
          public HttpResponseMessage ManageReport(ReportModel model)
          {
              var result = _reportsService.GetCustomerProductsReports(model.ProductIDs, model.CustomerId, model.Year, model.Month, model.EndYear, model.EndMonth);
-             if (result.Count>0)
-             {
-                 return Request.CreateResponse(HttpStatusCode.OK, result);
-             }
-             return Request.CreateResponse(HttpStatusCode.ExpectationFailed, result);
+             return Request.CreateResponse(result.Count>0 ? HttpStatusCode.OK : HttpStatusCode.ExpectationFailed, result);
          }
     }
 }
