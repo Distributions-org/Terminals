@@ -200,6 +200,21 @@ namespace Distributions.Web.Controllers
 
             return Request.CreateResponse(HttpStatusCode.InternalServerError, result.ToString());
         }
+
+         [Route("RemoveProductToCustomer")]
+        [HttpPost]
+        public HttpResponseMessage RemoveProductToCustomer(int productCustomerId)
+        {
+            var result = _productsService.RemoveProductToCustomer(productCustomerId);
+
+            if (result.ToString() == "Success")
+            {
+              return Request.CreateResponse(HttpStatusCode.OK, result.ToString());
+            }
+
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result.ToString());
+        }
+        
     }
 }
 

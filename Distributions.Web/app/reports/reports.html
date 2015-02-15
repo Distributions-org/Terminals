@@ -13,7 +13,7 @@
                                     <option value="">לקוח</option>
                                 </select>
                             </div>
-                            <div ng-show="vm.showDate" class="col-sm-4">
+                            <div ng-show="vm.showDate" class="col-sm-3">
                                 <label>מתאריך: </label>
                                 <p class="input-group date-picker">
                                     <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart" datepicker-options="vm.dateoptions"
@@ -21,7 +21,7 @@
                                 </p>
                                 <button type="button" class="btn btn-default btn-date" ng-click="vm.openeStart($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>
-                            <div ng-show="vm.showDate" class="col-sm-4">
+                            <div ng-show="vm.showDate" class="col-sm-3">
                                 <label>עד תאריך: </label>
                                 <p class="input-group date-picker">
                                     <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd" datepicker-options="vm.dateoptions"
@@ -32,10 +32,17 @@
                             <div ng-show="vm.showDate" class="col-sm-2">
                                 <button type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
                             </div>
+                            <div ng-show="vm.tblShow" class="col-sm-2">
+                                <button type="button" class="btn btn-info" ng-click="vm.printReport('reportDiv')">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
+                            </div>
                         </div>
                         <div class="row">
-                            <div ng-show="vm.showDate" class="col-sm-12">
-                                <table class="table table-condensed table-bordered table-hover table-striped">
+                            <div id="reportDiv" data-ng-show="vm.tblShow" class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-6"><label>{{vm.customerSelected.CustomerName}}</label></div>
+                                    <div class="col-sm-6"><label>אלון שיווק פיתות ודברי מאפה</label></div>
+                                </div>
+                                <table class="table table-condensed table-bordered  table-striped table-report">
                                     <thead>
                                         <tr>
                                             <th>תאריך</th>
@@ -43,12 +50,34 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr data-ng-repeat="report in vm.report | orderBy:'ProductName'">
-                                            <td>{{report.AllCustomerProductReports[0].currentDate | date:'dd-MM-yyyy HH:mm'}}</td>
-                                            <td data-ng-repeat="allCustomerProductReports in vm.report | orderBy:'ProductName'"> נשלח: {{report.AllCustomerProductReports[0].DelieverySent}}</td>
-                                            <!--<td> החזרות: {{report.AllCustomerProductReports[0].DelieveryTaken}}</td>-->
+                                        <tr data-ng-repeat="date in vm.dateRange">
+                                            <td>{{date | date:'dd-MM-yyyy'}}</td>
+                                            <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
+                                                <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
+                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-right">
+                                                        נשלח:  <strong>{{allCustomerProductReports.DelieverySent}}</strong>
+                                                    </span>
+                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-left">
+                                                        החזרות:  <strong>{{allCustomerProductReports.DelieveryTaken}}</strong>
+                                                    </span>
+                                                </span>
+                                            </td>
                                         </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>סה"כ</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.SumOfProducts}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>מחיר</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>סכום</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum}}</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

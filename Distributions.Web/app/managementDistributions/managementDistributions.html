@@ -39,6 +39,7 @@
                                             <th>שם מוצר</th>
                                             <th>מחיר</th>
                                             <th>שמירה</th>
+                                            <th>מחיקה</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -46,6 +47,7 @@
                                             <td>{{product.ProductName}}</td>
                                             <td><input type="text" ng-model="product.Cost" name="productCost" value="product.Cost" /></td>
                                             <td><button ng-click="vm.saveProductToCustomer(product)" class="btn btn-xs btn-success">שמור <i class="glyphicon glyphicon-save"></i></button></td>
+                                            <td><button ng-click="vm.removeProductToCustomer(product)" class="btn btn-xs btn-danger">מחק <i class="glyphicon glyphicon-remove"></i></button></td>
                                         </tr>
                                     </tbody>
                                 </table>

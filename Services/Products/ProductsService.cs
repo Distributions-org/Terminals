@@ -40,9 +40,9 @@ namespace Services
             return _productsRepository.Update(currentProduct);
         }
 
-        public FunctionReplay.functionReplay RemoveProductToCustomer(int ProductCustomerID)
+        public FunctionReplay.functionReplay RemoveProductToCustomer(int productCustomerId)
         {
-            return _ProductCustomerRepository.Delete(_ProductCustomerRepository.FindBy(x => x.ProductCustomerID == ProductCustomerID).FirstOrDefault());
+            return _ProductCustomerRepository.Delete(_ProductCustomerRepository.FindBy(x => x.ProductCustomerID == productCustomerId).FirstOrDefault());
 
         }
 

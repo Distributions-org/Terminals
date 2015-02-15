@@ -19,7 +19,8 @@
             getRounds: getRounds,
             changeRoundStatus: changeRoundStatus,
             updateRound: updateRound,
-            updateCustomerRound: updateCustomerRound
+            updateCustomerRound: updateCustomerRound,
+            removeProductToCustomer: removeProductToCustomer
         };
 
         return service;
@@ -125,6 +126,15 @@
 
         function updateCustomerRound(roundCustomersModel) {
             return $http.post("/UpdateCustomerRound", roundCustomersModel).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+
+        function removeProductToCustomer(productCustomerId) {
+            return $http.post("/RemoveProductToCustomer?productCustomerId=" + productCustomerId).success(function (data) {
                 return data;
             })
               .error(function (data, status) {

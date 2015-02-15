@@ -45,6 +45,7 @@
         vm.editRound = editRound;
         vm.roundBtnUpdateShow = false;
         vm.updateProductsRound = updateProductsRound;
+        vm.removeProductToCustomer = removeProductToCustomer;
         vm.copyRound = copyRound;
         vm.roundFilter= {
             Today: true,
@@ -418,6 +419,22 @@
             //        logError(response.status + " " + response.statusText);
             //    }
             //);
+        }
+
+        function removeProductToCustomer(product) {
+            return managementDistributionsService.removeProductToCustomer(product.ProductCustomerID).then(function(response) {
+                //success
+                if (response.data == "Success")
+                    {
+                logSuccess("המוצר נמחק בהצלחה.");
+                vm.productsCustomer = _.without(vm.productsCustomer, product);
+                } else {
+                    logWarning("המוצר לא קיים");
+                }
+            }, function(response) {
+                //error
+                logError(response.status + " " + response.statusText);
+            });
         }
 
         function updateProductsRound(roundId) {
