@@ -8,8 +8,9 @@
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
         var logError = common.logger.getLogFn(controllerId, 'error');
-        var logWarning = common.logger.getLogFn(controllerId, 'warning')
+        var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
+        vm.isBusy = common.serviceCallPreloader;
         vm.isAdmin=false;
         vm.title = 'תפריט ניהול - למנהל האתר';
         vm.users = {};
@@ -39,7 +40,7 @@
         function activate() {
             var promises = [getAllUsers(), getRoles(), isAdminRole(), getProducts(),getCustomers()];
             common.activateController([promises], controllerId)
-                .then(function () { log('Activated Admin View'); });
+                .then(function () { log('מסך ניהול פעיל'); });
         }
 
         function isAdminRole() {
@@ -68,6 +69,7 @@
 
         function addusersform(isValid) {
             if (isValid) {
+                vm.isBusy(true);
                 var userIdToUpdate = "";
                 var params = {
                     UserId: 0,
@@ -87,6 +89,8 @@
                         cancelUpdate();
                     }, function (data) {
                         logError(data.status + " " + data.statusText);
+                    }).finally(function () {
+                        vm.isBusy(false);
                     });
                 }
                 return adminService.addUser(params).then(function (data) {
@@ -95,6 +99,8 @@
                     resetUserForm();
                 }, function (data) {
                     logError(data.status + " " + data.statusText);
+                }).finally(function () {
+                    vm.isBusy(false);
                 });
             } else {
                 logError('שגיאה בהזנת הנתונים!');
@@ -140,12 +146,15 @@
         }
 
         function getProducts() {
+            vm.isBusy(true);
             return adminService.getAllProducts().then(function(response) {
                 vm.products = response.data;
                 }
                 , function (response) {
                     logError(response.status + " "+response.statusText);
-            });
+                }).finally(function () {
+                    vm.isBusy(false);
+                });
             
         };
 
@@ -217,16 +226,20 @@
 
 
         function getCustomers() {
+            vm.isBusy(true);
             return adminService.getAllCustomers().then(function (response) {
                 vm.customers = response.data;
             }
                 , function (response) {
                     logError(response.status + " " + response.statusText);
-                });
+                }).finally(function() {
+                vm.isBusy(false);
+            });
 
         };
 
         function addCustomer(isValid) {
+            vm.isBusy(true);
             if (isValid) {
                 var params = {
                     CustomerID: 0,
@@ -236,7 +249,7 @@
                 }
                 var customerIdToUpdate = "";
                 if (angular.element('form[name=customersForm] #updatedCustomerId') && angular.element('form[name=customersForm] button').data('action') == "update") {
-                    customerIdToUpdate = angular.element('form[name=customersForm] #updatedCustomersId').val();
+                    customerIdToUpdate = angular.element('form[name=customersForm] #updatedCustomerId').val();
                     params.CustomerID = parseInt(customerIdToUpdate);
                     return adminService.updateCustomer(params).then(function (data) {
                         logSuccess('העדכון בוצע בהצלחה!');
@@ -244,6 +257,8 @@
                         getCustomers();
                     }, function (data) {
                         logError(data.status + " " + data.statusText);
+                    }).finally(function () {
+                        vm.isBusy(false);
                     });
                 }
                 return adminService.addCustomer(params).then(function (data) {
@@ -252,6 +267,8 @@
                     getCustomers();
                 }, function (data) {
                     logError(data.status + " " + data.statusText);
+                }).finally(function () {
+                    vm.isBusy(false);
                 });
             } else {
                 logError('שגיאה בהזנת הנתונים!');

@@ -15,7 +15,12 @@
             getWorkers: getWorkers,
             newRound: newRound,
             addUserToRound: addUserToRound,
-            addCustomerRound: addCustomerRound
+            addCustomerRound: addCustomerRound,
+            getRounds: getRounds,
+            changeRoundStatus: changeRoundStatus,
+            updateRound: updateRound,
+            updateCustomerRound: updateCustomerRound,
+            removeProductToCustomer: removeProductToCustomer
         };
 
         return service;
@@ -27,6 +32,15 @@
                 .error(function(data, status) {
                 return status;
             });
+        }
+
+        function getRounds(model) {
+            return $http.post("/GetRounds",model).success(function (data) {
+                return data;
+            })
+                .error(function (data, status) {
+                    return status;
+                });
         }
 
         function getWorkers() {
@@ -85,6 +99,42 @@
 
         function addCustomerRound(roundCustomersModel) {
             return $http.post("/AddCustomerRound", roundCustomersModel).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+
+        function changeRoundStatus(round) {
+            return $http.post("/ChangeRoundStatus", round).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+        
+        function updateRound(round) {
+            return $http.post("/UpdateRound", round).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+
+        function updateCustomerRound(roundCustomersModel) {
+            return $http.post("/UpdateCustomerRound", roundCustomersModel).success(function (data) {
+                return data;
+            })
+              .error(function (data, status) {
+                  return status;
+              });
+        }
+
+        function removeProductToCustomer(productCustomerId) {
+            return $http.post("/RemoveProductToCustomer?productCustomerId=" + productCustomerId).success(function (data) {
                 return data;
             })
               .error(function (data, status) {

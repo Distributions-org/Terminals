@@ -1,13 +1,14 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'managementDistributions';
-    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService', 'adminService', managementDistributions]);
+    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'managementDistributionsService', 'adminService', managementDistributions]);
 
-    function managementDistributions($location, common, datacontext, managementDistributionsService, adminService) {
+    function managementDistributions($location, $filter, common, datacontext, managementDistributionsService, adminService) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
         var logError = common.logger.getLogFn(controllerId, 'error');
+        var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
         vm.isAdmin = false;
         vm.title = 'ניהול מוצרים ללקוח';
@@ -24,8 +25,10 @@
         vm.customerRoundSelectedChange = customerRoundSelected;
         vm.customerRoundSelected = {};
         vm.productsRoundCustomer = {};
-        vm.updateRound = false;
         vm.dt = new Date();
+        vm.stratDate = today();
+        vm.endDate = today();
+        vm.filterRoundDate = filterRoundDate;
         vm.productsRoundCustomerSelected = [];
         vm.addProductToRound = addProductToRound;
         vm.time = "";
@@ -33,20 +36,32 @@
         vm.saveRound = saveRound;
         vm.roundName = "";
         vm.rounds = {};
+        vm.round = {};
         vm.createRound = createNewRound;
         vm.customersRoundShow = false;
         vm.resetRound = resetRound;
-
+        vm.roundId = 0;
+        vm.roundStatusChange = roundStatusChange;
+        vm.editRound = editRound;
+        vm.roundBtnUpdateShow = false;
+        vm.updateProductsRound = updateProductsRound;
+        vm.removeProductToCustomer = removeProductToCustomer;
+        vm.copyRound = copyRound;
+        vm.roundFilter= {
+            Today: true,
+            StartDate: null,
+            EndDate:null
+        }
         ////date picker
 
         vm.today = today();
 
-        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate'];
-        vm.format = vm.formats[2];
+        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
+        vm.format = vm.formats[3];
 
         // Disable weekend selection
         vm.disabled = function (date, mode) {
-            return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+            return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
 
         vm.open = function ($event) {
@@ -59,6 +74,10 @@
         vm.dateOptions = {
             formatYear: 'yyyy',
             startingDay: 1,
+        };
+
+        function toggleMin() {
+            vm.minDate = (vm.minDate) ? null : new Date();
         };
 
         //vm.gridOptions = {
@@ -116,7 +135,7 @@
         activate();
 
         function activate() {
-            var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), init()];
+            var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), toggleMin(), init()];
             common.activateController([promises], controllerId)
                 .then(function () { log('Activated Management Distributions View'); });
         }
@@ -128,11 +147,21 @@
                 disableFocus: false,
                 showMeridian: false
             });
+            $('#timepicker').timepicker('setTime', new Date());
             vm.time = $('#timepicker').val();
         }
 
+        function filterRoundDate() {
+            vm.roundFilter = {
+                Today: false,
+                StartDate: $filter('date')(vm.stratDate,'MM-dd-yyyy'),
+                EndDate: $filter('date')(vm.endDate, 'MM-dd-yyyy')
+            }
+            getRounds();
+        }
+
         function getRounds() {
-            return managementDistributionsService.getRounds().then(function (response) {
+            return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
                 //success
                 vm.rounds = response.data;
             },
@@ -165,10 +194,10 @@
         }
 
         function getValidCustomers() {
-            return managementDistributionsService.getCustomers().then(function (result) {
-                return vm.customers = result.data;
-            }, function (status) {
-                logError(status);
+            return managementDistributionsService.getCustomers().then(function (response) {
+                return vm.customers = response.data;
+            }, function (response) {
+                logError(response.status + " " + response.statusText);
             });
         }
 
@@ -222,8 +251,6 @@
                     //vm.productsRoundCustomerSelected = [];
                     vm.productRoundSelected = {};
                     vm.productsRoundCustomer = response.data;
-                    vm.updateRound = true;
-
                 },
               function (response) {
                   //error
@@ -232,7 +259,6 @@
 
             }
             else {
-                vm.updateRound = false;
                 return null;
             }
         }
@@ -285,9 +311,11 @@
                 return false;
             }
         }
+
         function today() {
             var date = new Date();
-            vm.dt = date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            vm.dt = $filter('date')(date, 'MM.dd.yyyy'); // date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+            return $filter('date')(date, 'MM.dd.yyyy');
         };
 
         function createNewRound() {
@@ -298,11 +326,13 @@
             return managementDistributionsService.newRound(round).then(function (response) {
                 //success
                 logSuccess("הסבב נוצר בהצלחה!");
-                addUserToRound(1);
+                vm.roundId = response.data;
+                addUserToRound(vm.roundId);
 
             }, function (response) {
                 //error
                 logError(response.status + " " + response.statusText);
+                resetRound();
             });
         }
 
@@ -325,10 +355,10 @@
 
         function saveRound() {
 
-            var productsRoundCustomerGroping = _.groupBy(vm.productsRoundCustomerSelected, 'CustomerID');
-            _.each(productsRoundCustomerGroping, function(productsRoundCustomer) {
+            var productsRoundCustomerGroping = _.toArray(_.groupBy(vm.productsRoundCustomerSelected, 'CustomerID'));
+            _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                 var roundCustomers = {
-                    RoundId: 1,
+                    RoundId: vm.roundId,
                     RoundCustomers: [
                         {
                             customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
@@ -336,17 +366,20 @@
                         }
                     ]
                 }
-                return managementDistributionsService.addCustomerRound(roundCustomers).then(function(response) {
-                        //success
-                        logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
-                    },
-                    function(response) {
+                return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
+                    //success
+                    logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
+                    if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
+                        getRounds();
+                        resetRound();
+                    }
+                },
+                    function (response) {
                         //error
                         logError(response.status + " " + response.statusText);
                     }
                 );
             });
-            resetRound();
             //var roundcustomerProducts = [];
             //_.each(vm.productsRoundCustomerSelected, function(product) {
             //    roundcustomerProducts.push({
@@ -388,6 +421,75 @@
             //);
         }
 
+        function removeProductToCustomer(product) {
+            return managementDistributionsService.removeProductToCustomer(product.ProductCustomerID).then(function(response) {
+                //success
+                if (response.data == "Success")
+                    {
+                logSuccess("המוצר נמחק בהצלחה.");
+                vm.productsCustomer = _.without(vm.productsCustomer, product);
+                } else {
+                    logWarning("המוצר לא קיים");
+                }
+            }, function(response) {
+                //error
+                logError(response.status + " " + response.statusText);
+            });
+        }
+
+        function updateProductsRound(roundId) {
+            updateRoundById(roundId).then(function (response) {
+                //success
+                var productsRoundCustomerGroping = _.toArray(_.groupBy(vm.productsRoundCustomerSelected, 'CustomerID'));
+                _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
+                    var roundCustomers = {
+                        RoundId: vm.roundId,
+                        RoundCustomers: [
+                            {
+                                customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
+                                roundcustomerProducts: createRoundcustomerProducts(productsRoundCustomer)
+                            }
+                        ]
+                    }
+                    return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (innerRsponse) {
+                        //success
+                        logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב עודכן בהצלחה.");
+                        if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
+                            getRounds();
+                            resetRound();
+                        }
+                    },
+                        function (innerRsponse) {
+                            //error
+                            logError(innerRsponse.status + " " + innerRsponse.statusText);
+                        }
+                    );
+                });
+            },
+                function (response) {
+                    //error
+                    resetRound();
+                });
+        }
+
+        function updateRoundById(roundId) {
+            var round = {
+                RoundID: roundId,
+                RoundName: vm.roundName,
+                RoundDate: getRoundDate()
+            }
+            return managementDistributionsService.updateRound(round).then(function (response) {
+                //success
+                logSuccess("הסבב עודכן בהצלחה!");
+                return response;
+
+            }, function (response) {
+                //error
+                logError(response.status + " " + response.statusText);
+                return response;
+            });
+        }
+
         function createRoundcustomerProducts(products) {
             var roundcustomerProducts = [];
             _.each(products, function (product) {
@@ -401,6 +503,7 @@
                         ProductName: product.ProductName,
                         CustomerName: product.CustomerName
                     },
+                    RoundsCustomerProductID: product.RoundsCustomerProductID,
                     Amount: product.Amount,
                     DeliveredAmount: 0
                 });
@@ -408,16 +511,70 @@
             return roundcustomerProducts;
         }
 
+        function editRound(round) {
+            var roundcustomerProducts = [];
+            resetRound();
+            vm.roundId = round.RoundID;
+            vm.roundName = round.RoundName;
+            vm.workerSelected = round.RoundUser[0];
+            vm.dt = round.RoundDate;
+            $('#timepicker').timepicker('setTime', $filter('date')(round.RoundDate, 'HH:mm'));// new Date(round.RoundDate).toTimeString().slice(0, 5);
+            _.each(round.custRound, function (custRound) {
+                _.each(custRound.roundcustomerProducts, function (product) {
+                    roundcustomerProducts.push({
+                        Amount: product.Amount,
+                        ProductCustomerID: product.CustomerRoundProduct.ProductCustomerID,
+                        CustomerID: product.CustomerRoundProduct.CustomerID,
+                        ProductID: product.CustomerRoundProduct.ProductID,
+                        dayType: product.CustomerRoundProduct.dayType,
+                        Cost: product.CustomerRoundProduct.Cost,
+                        ProductName: product.CustomerRoundProduct.ProductName,
+                        CustomerName: product.CustomerRoundProduct.CustomerName,
+                        RoundsCustomerProductID: product.RoundsCustomerProductID
+                    });
+                });
+            });
+            vm.productsRoundCustomerSelected = roundcustomerProducts;
+            vm.customersRoundShow = true;
+            vm.roundBtnUpdateShow = true;
+            vm.round = round;
+        }
 
+        function copyRound(round) {
+            var roundcustomerProducts = [];
+            resetRound();
+            vm.roundId = 0;
+            vm.roundName = round.RoundName;
+            vm.workerSelected = round.RoundUser[0];
+            vm.dt = round.RoundDate;
+            $('#timepicker').timepicker('setTime', $filter('date')(round.RoundDate, 'HH:mm'));// new Date(round.RoundDate).toTimeString().slice(0, 5);
+            _.each(round.custRound, function (custRound) {
+                _.each(custRound.roundcustomerProducts, function (product) {
+                    roundcustomerProducts.push({
+                        Amount: product.Amount,
+                        CustomerID: product.CustomerRoundProduct.CustomerID,
+                        ProductID: product.CustomerRoundProduct.ProductID,
+                        dayType: product.CustomerRoundProduct.dayType,
+                        Cost: product.CustomerRoundProduct.Cost,
+                        ProductName: product.CustomerRoundProduct.ProductName,
+                        CustomerName: product.CustomerRoundProduct.CustomerName
+                    });
+                });
+            });
+            vm.productsRoundCustomerSelected = roundcustomerProducts;
+            vm.customersRoundShow = false;
+            vm.roundBtnUpdateShow = false;
+            vm.round = round;
+        }
 
         function getRoundDate() {
-            var date = new Date(vm.dt);
-            if (date == 'Invalid Date') {
+            var date = $filter('date')(vm.dt, 'MM-dd-yyyy') + " " + vm.time.split(':')[0] + ":" + vm.time.split(':')[1];
+            if (new Date(date) == 'Invalid Date') {
                 date = new Date();
                 date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
-                return date;
+                return date.toUTCString();
             }
-            date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
+            // date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
             return date;
         }
 
@@ -425,10 +582,41 @@
             vm.roundName = '';
             vm.customersRoundShow = false;
             vm.productsRoundCustomerSelected = [];
-            vm.updateRound = false;
             vm.workerSelected = {};
             vm.productsRoundCustomer = {};
+            vm.today = today();
+            vm.roundId = 0;
+            $('#timepicker').timepicker('setTime', new Date());
+            vm.time = $('#timepicker').val();
+            vm.roundBtnUpdateShow = false;
+            vm.round = {};
         }
+
+        function roundStatusChange(round) {
+            if (round.roundStatus == 1) {
+                round.roundStatus = 0;
+            } else {
+                round.roundStatus = 1;
+            }
+
+            changeRoundStatus(round);
+        }
+
+        function changeRoundStatus(round) {
+            return managementDistributionsService.changeRoundStatus(round).then(function (response) {
+                //success
+                if (response.data.roundStatus === 1) {
+                    logSuccess("הסבב פעיל");
+                } else {
+                    logWarning("הסבב לא פעיל");
+                }
+            }, function (response) {
+                //error
+                logError(response.status + " " + response.statusText);
+            });
+        }
+
+
 
 
         //function generateRandomItem(id) {

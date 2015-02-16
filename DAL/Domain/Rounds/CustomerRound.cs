@@ -10,6 +10,5 @@ namespace Core.Domain.Rounds
     {
         public Customers.Customers customerRound { get; set; }
         public List<RoundProductCustomer> roundcustomerProducts { get; set; }
-
     }
 }

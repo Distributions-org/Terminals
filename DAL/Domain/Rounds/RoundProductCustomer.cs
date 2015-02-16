@@ -9,6 +9,7 @@ namespace Core.Domain.Rounds
 {
     public class RoundProductCustomer
     {
+        public int RoundsCustomerProductID { get; set; }
         public ProductToCustomer CustomerRoundProduct { get; set; }
         public int Amount { get; set; }
 

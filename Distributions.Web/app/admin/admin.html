@@ -2,7 +2,7 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div class="widget wviolet">
+                <div  class="widget wviolet">
                     <div data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content user">
                         <h3>ניהול משתמשים, ניהול מוצרים, ניהול לקוחות</h3>
@@ -45,8 +45,8 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="widget wviolet">
-                        <div data-cc-widget-header title="ניהול משתמשים"
+                    <div  class="widget wviolet">
+                        <div  data-cc-widget-header title="ניהול משתמשים"
                              allow-collapse="true"></div>
                         <div class="widget-content text-center text-info">
                             <div class="row">
@@ -134,8 +134,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="row">
-                        <div class="widget wlightblue">
-                            <div data-cc-widget-header title="ניהול מוצרים"></div>
+                        <div  class="widget wlightblue">
+                            <div allow-collapse="true" data-cc-widget-header title="ניהול מוצרים"></div>
                             <div class="widget-content">
                                 <h3>כל המוצרים</h3>
                                 <div>חיפוש: <input ng-model="vm.searchText"></div>
@@ -212,7 +212,7 @@
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="widget wgreen">
-                            <div data-cc-widget-header title="ניהול לקוחות"></div>
+                            <div allow-collapse="true" data-cc-widget-header title="ניהול לקוחות"></div>
                             <div class="widget-content customers">
                                 <h3>כל הלקוחות</h3>
                                 <div>חיפוש: <input ng-model="vm.searchCustomerText"></div>
@@ -227,7 +227,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>שם הלקוח</th>
-                                                                <th>לקוח HP</th>
+                                                                <th>לקוח ח.פ</th>
                                                                 <th>סטטוס</th>
                                                                 <th>עריכה</th>
                                                                 <th>מחיקה</th>
@@ -262,7 +262,7 @@
                                                             </div>
                                                             <div class="input-group pull-right">
                                                                 <input type="text" ng-model="vm.customer.customerHP" name="customerHP" id="customerHP"
-                                                                       class="form-control input-validation-error" required placeholder="לקוח HP" />
+                                                                       class="form-control input-validation-error" required placeholder="לקוח ח.פ" />
                                                             </div>
                                                             <div class="input-group pull-right">
                                                                 <input type="checkbox" ng-change="vm.customer.statusChange()" ng-true-value="'סטטוס פעיל'" ng-false-value="'סטטוס לא פעיל'" ng-model="vm.customer.status" id="customerStatus" name="customerStatus" />

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using Core.Data;
 using Core.Domain.Persons;
@@ -13,6 +16,7 @@ using Core.Domain;
 using Core.Domain.Rounds;
 using Core.Domain.Customers;
 using System;
+using Services.Users;
 
 namespace Services
 {
@@ -25,11 +29,14 @@ namespace Services
         private readonly IRepository<RoundsUserTbl> _RoundsUserRepository;
         private readonly IRepository<RoundsCustomerTbl> _RoundsCustomerRepository;
         private readonly IRepository<RoundsCustomerProductTbl> _RoundsCustomerProductRepository;
+        private readonly IUserService _userService;
+        private readonly ICustomerService _customerService;
 
         public RoundsService(IRepository<Data.RoundsTbl> RoundsRepository, IRepository<Data.Customers> CustomersRepository,
             IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository
             , IRepository<Data.RoundsUserTbl> RoundsUserRepository,
-            IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository)
+            IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository,
+            IUserService userService,ICustomerService customerService)
         {
             _RoundsRepository = RoundsRepository;
             _CustomersRepository = CustomersRepository;
@@ -38,6 +45,8 @@ namespace Services
             _RoundsUserRepository = RoundsUserRepository;
             _RoundsCustomerRepository = RoundsCustomerRepository;
             _RoundsCustomerProductRepository = RoundsCustomerProductRepository;
+            _userService = userService;
+            _customerService = customerService;
         }
 
         public int CreateNewRound(Rounds NewRound)
@@ -82,6 +91,7 @@ namespace Services
         {
             try
             {
+                Mapper.Reset();
                 Mapper.CreateMap<CustomerRound, RoundsCustomerTbl>()
                  .ForMember(a => a.RoundsID, b => b.MapFrom(c => RoundID))
                  .ForMember(a => a.CustomerID, b => b.MapFrom(c => c.customerRound.CustomerID));
@@ -162,12 +172,54 @@ namespace Services
                
                 currentRound.CustomerRoundProduct = currentCustomer;
                 currentRound.Amount = item.Amount.Value;
+                currentRound.RoundsCustomerProductID = item.RoundsCustomerProductID;
                 currentRound.DeliveredAmount = item.DelieveredAmount.HasValue ? item.DelieveredAmount.Value : 0;
                 allroundProducts.Add(currentRound);
             }
             
             return allroundProducts;
 
+        }
+
+
+        public List<Rounds> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate)
+        {
+            var rounds = new List<Rounds>();
+            var tmpRounds=new List<RoundsTbl>();
+
+            if (startDate != null && endDate != null)
+            {
+                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) >= DbFunctions.TruncateTime(startDate)
+                    && DbFunctions.TruncateTime(x.RoundDate) <= DbFunctions.TruncateTime(endDate)).ToList();
+            }
+            else if (!today)
+            {
+                tmpRounds = _RoundsRepository.GetAll().ToList();
+            }
+            else
+            {
+                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) == DbFunctions.TruncateTime(DateTime.Now)).ToList();
+            }
+           
+            if (tmpRounds.Any())
+                {
+                    tmpRounds.ForEach(round => rounds.Add(new Rounds
+                    {
+                            RoundID = round.RoundsID,
+                            roundStatus = (RoundStatus.roundStatus)round.RoundStatus.GetValueOrDefault(),
+                            RoundDate = round.RoundDate.GetValueOrDefault(),
+                            RoundName = round.RoundName,
+                            RoundUser = _userService.GetAllUsers().Where(x=>
+                            {
+                                var firstOrDefault = _RoundsUserRepository.FindBy(u=>u.RoundsID==round.RoundsID).FirstOrDefault();
+                                return firstOrDefault != null && x.UserID==firstOrDefault.UserID;
+                            }).ToList(),
+                            custRound = MapRoundCustomer(_RoundsCustomerRepository.FindBy(x => x.RoundsID == round.RoundsID).ToList())
+
+                    }));
+                }
+            
+            return rounds;
         }
 
         //public List<RoundProductCustomer> GetAllRounds(DateTime startdate,DateTime enddate)
@@ -218,6 +270,81 @@ namespace Services
 
         }
 
+        public FunctionReplay.functionReplay UpdateRoundStatus(int roundId, int roundStatus)
+        {
+            var round = _RoundsRepository.FindBy(x => x.RoundsID == roundId).FirstOrDefault();
+            if (round == null) return FunctionReplay.functionReplay.Failed;
+            round.RoundStatus = roundStatus;
+            var result = _RoundsRepository.Update(round);
+            if (result.ToString()=="Success")
+                return FunctionReplay.functionReplay.Success;
+
+            return FunctionReplay.functionReplay.Failed;
+        }
+
+        public FunctionReplay.functionReplay UpdateCustomersToRound(List<CustomerRound> roundCustomers, int roundId)
+        {
+             try
+            {
+                Mapper.Reset();
+                Mapper.CreateMap<CustomerRound, RoundsCustomerTbl>()
+                    .ForMember(a=>a.RoundsCustomersID,b=>b.MapFrom(c=>_RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.customerRound.CustomerID).FirstOrDefault().RoundsCustomersID))
+                 .ForMember(a => a.RoundsID, b => b.MapFrom(c => roundId))
+                 .ForMember(a => a.CustomerID, b => b.MapFrom(c => c.customerRound.CustomerID));
+                List<RoundsCustomerTbl> newRoundCust = Mapper.Map<List<CustomerRound>, List<RoundsCustomerTbl>>(roundCustomers);
+                foreach (var roundCust in newRoundCust)
+                {
+                    if(roundCust.RoundsCustomersID!=0)
+                    {
+                    _RoundsCustomerRepository.Update(roundCust);
+                    }
+                    else
+                    {
+                        _RoundsCustomerRepository.Add(roundCust);
+                    }
+                }
+                return FunctionReplay.functionReplay.Success;
+            }
+            catch (System.Exception)
+            {   
+                return FunctionReplay.functionReplay.Failed;
+            }
+        }
+
+        public FunctionReplay.functionReplay UpdateRoundProductCustomer(List<RoundProductCustomer> updateProductToCustomerRound, int roundId)
+        {
+             try
+            {
+                Mapper.Reset();
+                Mapper.CreateMap<RoundProductCustomer, RoundsCustomerProductTbl>()
+                    .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
+                    .ForMember(a => a.ProductID, b => b.MapFrom(c => c.CustomerRoundProduct.ProductID))
+                    .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount))
+                    .ForMember(a=>a.DelieveredAmount,b=>b.MapFrom(c=>c.DeliveredAmount==null?0:c.DeliveredAmount));
+
+                var updateRoundsCustomerProductTbl = Mapper.Map<List<RoundProductCustomer>, List<RoundsCustomerProductTbl>>(updateProductToCustomerRound);
+                foreach (var item in updateRoundsCustomerProductTbl)
+                {
+                    if (item.RoundsCustomerProductID != 0)
+                    {
+                        _RoundsCustomerProductRepository.Update(item);
+                    }
+                    else
+                    {
+                        _RoundsCustomerProductRepository.Add(item);
+                    }
+                }
+
+                return FunctionReplay.functionReplay.Success;
+            
+            }
+            catch (System.Exception ex)
+            {
+                return FunctionReplay.functionReplay.Failed;
+            }
+
+        }
+        
         public bool CheckIfUserCanUseRound(int UserID)
         {
             RoundsUserTbl currentUser = _RoundsUserRepository.FindBy(x => x.UserID == UserID).FirstOrDefault();
@@ -267,6 +394,29 @@ namespace Services
                 .ForMember(a => a.Status, b => b.MapFrom(z => (int)z.custStatus));
         }
 
-       
+        private  List<CustomerRound> MapRoundCustomer(List<RoundsCustomerTbl> roundsCustomerTbl)
+        {
+            var customerRoundTmp = new List<CustomerRound>();
+            if (roundsCustomerTbl.Any())
+            {
+                roundsCustomerTbl.Each(roundsCustomer => customerRoundTmp.Add(new CustomerRound
+                {
+                    customerRound = _customerService.GetValidCustomers().FirstOrDefault(x => x.CustomerID == roundsCustomer.CustomerID),
+                    roundcustomerProducts = GetRoundCustomerProducts(roundsCustomer.CustomerID.GetValueOrDefault(), roundsCustomer.RoundsID.GetValueOrDefault())
+                }));
+            }
+
+            return customerRoundTmp;
+        }
+
+
+        public FunctionReplay.functionReplay UpdateRound(Rounds round)
+        {
+            var map = Mapper.FindTypeMapFor<Rounds, RoundsTbl>();
+            Mapper.CreateMap<Rounds, RoundsTbl>().ForMember(a => a.RoundsID, b => b.MapFrom(c => c.RoundID))
+                .ForMember(a => a.RoundStatus, b => b.MapFrom(c => (int) c.roundStatus));
+            var mapRoundTbl = Mapper.Map<Rounds, RoundsTbl>(round);
+            return _RoundsRepository.Update(mapRoundTbl);
+        }
     }
 }

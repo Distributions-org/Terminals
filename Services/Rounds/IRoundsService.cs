@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Core.Domain.Users;
 using Core.Enums;
@@ -20,7 +21,17 @@ namespace Services
         List<RoundProductCustomer> GetRoundCustomerProducts(int CustomerID, int RoundID);
 
         FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount);
-        List<RoundProductCustomer> CheckProductAmountPerRound(int ProductID, int RoundID, int TotalAmount)
+
+        FunctionReplay.functionReplay UpdateRoundStatus(int roundId, int roundStatus);
+        FunctionReplay.functionReplay UpdateRound(Rounds round);
+
+        FunctionReplay.functionReplay UpdateCustomersToRound(List<CustomerRound> roundCustomers, int roundId);
+        FunctionReplay.functionReplay UpdateRoundProductCustomer(List<RoundProductCustomer> updateProductToCustomerRound, int roundId);
+
+        List<RoundProductCustomer> CheckProductAmountPerRound(int ProductID, int RoundID, int TotalAmount);
+
         bool CheckIfUserCanUseRound(int UserID);
+
+        List<Rounds> GetAllRounds(bool today, DateTime? startDate, DateTime? endDate);
     }
 }

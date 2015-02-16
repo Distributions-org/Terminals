@@ -10286,7 +10286,7 @@ function $IntervalProvider() {
 function $LocaleProvider() {
   this.$get = function() {
     return {
-      id: 'en-us',
+      id: 'he-il',
 
       NUMBER_FORMATS: {
         DECIMAL_SEP: '.',

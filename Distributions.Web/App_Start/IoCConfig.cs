@@ -43,6 +43,7 @@ namespace Distributions.Web
             builder.RegisterType<CustomerService>().As<ICustomerService>().InstancePerRequest();
             builder.RegisterType<ProductsService>().As<IProductsService>().InstancePerRequest();
             builder.RegisterType<RoundsService>().As<IRoundsService>().InstancePerRequest();
+            builder.RegisterType<ReportsService>().As<IReportsService>().InstancePerRequest();
 
             // Set the dependency resolver to be Autofac.
             var container = builder.Build();

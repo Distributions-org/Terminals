@@ -23,7 +23,7 @@
                 url: '/',
                 config: {
                     templateUrl: '../app/dashboard/dashboard.html',
-                    title: 'dashboard',
+                    title: 'dashboard - Terminal',
                     settings: {
                         nav: 1,
                         content: '<i class="fa fa-dashboard"></i> מידע כללי'
@@ -32,7 +32,7 @@
             }, {
                 url: '/admin',
                 config: {
-                    title: 'admin',
+                    title: 'admin - Terminal',
                     templateUrl: '../app/admin/admin.html',
                     settings: {
                         nav: 2,
@@ -42,11 +42,21 @@
             }, {
                 url: '/managementDistributions',
                 config: {
-                    title: 'management Distributions',
+                    title: 'management Distributions - Terminal',
                     templateUrl: '../app/managementDistributions/managementDistributions.html',
                     settings: {
                         nav: 3,
                         content: '<i class="fa fa-truck"></i> ניהול הפצות'
+                    }
+                }
+            }, {
+                url: '/reports',
+                config: {
+                    title: 'reports - Terminal',
+                    templateUrl: '../app/reports/reports.html',
+                    settings: {
+                        nav: 4,
+                        content: '<i class="fa fa-file-text-o"></i> דוחות'
                     }
                 }
             }

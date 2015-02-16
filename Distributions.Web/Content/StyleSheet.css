@@ -162,16 +162,38 @@ form[name=customersForm] .input-group div.btn {
 .round .saveBtn {
   margin-top: 10px;
 }
-/*.ui-grid-column-menu-button
-{
-    left:0;
-    right:0;
+table.date-filter {
+  margin-top: 3px !important;
 }
-.ui-grid-icon-angle-down{
-    float:left;
+table.date-filter thead > tr:first-child {
+  border-top: 1px solid #ccc !important;
 }
-.ui-grid-filter-container{
-     .ui-grid-filter-button [class^="ui-grid-icon"]{
-         right :240px;
-     }
-     }*/
+.report .date .date-picker {
+  width: 30%;
+  display: block;
+  display: inline-block;
+  padding: 0 !important;
+}
+.report .date .btn.btn-date {
+  margin: 0;
+  padding: 6px 10px 8px 10px;
+  position: absolute;
+  top: 1px;
+}
+.report .date .btn.btn-date i {
+  margin: 0;
+}
+.report .date label {
+  vertical-align: top;
+  padding-top: 4px;
+}
+.report .date .btn-group {
+  display: none;
+}
+.table-report {
+  border-top: 1px solid #ccc !important;
+  margin-top: 15px;
+}
+.table-report tfoot {
+  font-weight: 600;
+}

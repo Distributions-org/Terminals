@@ -26,8 +26,8 @@ namespace Services
 
         public FunctionReplay.functionReplay AddNewProduct(Core.Domain.Product newProduct)
         {
-            Mapper.CreateMap<Data.Product, Core.Domain.Product>()
-                .ForMember(a => a.productStatus,b => b.MapFrom(c => (ProductStatus.productStatus)c.ProductStatus));
+            Mapper.CreateMap<Core.Domain.Product, Data.Product>()
+                .ForMember(a => a.ProductStatus,b => b.MapFrom(c => (ProductStatus.productStatus)c.productStatus));
             Data.Product productToInsert = Mapper.Map<Core.Domain.Product, Data.Product>(newProduct);
             return _productsRepository.Add(productToInsert);
         }
@@ -40,9 +40,9 @@ namespace Services
             return _productsRepository.Update(currentProduct);
         }
 
-        public FunctionReplay.functionReplay RemoveProductToCustomer(int ProductCustomerID)
+        public FunctionReplay.functionReplay RemoveProductToCustomer(int productCustomerId)
         {
-            return _ProductCustomerRepository.Delete(_ProductCustomerRepository.FindBy(x => x.ProductCustomerID == ProductCustomerID).FirstOrDefault());
+            return _ProductCustomerRepository.Delete(_ProductCustomerRepository.FindBy(x => x.ProductCustomerID == productCustomerId).FirstOrDefault());
 
         }
 

@@ -13,6 +13,7 @@ namespace Services
         FunctionReplay.functionReplay UpdateProduct(Core.Domain.Product Producttoupdate);
         FunctionReplay.functionReplay AddProductTocustomer(ProductToCustomer addedProduct);
         FunctionReplay.functionReplay UpdateCustomerProductPrice(ProductToCustomer updateProduct);
+        FunctionReplay.functionReplay RemoveProductToCustomer(int productCustomerId);
         Core.Domain.Product GetProductById(int ProductID);
         List<Core.Domain.Product> GetProductByStatus(ProductStatus.productStatus pStatus);
         List<Core.Domain.Product> GetProducts();
