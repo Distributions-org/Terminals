@@ -48,6 +48,13 @@ namespace Services
             return _RoundsRepository.GetAll().OrderByDescending(x => x.RoundsID).Select(x => x.RoundsID).FirstOrDefault();
         }
 
+        public List<Rounds> GetRoundsByDate(DateTime startdate, DateTime enddate)
+        {
+            MapDBToRound();
+            List<RoundsTbl> allDbRounds = _RoundsRepository.FindBy(x => x.RoundDate >= startdate && x.RoundDate <= enddate).ToList();
+            return Mapper.Map<List<RoundsTbl>, List<Rounds>>(allDbRounds);
+        }
+
         public FunctionReplay.functionReplay AddRoundUsersToRound(List<User> RoundUsers, int RoundID)
         {
             try
@@ -225,6 +232,13 @@ namespace Services
         {
             Mapper.CreateMap<Rounds, RoundsTbl>()
                 .ForMember(a => a.RoundStatus, b => b.MapFrom(c => (int)c.roundStatus));
+        }
+
+        private void MapDBToRound()
+        {
+            Mapper.CreateMap<RoundsTbl, Rounds>()
+                .ForMember(a => a.roundStatus, b => b.MapFrom(c => (RoundStatus.roundStatus)c.RoundStatus))
+                .ForMember(a => a.RoundID, b => b.MapFrom(c => c.RoundsID));
         }
 
         private void MappingToClass()
