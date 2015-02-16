@@ -82,11 +82,78 @@
                             </div>
                         </div>
                     </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
-                <div class="widget-foot">
-                    <div class="clearfix"></div>
-                </div>
+
             </div>
         </div>
     </section>
+    <section class="matter round-product">
+        <div class="container">
+                <div class="row">
+                    <div class="widget wlightblue">
+                        <div allow-collapse="true" data-cc-widget-header title="בדיקת כמות בסבב"></div>
+                        <div class="widget-content">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="widget wlightblue">
+                                        <div allow-collapse="true" data-cc-widget-header title="בחר סבב - מוצר - כמות"></div>
+                                        <div class="widget-content">
+                                            <div class="row">
+                                                <form name="form">
+                                                    <div class="col-sm-4">
+                                                        <label>בחר סבב:</label>
+                                                        <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.rounds"
+                                                                ng-change="vm.roundSelectedChange(vm.roundSelected)">
+                                                            <option value="">סבב</option>
+                                                        </select>
+                                                    </div>
+                                                    <div data-ng-show="vm.customersRound.length>0" class="col-sm-4">
+                                                        <label>בחר לקוח:</label>
+                                                        <select class="form-control" ng-model="vm.customersRoundSelected" ng-options="customer.customerRound.CustomerName for customer in vm.customersRound"
+                                                                ng-change="vm.customersRoundSelectedChange(vm.customersRoundSelected)">
+                                                            <option value="">לקוח</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <input type="number" required name="inputNumber" data-ng-model="vm.productAmount"  placeholder="כמות" />
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <button data-ng-disabled="!form.inputNumber.$valid" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 text-left">
+                                                    <span class="field-validation-error" ng-show="form.inputNumber.$error.number">מספרים בלבד</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="widget-foot">
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="widget wlightblue">
+                                        <div allow-collapse="true" data-cc-widget-header title="עריכת לקוח בסבב"></div>
+                                        <div class="widget-content">
+                                        </div>
+                                        <div class="widget-foot">
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-foot">
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
 </section>
+

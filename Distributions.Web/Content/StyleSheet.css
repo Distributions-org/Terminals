@@ -197,3 +197,6 @@ table.date-filter thead > tr:first-child {
 .table-report tfoot {
   font-weight: 600;
 }
+.round-product .btn {
+  margin: 0 !important;
+}

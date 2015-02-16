@@ -33,11 +33,21 @@
         vm.printReport = printReport;
         vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
         vm.format = vm.formats[3];
+        vm.rounds = {};
+        vm.roundSelectedChange = roundSelectedChange;
+        vm.customersRound = {};
 
+        vm.dateFilter = new Date();
         // Disable weekend selection
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
+
+        vm.roundFilter = {
+            Today: false,
+            StartDate: $filter('date')(vm.dateFilter.setDate(1), 'MM-dd-yyyy'),
+            EndDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() + 1, 0), 'MM-dd-yyyy')
+        }
 
         vm.openeStart = function ($event) {
             $event.preventDefault();
@@ -71,7 +81,7 @@
         activate();
 
         function activate() {
-            var promises = [isAdminRole(), getValidCustomers(), toggleMin()];
+            var promises = [isAdminRole(), getValidCustomers(), toggleMin(), getRounds()];
             common.activateController([promises], controllerId)
                 .then(function () { log('מסך ' + vm.title + ' פעיל'); });
         }
@@ -85,6 +95,25 @@
                     $location.url('/');
                 }
             });
+        }
+
+        function getRounds() {
+            return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
+                //success
+                vm.rounds = response.data;
+            },
+                function (response) {
+                    //error
+                    logError(response.status + " " + response.statusText);
+                });
+        }
+
+        function roundSelectedChange(round) {
+            if(round!=null) {
+                vm.customersRound = round.custRound;
+            } else {
+                vm.customersRound = {};
+            }
         }
 
         function getValidCustomers() {
