@@ -110,18 +110,17 @@
                                                             <option value="">סבב</option>
                                                         </select>
                                                     </div>
-                                                    <div data-ng-show="vm.customersRound.length>0" class="col-sm-4">
-                                                        <label>בחר לקוח:</label>
-                                                        <select class="form-control" ng-model="vm.customersRoundSelected" ng-options="customer.customerRound.CustomerName for customer in vm.customersRound"
-                                                                ng-change="vm.customersRoundSelectedChange(vm.customersRoundSelected)">
-                                                            <option value="">לקוח</option>
+                                                    <div data-ng-show="vm.products.length>0" class="col-sm-4">
+                                                        <label>בחר מוצר:</label>
+                                                        <select class="form-control" ng-model="vm.productSelected" ng-options="product.ProductName for product in vm.products">
+                                                            <option value="">מוצר</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-3">
-                                                        <input type="number" required name="inputNumber" data-ng-model="vm.productAmount"  placeholder="כמות" />
+                                                    <div data-ng-show="vm.products.length>0 && vm.productSelected !=null" class="col-sm-3">
+                                                        <input type="number" required name="inputNumber" data-ng-model="vm.amount" placeholder="כמות" />
                                                     </div>
                                                     <div class="col-sm-1">
-                                                        <button data-ng-disabled="!form.inputNumber.$valid" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></button>
+                                                        <button data-ng-disabled="!form.inputNumber.$valid" data-ng-click="vm.getCustomerRoundAmount()" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></button>
                                                     </div>
                                                 </form>
                                             </div>

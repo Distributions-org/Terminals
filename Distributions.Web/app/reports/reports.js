@@ -2,10 +2,10 @@
     'use strict';
 
     var controllerId = "reports";
-    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'reportsService', 'managementDistributionsService', reports]);
+    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'reportsService', 'managementDistributionsService','adminService', reports]);
 
 
-    function reports($location, $filter, common, datacontext, reportsService, managementDistributionsService) {
+    function reports($location, $filter, common, datacontext, reportsService, managementDistributionsService,adminService) {
         /* jshint validthis:true */
         //reportsService.$inject = [];
 
@@ -34,8 +34,15 @@
         vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
         vm.format = vm.formats[3];
         vm.rounds = {};
+        vm.roundSelected = {};
         vm.roundSelectedChange = roundSelectedChange;
         vm.customersRound = {};
+        vm.roundProductCustomer = {};
+        vm.products = {};
+        vm.productSelected =null;
+        
+        vm.amount;
+        vm.getCustomerRoundAmount = getCustomerRoundAmount;
 
         vm.dateFilter = new Date();
         // Disable weekend selection
@@ -97,6 +104,16 @@
             });
         }
 
+        function getProducts() {
+            return adminService.getAllProducts().then(function(response) {
+                vm.products = response.data;
+            }
+                , function (response) {
+                    logError(response.status + " "+response.statusText);
+                });
+            
+        };
+
         function getRounds() {
             return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
                 //success
@@ -110,9 +127,11 @@
 
         function roundSelectedChange(round) {
             if(round!=null) {
-                vm.customersRound = round.custRound;
+                // vm.customersRound = round.custRound;
+                getProducts();
             } else {
-                vm.customersRound = {};
+                //vm.customersRound = {};
+                vm.products = {};
             }
         }
 
@@ -203,42 +222,58 @@
         function fillterDate(date) {
             return $filter('date')(date, "dd-MM-yyyy");
         }
-    }
 
-    function printReport(divName) {
-        var printContents = document.getElementById(divName).innerHTML;
-        var originalContents = document.body.innerHTML;
-        var params = [
-    'height=' + screen.height,
-    'width=' + screen.width,
-    'fullscreen=yes' // only works in IE, but here for completeness
-        ].join(',');
-        var popupWin;
-        if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-            popupWin = window.open('', '_blank', params + ',scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
-            popupWin.window.focus();
-            popupWin.document.write('<!DOCTYPE html><html><head>' +
-                '<link href="/content/bootstrap.min.css" rel="stylesheet">' + '<link href="/Content/bootstrap-rtl.css" rel="stylesheet"> <link href="/content/customtheme.css" rel="stylesheet">' +
-                '<link href="/content/styles.css" rel="stylesheet"> <link href="/Content/StyleSheet.min.css" rel="stylesheet">' +
-                '</head><body onload="window.print()"><div class="reward-body">' + printContents + '</div></html>');
-            popupWin.onbeforeunload = function (event) {
-                popupWin.close();
-                return '.\n';
-            };
-            popupWin.onabort = function (event) {
-                popupWin.document.close();
-                popupWin.close();
+        function getCustomerRoundAmount() {
+            var model = {
+                ProductID: vm.productSelected.ProductID,
+                RoundID: vm.roundSelected.RoundID,
+                TotalAmount: vm.amount
             }
-        } else {
-            popupWin = window.open('', '_blank', params);
-            popupWin.document.open();
-            popupWin.document.write('<html><head><link href="/content/bootstrap.min.css" rel="stylesheet">' + '<link href="/Content/bootstrap-rtl.css" rel="stylesheet"> <link href="/content/customtheme.css" rel="stylesheet">' +
-                '<link href="/content/styles.css" rel="stylesheet"> <link href="/Content/StyleSheet.min.css" rel="stylesheet">' +
-                '</head><body onload="window.print()">' + printContents + '</html>');
-            popupWin.document.close();
-        }
-        popupWin.document.close();
 
-        return true;
+            return reportsService.checkProductAmountPerRound(model).then(function (response) {
+                vm.roundProductCustomer = response.data;
+                logSuccess("סריקת המוצר בסבב עבר בהצלחה");
+            }, function (response) {
+                logError(response.status + " " + response.statusText);
+            });
+        }
+
+        function printReport(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            var params = [
+        'height=' + screen.height,
+        'width=' + screen.width,
+        'fullscreen=yes' // only works in IE, but here for completeness
+            ].join(',');
+            var popupWin;
+            if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+                popupWin = window.open('', '_blank', params + ',scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+                popupWin.window.focus();
+                popupWin.document.write('<!DOCTYPE html><html><head>' +
+                    '<link href="/content/bootstrap.min.css" rel="stylesheet">' + '<link href="/Content/bootstrap-rtl.css" rel="stylesheet"> <link href="/content/customtheme.css" rel="stylesheet">' +
+                    '<link href="/content/styles.css" rel="stylesheet"> <link href="/Content/StyleSheet.min.css" rel="stylesheet">' +
+                    '</head><body onload="window.print()"><div class="reward-body">' + printContents + '</div></html>');
+                popupWin.onbeforeunload = function (event) {
+                    popupWin.close();
+                    return '.\n';
+                };
+                popupWin.onabort = function (event) {
+                    popupWin.document.close();
+                    popupWin.close();
+                }
+            } else {
+                popupWin = window.open('', '_blank', params);
+                popupWin.document.open();
+                popupWin.document.write('<html><head><link href="/content/bootstrap.min.css" rel="stylesheet">' + '<link href="/Content/bootstrap-rtl.css" rel="stylesheet"> <link href="/content/customtheme.css" rel="stylesheet">' +
+                    '<link href="/content/styles.css" rel="stylesheet"> <link href="/Content/StyleSheet.min.css" rel="stylesheet">' +
+                    '</head><body onload="window.print()">' + printContents + '</html>');
+                popupWin.document.close();
+            }
+            popupWin.document.close();
+
+            return true;
+        }
+
     }
 })();

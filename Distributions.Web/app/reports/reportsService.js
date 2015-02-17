@@ -11,7 +11,8 @@
 
         //function getData() { }
         var service = {
-            reports: reports
+            reports: reports,
+            checkProductAmountPerRound: checkProductAmountPerRound
         }
 
         return service;
@@ -24,5 +25,15 @@
                     return status;
                 });
         }
+
+        function checkProductAmountPerRound(model) {
+            return $http.post("/CheckProductAmountPerRound", model).success(function (data) {
+                return data;
+            })
+                .error(function (data, status) {
+                    return status;
+                });
+        }
+        
     }
 })();

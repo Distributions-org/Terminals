@@ -11,18 +11,29 @@ namespace Distributions.Web.Controllers
     public class ReportsController : BaseApiController
     {
          private readonly IReportsService _reportsService;
+        private readonly IRoundsService _roundsService;
 
-         public ReportsController(IReportsService reportsService)
+        public ReportsController(IReportsService reportsService,IRoundsService roundsService)
          {
              _reportsService = reportsService;
+             _roundsService = roundsService;
          }
 
-         [Route("ManageReport")]
+        [Route("ManageReport")]
          [HttpPost]
          public HttpResponseMessage ManageReport(ReportModel model)
          {
              var result = _reportsService.GetCustomerProductsReports(model.ProductIDs, model.CustomerId, model.Year, model.Month, model.EndYear, model.EndMonth);
              return Request.CreateResponse(result.Count>0 ? HttpStatusCode.OK : HttpStatusCode.ExpectationFailed, result);
          }
+
+         [Route("CheckProductAmountPerRound")]
+         [HttpPost]
+         public HttpResponseMessage CheckProductAmountPerRound(ProductAmountPerRound model)
+         {
+             var result = _roundsService.CheckProductAmountPerRound(model.ProductId, model.RoundId, model.TotalAmount);
+             return Request.CreateResponse(result.Count>0 ? HttpStatusCode.OK : HttpStatusCode.ExpectationFailed, result);
+         }
+        
     }
 }
