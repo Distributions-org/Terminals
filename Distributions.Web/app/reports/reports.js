@@ -2,10 +2,10 @@
     'use strict';
 
     var controllerId = "reports";
-    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'reportsService', 'managementDistributionsService','adminService', reports]);
+    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'reportsService', 'managementDistributionsService', 'adminService', reports]);
 
 
-    function reports($location, $filter, common, datacontext, reportsService, managementDistributionsService,adminService) {
+    function reports($location, $filter, common, datacontext, reportsService, managementDistributionsService, adminService) {
         /* jshint validthis:true */
         //reportsService.$inject = [];
 
@@ -39,10 +39,11 @@
         vm.customersRound = {};
         vm.roundProductCustomer = {};
         vm.products = {};
-        vm.productSelected =null;
-        
+        vm.productSelected = null;
         vm.amount;
         vm.getCustomerRoundAmount = getCustomerRoundAmount;
+        vm.editRpc = editRoundProductCustomer;
+        vm.roundProductCustomerEdit = {};
 
         vm.dateFilter = new Date();
         // Disable weekend selection
@@ -105,13 +106,13 @@
         }
 
         function getProducts() {
-            return adminService.getAllProducts().then(function(response) {
+            return adminService.getAllProducts().then(function (response) {
                 vm.products = response.data;
             }
                 , function (response) {
-                    logError(response.status + " "+response.statusText);
+                    logError(response.status + " " + response.statusText);
                 });
-            
+
         };
 
         function getRounds() {
@@ -126,7 +127,7 @@
         }
 
         function roundSelectedChange(round) {
-            if(round!=null) {
+            if (round != null) {
                 // vm.customersRound = round.custRound;
                 getProducts();
             } else {
@@ -159,6 +160,8 @@
             }
             else {
                 vm.showDate = false;
+                vm.tblShow = false;
+                vm.report = {};
                 return null;
             }
         }
@@ -236,6 +239,15 @@
             }, function (response) {
                 logError(response.status + " " + response.statusText);
             });
+        }
+
+        function editRoundProductCustomer(rpc) {
+            if (rpc != null) {
+                vm.roundProductCustomerEdit = rpc;
+            }
+            else {
+                logWarning("שגיאה");
+            }
         }
 
         function printReport(divName) {

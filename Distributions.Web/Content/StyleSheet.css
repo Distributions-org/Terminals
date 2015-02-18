@@ -192,7 +192,7 @@ table.date-filter thead > tr:first-child {
 }
 .table-report {
   border-top: 1px solid #ccc !important;
-  margin-top: 15px;
+  margin-top: 15px !important;
 }
 .table-report tfoot {
   font-weight: 600;

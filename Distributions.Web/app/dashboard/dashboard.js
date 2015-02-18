@@ -1,39 +1,62 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'dashboard';
-    angular.module('app').controller(controllerId, ['common', 'datacontext', dashboard]);
+    angular.module('app').controller(controllerId, ['$filter', 'common', 'managementDistributionsService', dashboard]);
 
-    function dashboard(common, datacontext) {
+    function dashboard($filter, common, managementDistributionsService) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
 
         var vm = this;
-        vm.news = {
-            title: 'Terminal',
-            description: 'Terminal'
-        };
-        vm.messageCount = 0;
-        vm.people = [];
         vm.title = 'Dashboard';
-
+        vm.roundFilter = {};
+        vm.rounds = {};
+        vm.closeRounds = {};
         activate();
 
         function activate() {
-            var promises = [getMessageCount(), getPeople()];
+            var promises = [filterRoundDate()];
             common.activateController(promises, controllerId)
-                .then(function () { log('Activated Dashboard View'); });
+                .then(function () { log('מידע כללי פעיל'); });
         }
 
-        function getMessageCount() {
-            return datacontext.getMessageCount().then(function (data) {
-                return vm.messageCount = data;
-            });
+        function filterRoundDate() {
+            var s = new Date();
+            var e = new Date();
+            vm.roundFilter = {
+                Today: false,
+                StartDate: $filter('date')(new Date(s.setDate(1)), 'MM-dd-yyyy'),
+                EndDate: $filter('date')(new Date(e.getFullYear(), e.getMonth() + 1, 0), 'MM-dd-yyyy'),
+                StartDateView: $filter('date')(new Date(s.setDate(1)), 'dd-MM-yyyy'),
+                EndDateView: $filter('date')(new Date(e.getFullYear(), e.getMonth() + 1, 0), 'dd-MM-yyyy')
+            }
+            getRounds();
         }
 
-        function getPeople() {
-            return datacontext.getPeople().then(function (data) {
-                return vm.people = data;
-            });
+        function getRounds() {
+            return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
+                //success
+                vm.rounds = _.where(response.data, { roundStatus: 1 });
+                vm.closeRounds = _.where(response.data, { roundStatus: 0 });
+            },
+                function (response) {
+                    //error
+                    logError(response.status + " " + response.statusText);
+                });
         }
+
+
+
+        //function getMessageCount() {
+        //    return datacontext.getMessageCount().then(function (data) {
+        //        return vm.messageCount = data;
+        //    });
+        //}
+
+        //function getPeople() {
+        //    return datacontext.getPeople().then(function (data) {
+        //        return vm.people = data;
+        //    });
+        //}
     }
 })();
