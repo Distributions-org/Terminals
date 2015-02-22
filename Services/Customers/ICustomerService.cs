@@ -13,5 +13,6 @@ namespace Services.Users
         List<Core.Domain.Customers.Customers> GetValidCustomers();
         List<ProductToCustomer> GetAllCustomerProducts(int CustomerID);
         FunctionReplay.functionReplay UpdateCustomer(int CustomerID, Core.Domain.Customers.Customers UpdateCustomer);
+        Core.Domain.Customers.Customers GetCustomersById(int id);
     }
 }

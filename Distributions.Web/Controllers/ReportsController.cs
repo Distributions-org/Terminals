@@ -4,6 +4,7 @@ using System.Web.Http;
 using Distributions.Web.Authorize;
 using Distributions.Web.Models;
 using Services;
+using Services.Users;
 
 namespace Distributions.Web.Controllers
 {
@@ -12,11 +13,13 @@ namespace Distributions.Web.Controllers
     {
          private readonly IReportsService _reportsService;
         private readonly IRoundsService _roundsService;
+        private readonly ICustomerService _customerService;
 
-        public ReportsController(IReportsService reportsService,IRoundsService roundsService)
+        public ReportsController(IReportsService reportsService,IRoundsService roundsService,ICustomerService customerService)
          {
              _reportsService = reportsService;
              _roundsService = roundsService;
+            _customerService = customerService;
          }
 
         [Route("ManageReport")]
@@ -33,6 +36,17 @@ namespace Distributions.Web.Controllers
          {
              var result = _roundsService.CheckProductAmountPerRound(model.ProductId, model.RoundId, model.TotalAmount);
              return Request.CreateResponse(result.Count>0 ? HttpStatusCode.OK : HttpStatusCode.ExpectationFailed, result);
+         }
+         [Route("GetCustomerById")]
+         [HttpGet]
+         public HttpResponseMessage GetCustomerById(int id)
+         {
+             var result = _customerService.GetCustomersById(id);
+             if (result != null)
+             {
+                 return Request.CreateResponse(HttpStatusCode.OK, result);
+             }
+             return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
          }
         
     }

@@ -44,6 +44,9 @@
         vm.getCustomerRoundAmount = getCustomerRoundAmount;
         vm.editRpc = editRoundProductCustomer;
         vm.roundProductCustomerEdit = {};
+        vm.totalAmount = 0;
+        vm.totalDeliveredAmount = 0;
+        vm.savePrc = savePrc;
 
         vm.dateFilter = new Date();
         // Disable weekend selection
@@ -235,7 +238,9 @@
 
             return reportsService.checkProductAmountPerRound(model).then(function (response) {
                 vm.roundProductCustomer = response.data;
-                logSuccess("סריקת המוצר בסבב עבר בהצלחה");
+                vm.totalDeliveredAmount = _.reduce(vm.roundProductCustomer, function (memo, num) { return memo + num.DeliveredAmount; }, 0);
+                vm.totalAmount = _.reduce(vm.roundProductCustomer, function (memo, num) { return memo + num.Amount; }, 0);
+                logSuccess("סריקת המוצר בסבב עברה בהצלחה");
             }, function (response) {
                 logError(response.status + " " + response.statusText);
             });
@@ -248,6 +253,72 @@
             else {
                 logWarning("שגיאה");
             }
+        }
+
+        function savePrc() {
+            if (vm.roundProductCustomerEdit.hasOwnProperty('Amount')) {
+                updateProductsRound();
+            }
+        }
+
+        function updateProductsRound() {
+            getCustomerById(vm.roundProductCustomerEdit.CustomerRoundProduct.CustomerID).then(function(response) {
+                //success
+                var customer = response;
+                if (customer == false) {
+                    logError("שגיאה בנתוני לקוח");
+                    return false;
+                }
+                var roundCustomers = {
+                    RoundId: vm.roundSelected.RoundID,
+                    RoundCustomers: [
+                        {
+                            customerRound: customer,
+                            roundcustomerProducts: [{
+                                CustomerRoundProduct: {
+                                    ProductCustomerID: vm.roundProductCustomerEdit.CustomerRoundProduct.ProductCustomerID,
+                                    CustomerID: vm.roundProductCustomerEdit.CustomerRoundProduct.CustomerID,
+                                    ProductID: vm.roundProductCustomerEdit.CustomerRoundProduct.ProductID,
+                                    dayType: vm.roundProductCustomerEdit.CustomerRoundProduct.dayType,
+                                    Cost: vm.roundProductCustomerEdit.CustomerRoundProduct.Cost,
+                                    ProductName: vm.roundProductCustomerEdit.CustomerRoundProduct.ProductName,
+                                    CustomerName: vm.roundProductCustomerEdit.CustomerRoundProduct.CustomerName
+                                },
+                                RoundsCustomerProductID: vm.roundProductCustomerEdit.RoundsCustomerProductID,
+                                Amount: vm.roundProductCustomerEdit.Amount,
+                                DeliveredAmount: vm.roundProductCustomerEdit.DeliveredAmount
+                            }]
+                        }
+                    ]
+                }
+                return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (responsedata) {
+                    //success
+                    logSuccess("המוצר עודכן בסבב בהצלחה");
+                    angular.element('.edit-eport-tbl .btn-success > i').removeClass('glyphicon-save').addClass('glyphicon-saved');
+                    angular.element('.edit-eport-tbl .btn-success').attr('disabled', 'disabled');
+                        vm.getCustomerRoundAmount();
+                    },
+                    function (responsedata) {
+                        //error
+                        logError(responsedata.status + " " + responsedata.statusText);
+                    });
+            }, function (response) {
+                //error
+                logError(response.status + " " + response.statusText);
+            });
+           
+                     
+        }
+
+        function getCustomerById(id) {
+            return  reportsService.getCustomerById(id).then(function(response) {
+                //success
+                return response.data;
+            }, function(response) {
+                //errror
+                logError(response.status + " " + response.statusText);
+                return false;
+            });
         }
 
         function printReport(divName) {

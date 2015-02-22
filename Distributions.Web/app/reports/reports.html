@@ -131,7 +131,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <table class="table table-condensed table-bordered  table-striped table-report">
+                                                <table ng-show="vm.roundProductCustomer.length>0" class="table table-condensed table-bordered  table-striped table-report">
                                                     <thead>
                                                         <tr>
                                                             <th>שם הלקוח</th>
@@ -150,6 +150,15 @@
                                                             <td class="text-center"><button data-ng-click="vm.editRpc(rpc)" class="btn btn-info btn-sm">ערוך <i class="glyphicon glyphicon-arrow-left"></i></button></td>
                                                         </tr>
                                                     </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>סכ"ה</td>
+                                                            <td></td>
+                                                            <td>{{vm.totalAmount}}</td>
+                                                            <td>{{vm.totalDeliveredAmount}}</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>
@@ -163,7 +172,7 @@
                                 <div class="widget wlightblue">
                                     <div allow-collapse="true" data-cc-widget-header title="עריכת לקוח בסבב"></div>
                                     <div class="widget-content">
-                                        <table data-ng-show="vm.roundProductCustomerEdit.hasOwnProperty('Amount')" class="table table-condensed table-bordered  table-striped table-report">
+                                        <table data-ng-show="vm.roundProductCustomerEdit.hasOwnProperty('Amount')" class="table table-condensed table-bordered  table-striped table-report edit-eport-tbl">
                                             <thead>
                                                 <tr>
                                                     <th>סבב</th>

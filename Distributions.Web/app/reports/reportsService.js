@@ -12,7 +12,8 @@
         //function getData() { }
         var service = {
             reports: reports,
-            checkProductAmountPerRound: checkProductAmountPerRound
+            checkProductAmountPerRound: checkProductAmountPerRound,
+            getCustomerById: getCustomerById
         }
 
         return service;
@@ -34,6 +35,14 @@
                     return status;
                 });
         }
-        
+     
+        function getCustomerById(id) {
+            return $http.get("/GetCustomerById?Id=" + id).success(function (data) {
+                return data;
+            })
+                .error(function (data, status, headers, config) {
+                    return status;
+                });
+        }
     }
 })();

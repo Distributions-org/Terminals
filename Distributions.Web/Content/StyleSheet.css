@@ -200,3 +200,6 @@ table.date-filter thead > tr:first-child {
 .round-product .btn {
   margin: 0 !important;
 }
+.edit-eport-tbl input[type="text"] {
+  max-width: 50px;
+}

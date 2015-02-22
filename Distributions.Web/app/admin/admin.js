@@ -30,10 +30,13 @@
         vm.cancelUpdate = cancelUpdate;
         vm.cancelProductUpdate = cancelProductUpdate;
         vm.cancelCustomerUpdate = cancelCustomerUpdate;
-        vm.customer.status = vm.product.status = "סטטוס לא פעיל";
+        vm.customer.status = vm.product.status = "סטטוס פעיל";
         vm.product.statusChange = productStatusChange;
         vm.customer.statusChange = customerStatusChange;
        
+        //filter
+        vm.predicateProduct = 'ProductName';
+
         //vm.deletUser = deleteUser;
         activate();
 
@@ -196,7 +199,7 @@
                 vm.product.status = product.productStatus == 1 ? "סטטוס פעיל" : "סטטוס לא פעיל";
                 angular.element('#productStatus').attr('checked', product.productStatus == 1 ? true : false);
                 angular.element('form[name=productsForm] button').text("עדכן");
-                angular.element('form[name=productsForm] button').attr('data-action', 'update');
+                angular.element('form[name=productsForm] button').data('action', 'update');
                 angular.element('form[name=productsForm]').find('#updatedProductId').remove();
                 angular.element('form[name=productsForm]').append("<input type=\"hidden\" id=\"updatedProductId\" value=\"" + product.ProductID + "\"/>");
                 angular.element('#cancelProductUpdate').removeClass('hidden');
@@ -207,14 +210,14 @@
             resetProductForm();
             angular.element('form[name=productsForm] button').text("הוסף");
             angular.element('form[name=productsForm]').find('#updatedProductId').remove();
-            angular.element('form[name=productsForm] button').removeAttr('data-action');
+            angular.element('form[name=productsForm] button').removeData('action');
             angular.element('#cancelProductUpdate').addClass('hidden');
         }
 
         function resetProductForm() {
             vm.product.productName = '';
-            vm.product.status = "סטטוס לא פעיל";
-            angular.element('#productStatus').attr('checked',false);
+            vm.product.status = "סטטוס פעיל";
+            angular.element('#productStatus').attr('checked',true);
         }
 
         function productStatusChange() {
@@ -248,7 +251,7 @@
                     custStatus: angular.element('#customerStatus').is(':checked') ? 1 : 2
                 }
                 var customerIdToUpdate = "";
-                if (angular.element('form[name=customersForm] #updatedCustomerId') && angular.element('form[name=customersForm] button').data('action') == "update") {
+                if (angular.element('form[name=customersForm] #updatedCustomerId').length>0 && angular.element('form[name=customersForm] button').data('action') == "update") {
                     customerIdToUpdate = angular.element('form[name=customersForm] #updatedCustomerId').val();
                     params.CustomerID = parseInt(customerIdToUpdate);
                     return adminService.updateCustomer(params).then(function (data) {
@@ -283,7 +286,7 @@
                 vm.customer.status = customer.custStatus == 1 ? "סטטוס פעיל" : "סטטוס לא פעיל";
                 angular.element('#customerStatus').attr('checked', customer.custStatus == 1 ? true : false);
                 angular.element('form[name=customersForm] button').text("עדכן");
-                angular.element('form[name=customersForm] button').attr('data-action', 'update');
+                angular.element('form[name=customersForm] button').data('action', 'update');
                 angular.element('form[name=customersForm]').find('#updatedCustomerId').remove();
                 angular.element('form[name=customersForm]').append("<input type=\"hidden\" id=\"updatedCustomerId\" value=\"" + customer.CustomerID + "\"/>");
                 angular.element('#cancelCustomerUpdate').removeClass('hidden');
@@ -294,7 +297,7 @@
             resetCustomerForm();
             angular.element('form[name=customersForm] button').text("הוסף");
             angular.element('form[name=customersForm]').find('#updatedCustomerId').remove();
-            angular.element('form[name=customersForm] button').removeAttr('data-action');
+            angular.element('form[name=customersForm] button').removeData('action');
             angular.element('#cancelCustomerUpdate').addClass('hidden');
         }
 
@@ -308,8 +311,8 @@
         function resetCustomerForm() {
             vm.customer.customerName = '';
             vm.customer.customerHP = '';
-            vm.customer.status = "סטטוס לא פעיל";
-            angular.element('#customerStatus').attr('checked', false);
+            vm.customer.status = "סטטוס פעיל";
+            angular.element('#customerStatus').attr('checked', true);
         }
     }
 

@@ -46,6 +46,14 @@ namespace Services.Users
             return Mapper.Map<List<Data.Customers>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
         }
 
+        public Core.Domain.Customers.Customers GetCustomersById(int id)
+        {
+            Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+                .ForMember(a => a.custStatus, b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status));
+            Data.Customers FoundCustomer = _CustomersRepository.FindBy(x => x.CustomerID==id).FirstOrDefault();
+            return Mapper.Map<Data.Customers, Core.Domain.Customers.Customers>(FoundCustomer);
+        }
+
         public List<ProductToCustomer> GetAllCustomerProducts(int CustomerID)
         {
             Mapper.Reset();
@@ -62,6 +70,8 @@ namespace Services.Users
             return allcustomers;
             
         }
+
+
 
         public FunctionReplay.functionReplay UpdateCustomer(int CustomerID,Core.Domain.Customers.Customers UpdateCustomer)
         {

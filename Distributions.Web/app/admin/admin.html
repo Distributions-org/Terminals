@@ -2,7 +2,7 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div  class="widget wviolet">
+                <div class="widget wviolet">
                     <div data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content user">
                         <h3>ניהול משתמשים, ניהול מוצרים, ניהול לקוחות</h3>
@@ -45,8 +45,8 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div  class="widget wviolet">
-                        <div  data-cc-widget-header title="ניהול משתמשים"
+                    <div class="widget wviolet">
+                        <div data-cc-widget-header title="ניהול משתמשים"
                              allow-collapse="true"></div>
                         <div class="widget-content text-center text-info">
                             <div class="row">
@@ -134,7 +134,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="row">
-                        <div  class="widget wlightblue">
+                        <div class="widget wlightblue">
                             <div allow-collapse="true" data-cc-widget-header title="ניהול מוצרים"></div>
                             <div class="widget-content">
                                 <h3>כל המוצרים</h3>
@@ -149,14 +149,14 @@
                                                     <table class="table table-condensed table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>שם מוצר</th>
+                                                                <th ng-click="vm.predicateProduct= 'ProductName'; reverse=!reverse">שם מוצר</th>
                                                                 <th>סטטוס</th>
                                                                 <th>עריכה</th>
                                                                 <th>מחיקה</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr data-ng-repeat="product in vm.products | filter:vm.searchText | orderBy:'ProductName'">
+                                                            <tr data-ng-repeat="product in vm.products | filter:vm.searchText | orderBy:vm.predicateProduct:reverse">
                                                                 <td>{{product.ProductName}}</td>
                                                                 <td><input type="checkbox" disabled="disabled" ng-checked="{{product.productStatus==1?'true':'false'}}" />{{product.productStatus==1?"פעיל":"לא פעיל"}}</td>
                                                                 <td><button ng-click="vm.editProduct(product.ProductID)" class="btn btn-xs btn-primary">ערוך</button></td>
@@ -200,7 +200,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -290,5 +290,5 @@
                 </div>
             </div>
         </div>
-        </section>
     </section>
+</section>

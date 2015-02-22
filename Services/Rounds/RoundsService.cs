@@ -242,7 +242,7 @@ namespace Services
                 RoundProductCustomer currentRound = new RoundProductCustomer();
                 ProductToCustomer currentCustomer = new ProductToCustomer();
                 currentCustomer.ProductID = item.ProductID.Value;
-
+                
                 currentCustomer.ProductName = _ProductsRepository.FindBy(x => x.ProductID == item.ProductID).FirstOrDefault().ProductName;
                 currentCustomer.CustomerID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == item.RoundsCustomersID.Value).FirstOrDefault().CustomerID.Value;
                 currentCustomer.CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID).FirstOrDefault().CustomerName;
@@ -250,8 +250,9 @@ namespace Services
                 PCT = _ProductCustomerRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID && x.ProductID == item.ProductID).FirstOrDefault();
                 currentCustomer.ProductCustomerID = PCT.ProductCustomerID;
                 currentCustomer.Cost = PCT.Cost.Value;
-
+                
                 currentRound.CustomerRoundProduct = currentCustomer;
+                currentRound.RoundsCustomerProductID = item.RoundsCustomerProductID;
                 currentRound.Amount = item.Amount.Value;
                 currentRound.DeliveredAmount = item.DelieveredAmount.HasValue ? item.DelieveredAmount.Value : 0;
                 allroundProducts.Add(currentRound);

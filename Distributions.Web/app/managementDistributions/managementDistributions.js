@@ -137,7 +137,7 @@
         function activate() {
             var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), toggleMin(), init()];
             common.activateController([promises], controllerId)
-                .then(function () { log('Activated Management Distributions View'); });
+                .then(function () { log('מסך ניהול הפצות פעיל'); });
         }
 
         function init() {
