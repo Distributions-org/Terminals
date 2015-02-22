@@ -249,6 +249,8 @@
         function editRoundProductCustomer(rpc) {
             if (rpc != null) {
                 vm.roundProductCustomerEdit = rpc;
+                angular.element('.edit-eport-tbl .btn-success').removeAttr('disabled');
+                angular.element('.edit-eport-tbl .btn-success > i').removeClass('glyphicon-saved').addClass('glyphicon-save');
             }
             else {
                 logWarning("שגיאה");
