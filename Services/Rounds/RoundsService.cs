@@ -185,7 +185,7 @@ namespace Services
         public List<Rounds> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate)
         {
             var rounds = new List<Rounds>();
-            var tmpRounds=new List<RoundsTbl>();
+            List<RoundsTbl> tmpRounds;
 
             if (startDate != null && endDate != null)
             {
@@ -194,11 +194,11 @@ namespace Services
             }
             else if (!today)
             {
-                tmpRounds = _RoundsRepository.GetAll().ToList();
+                tmpRounds = _RoundsRepository.GetAll().Where(x=>x!=null).ToList();
             }
             else
             {
-                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) == DbFunctions.TruncateTime(DateTime.Now)).ToList();
+                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) == DbFunctions.TruncateTime(DateTime.Now)).Where(x=>x!=null).ToList();
             }
            
             if (tmpRounds.Any())
@@ -211,10 +211,10 @@ namespace Services
                             RoundName = round.RoundName,
                             RoundUser = _userService.GetAllUsers().Where(x=>
                             {
-                                var firstOrDefault = _RoundsUserRepository.FindBy(u=>u.RoundsID==round.RoundsID).FirstOrDefault();
+                                var firstOrDefault = _RoundsUserRepository.FindBy(u=>u.RoundsID==round.RoundsID).FirstOrDefault(c => c!=null);
                                 return firstOrDefault != null && x.UserID==firstOrDefault.UserID;
                             }).ToList(),
-                            custRound = MapRoundCustomer(_RoundsCustomerRepository.FindBy(x => x.RoundsID == round.RoundsID).ToList())
+                            custRound = MapRoundCustomer(_RoundsCustomerRepository.FindBy(x => x.RoundsID == round.RoundsID).Where(r=>r!=null).ToList())
 
                     }));
                 }
@@ -321,7 +321,7 @@ namespace Services
                     .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
                     .ForMember(a => a.ProductID, b => b.MapFrom(c => c.CustomerRoundProduct.ProductID))
                     .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount))
-                    .ForMember(a=>a.DelieveredAmount,b=>b.MapFrom(c=>c.DeliveredAmount==null?0:c.DeliveredAmount));
+                    .ForMember(a=>a.DelieveredAmount,b=>b.MapFrom(c=>c.DeliveredAmount));
 
                 var updateRoundsCustomerProductTbl = Mapper.Map<List<RoundProductCustomer>, List<RoundsCustomerProductTbl>>(updateProductToCustomerRound);
                 foreach (var item in updateRoundsCustomerProductTbl)

@@ -18,6 +18,7 @@
         vm.selectedRole = {};
         vm.user = {};
         vm.products = {};
+        vm.productsTmp = {};
         vm.product = {};
         vm.customers = {};
         vm.customer = {};
@@ -33,9 +34,12 @@
         vm.customer.status = vm.product.status = "סטטוס פעיל";
         vm.product.statusChange = productStatusChange;
         vm.customer.statusChange = customerStatusChange;
-       
-        //filter
+        //filters
         vm.predicateProduct = 'ProductName';
+        vm.activeChecked = activeChecked;
+        vm.notactiveChecked = activeChecked;
+        vm.activeProducts = true;
+        vm.notactiveProducts = true;
 
         //vm.deletUser = deleteUser;
         activate();
@@ -152,6 +156,7 @@
             vm.isBusy(true);
             return adminService.getAllProducts().then(function(response) {
                 vm.products = response.data;
+                    vm.productsTmp = response.data;
                 }
                 , function (response) {
                     logError(response.status + " "+response.statusText);
@@ -314,6 +319,25 @@
             vm.customer.status = "סטטוס פעיל";
             angular.element('#customerStatus').attr('checked', true);
         }
+
+        function activeChecked() {
+            if (vm.notactiveProducts && !vm.activeProducts) {
+                vm.products = _.filter(vm.productsTmp, function(product) {
+                    return product.productStatus == 2;
+                });
+            } else if (!vm.notactiveProducts && vm.activeProducts) {
+                vm.products = _.filter(vm.productsTmp, function (product) {
+                    return product.productStatus == 1;
+                });
+            } else if (vm.notactiveProducts && vm.activeProducts) {
+                vm.products = vm.productsTmp;
+            }
+            else if (!vm.notactiveProducts && !vm.activeProducts) {
+                vm.products = {};
+            }
+        }
+
+        
     }
 
 

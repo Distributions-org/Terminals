@@ -203,3 +203,14 @@ table.date-filter thead > tr:first-child {
 .edit-eport-tbl input[type="text"] {
   max-width: 50px;
 }
+.table thead tr th[ng-click] {
+  cursor: pointer;
+}
+.widget-content.scroll {
+  max-height: 500px;
+  overflow-y: auto;
+}
+div.scroll {
+  max-height: 500px;
+  overflow-y: auto;
+}

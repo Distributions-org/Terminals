@@ -112,7 +112,7 @@
                                                 </div>
                                                 <div data-ng-show="vm.products.length>0" class="col-sm-4">
                                                     <label>בחר מוצר:</label>
-                                                    <select class="form-control" ng-model="vm.productSelected" ng-options="product.ProductName for product in vm.products">
+                                                    <select class="form-control" ng-model="vm.productSelected" ng-options="product.ProductName for product in vm.products | orderBy:'ProductName'">
                                                         <option value="">מוצר</option>
                                                     </select>
                                                 </div>
