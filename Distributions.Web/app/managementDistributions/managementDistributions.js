@@ -505,7 +505,7 @@
                     },
                     RoundsCustomerProductID: product.RoundsCustomerProductID,
                     Amount: product.Amount,
-                    DeliveredAmount: 0
+                    DeliveredAmount: product.DeliveredAmount
                 });
             });
             return roundcustomerProducts;
@@ -523,6 +523,7 @@
                 _.each(custRound.roundcustomerProducts, function (product) {
                     roundcustomerProducts.push({
                         Amount: product.Amount,
+                        DeliveredAmount:product.DeliveredAmount,
                         ProductCustomerID: product.CustomerRoundProduct.ProductCustomerID,
                         CustomerID: product.CustomerRoundProduct.CustomerID,
                         ProductID: product.CustomerRoundProduct.ProductID,
@@ -552,6 +553,7 @@
                 _.each(custRound.roundcustomerProducts, function (product) {
                     roundcustomerProducts.push({
                         Amount: product.Amount,
+                        DeliveredAmount: product.DeliveredAmount,
                         CustomerID: product.CustomerRoundProduct.CustomerID,
                         ProductID: product.CustomerRoundProduct.ProductID,
                         dayType: product.CustomerRoundProduct.dayType,

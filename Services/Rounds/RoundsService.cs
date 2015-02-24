@@ -132,7 +132,8 @@ namespace Services
                 Mapper.CreateMap<RoundProductCustomer, RoundsCustomerProductTbl>()
                     .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == RoundID && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
                     .ForMember(a => a.ProductID, b => b.MapFrom(c => c.CustomerRoundProduct.ProductID))
-                    .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount));
+                    .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount))
+                    .ForMember(a=>a.DelieveredAmount, b=>b.MapFrom(c=>c.DeliveredAmount));
 
                 List<RoundsCustomerProductTbl> NewRoundsCustomerProductTbl = Mapper.Map<List<RoundProductCustomer>, List<RoundsCustomerProductTbl>>(addedProductToCustomerRound);
                 foreach (var item in NewRoundsCustomerProductTbl)
@@ -173,7 +174,7 @@ namespace Services
                 currentRound.CustomerRoundProduct = currentCustomer;
                 currentRound.Amount = item.Amount.Value;
                 currentRound.RoundsCustomerProductID = item.RoundsCustomerProductID;
-                currentRound.DeliveredAmount = item.DelieveredAmount.HasValue ? item.DelieveredAmount.Value : 0;
+                if (item.DelieveredAmount != null) currentRound.DeliveredAmount = item.DelieveredAmount.Value;
                 allroundProducts.Add(currentRound);
             }
             
@@ -321,7 +322,7 @@ namespace Services
                     .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
                     .ForMember(a => a.ProductID, b => b.MapFrom(c => c.CustomerRoundProduct.ProductID))
                     .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount))
-                    .ForMember(a=>a.DelieveredAmount,b=>b.MapFrom(c=>c.DeliveredAmount));
+                    .ForMember(a => a.DelieveredAmount, b => b.MapFrom(c => c.DeliveredAmount));
 
                 var updateRoundsCustomerProductTbl = Mapper.Map<List<RoundProductCustomer>, List<RoundsCustomerProductTbl>>(updateProductToCustomerRound);
                 foreach (var item in updateRoundsCustomerProductTbl)

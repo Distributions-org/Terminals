@@ -173,7 +173,7 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <label>מפיץ:</label>
-                                                <select ng-disabled="vm.customersRoundShow" class="form-control" ng-model="vm.workerSelected" ng-options="(worker.FirstName+' '+worker.LastName)  for worker in vm.workers track by worker.UserID">
+                                                <select ng-disabled="vm.customersRoundShow" class="form-control" ng-model="vm.workerSelected" ng-options="(worker.FirstName+' '+worker.LastName)  for worker in vm.workers track by worker.FirstName">
                                                     <option value="">בחר מפיץ</option>
                                                 </select>
                                             </div>
@@ -200,14 +200,14 @@
                                         <div class="row addProduct">
                                             <div ng-show="vm.customersRoundShow" class="col-sm-4">
                                                 <label>לקוח:</label>
-                                                <select class="form-control" ng-model="vm.customerRoundSelected" ng-options="customer.CustomerName for customer in vm.customers track by customer.CustomerID"
+                                                <select class="form-control" ng-model="vm.customerRoundSelected" ng-options="customer.CustomerName for customer in vm.customers track by customer.CustomerName"
                                                         ng-change="vm.customerRoundSelectedChange(vm.customerRoundSelected)">
                                                     <option value="">בחר לקוח</option>
                                                 </select>
                                             </div>
                                             <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
                                                 <label>בחר מוצר:</label>
-                                                <select class="form-control" ng-model="vm.productRoundSelected" ng-options="product.ProductName for product in vm.productsRoundCustomer track by product.ProductID">
+                                                <select class="form-control" ng-model="vm.productRoundSelected" ng-options="product.ProductName for product in vm.productsRoundCustomer track by product.ProductName">
                                                     <option value="">בחר מוצר</option>
                                                 </select>
                                             </div>
@@ -229,7 +229,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:'CustomerName' ">
+                                                        <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:['CustomerName','ProductName'] ">
                                                             <td>{{product.CustomerName}}</td>
                                                             <td>{{product.ProductName}}</td>
                                                             <td>{{product.Cost}}</td>

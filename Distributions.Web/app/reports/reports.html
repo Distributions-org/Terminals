@@ -8,7 +8,7 @@
                         <div class="row date">
                             <div class="col-sm-2">
                                 <label>בחר לקוח:</label>
-                                <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers"
+                                <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers | orderBy:'CustomerName':false"
                                         ng-change="vm.customerSelectedChange(vm.customerSelected)">
                                     <option value="">לקוח</option>
                                 </select>
@@ -105,7 +105,7 @@
                                             <form name="form">
                                                 <div class="col-sm-4">
                                                     <label>בחר סבב:</label>
-                                                    <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.rounds"
+                                                    <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.rounds | orderBy:round.RoundDate"
                                                             ng-change="vm.roundSelectedChange(vm.roundSelected)">
                                                         <option value="">סבב</option>
                                                     </select>

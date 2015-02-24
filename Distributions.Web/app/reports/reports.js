@@ -56,8 +56,8 @@
 
         vm.roundFilter = {
             Today: false,
-            StartDate: $filter('date')(vm.dateFilter.setDate(1), 'MM-dd-yyyy'),
-            EndDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() + 1, 0), 'MM-dd-yyyy')
+            StartDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() -2, 0).setDate(1), 'MM-dd-yyyy'),
+            EndDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() + 2, 0), 'MM-dd-yyyy')
         }
 
         vm.openeStart = function ($event) {
