@@ -103,7 +103,7 @@
             }).then(function () {
                 if (!vm.isAdmin && $location.path() === "/reports") {
                     logError('אינך מורשה לצפות בדף זה!!!');
-                    $location.url('/');
+                    $location.url('/worker');
                 }
             });
         }

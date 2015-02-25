@@ -249,6 +249,8 @@
     <Content Include="app\reports\reports.html" />
     <Content Include="app\reports\reports.js" />
     <Content Include="app\reports\reportsService.js" />
+    <Content Include="app\worker\worker.html" />
+    <Content Include="app\worker\worker.js" />
     <Content Include="Content\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker.min.css" />
     <Content Include="Scripts\bootstrap-timepicker.js" />

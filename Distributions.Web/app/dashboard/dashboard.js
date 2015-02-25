@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'dashboard';
-    angular.module('app').controller(controllerId, ['$filter', 'common', 'managementDistributionsService', dashboard]);
+    angular.module('app').controller(controllerId, ['$filter', 'common', 'datacontext', 'managementDistributionsService', dashboard]);
 
-    function dashboard($filter, common, managementDistributionsService) {
+    function dashboard($filter, common, datacontext, managementDistributionsService) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
 
@@ -15,9 +15,20 @@
         activate();
 
         function activate() {
-            var promises = [filterRoundDate()];
+            var promises = [isAdminRole(), filterRoundDate()];
             common.activateController(promises, controllerId)
                 .then(function () { log('מידע כללי פעיל'); });
+        }
+
+        function isAdminRole() {
+            return datacontext.getUserNameAndRole().then(function (response) {
+                return vm.isAdmin = response.data.isAdmin;
+            }).then(function () {
+                if (!vm.isAdmin && $location.path() === "/") {
+                    logError('אינך מורשה לצפות בדף זה!!!');
+                    $location.url('/worker');
+                }
+            });
         }
 
         function filterRoundDate() {

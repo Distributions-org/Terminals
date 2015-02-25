@@ -59,6 +59,16 @@
                         content: '<i class="fa fa-file-text-o"></i> דוחות'
                     }
                 }
+            }, {
+                url: '/worker',
+                config: {
+                    title: 'worker - Terminal',
+                    templateUrl: '../app/worker/worker.html',
+                    settings: {
+                        nav: 5,
+                        content: '<i class="fa fa-file-text-o"></i> חלוקה'
+                    }
+                }
             }
         ];
     }

@@ -45,7 +45,7 @@
         activate();
 
         function activate() {
-            var promises = [getAllUsers(), getRoles(), isAdminRole(), getProducts(),getCustomers()];
+            var promises = [isAdminRole(),getAllUsers(), getRoles(), getProducts(),getCustomers()];
             common.activateController([promises], controllerId)
                 .then(function () { log('מסך ניהול פעיל'); });
         }
@@ -56,7 +56,7 @@
             }).then(function () {
                 if (!vm.isAdmin && $location.path() === "/admin") {
                     logError('אינך מורשה לצפות בדף זה!!!');
-                    $location.url('/');
+                    $location.url('/worker');
                 }
             });
         }

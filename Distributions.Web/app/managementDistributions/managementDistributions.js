@@ -175,9 +175,9 @@
             return datacontext.getUserNameAndRole().then(function (response) {
                 return vm.isAdmin = response.data.isAdmin;
             }).then(function () {
-                if (!vm.isAdmin && $location.path() === "/admin") {
+                if (!vm.isAdmin && $location.path() === "/managementDistributions") {
                     logError('אינך מורשה לצפות בדף זה!!!');
-                    $location.url('/');
+                    $location.url('/worker');
                 }
             });
         }
