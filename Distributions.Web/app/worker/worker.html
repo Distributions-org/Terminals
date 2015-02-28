@@ -3,9 +3,24 @@
         <div class="container">
             <div class="row">
                 <div class="widget wviolet">
-                    <div data-cc-widget-header title=""></div>
+                    <div data-cc-widget-header title="חלוקה"></div>
                     <div class="widget-content user">
-                        <h3>ניהול משתמשים, ניהול מוצרים, ניהול לקוחות</h3>
+                        <h3>סבבים בתאריך {{vm.date | date: 'dd-MM-yyyy'}}</h3>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <select ng-model="vm.roundSelected" ng-options="round.RoundName for round in  vm.rounds  | orderBy:round.RoundDate">
+                                    <option value="">בחר סבב</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div data-ng-repeat="round in vm.rounds">{{round.RoundName}}</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="widget-foot">
                         <div class="clearfix"></div>

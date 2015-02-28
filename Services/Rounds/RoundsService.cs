@@ -183,7 +183,7 @@ namespace Services
         }
 
 
-        public List<Rounds> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate)
+        public List<Rounds> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate,string email)
         {
             var rounds = new List<Rounds>();
             List<RoundsTbl> tmpRounds;
@@ -219,7 +219,12 @@ namespace Services
 
                     }));
                 }
-            
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                return rounds.Where(x => x.RoundUser[0].Email == email).ToList();
+            }
+
             return rounds;
         }
 

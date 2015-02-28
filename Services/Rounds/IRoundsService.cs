@@ -32,6 +32,6 @@ namespace Services
 
         bool CheckIfUserCanUseRound(int UserID);
 
-        List<Rounds> GetAllRounds(bool today, DateTime? startDate, DateTime? endDate);
+        List<Rounds> GetAllRounds(bool today, DateTime? startDate, DateTime? endDate,string email);
     }
 }

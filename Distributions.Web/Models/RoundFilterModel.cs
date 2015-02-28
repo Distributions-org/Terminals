@@ -10,5 +10,6 @@ namespace Distributions.Web.Models
         public bool Today { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace Distributions.Web.Controllers
         [HttpPost]
         public HttpResponseMessage GetRounds(RoundFilterModel model)
         {
-            var rounds = _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate);
+            var rounds = _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate,model.Email);
             if (rounds != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, rounds);

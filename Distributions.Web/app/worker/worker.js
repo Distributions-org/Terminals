@@ -18,6 +18,7 @@
         vm.workerEmail = "";
         vm.rounds = {};
         vm.closeRounds = {};
+        vm.date = new Date();
         activate();
 
         function activate() {
@@ -27,19 +28,25 @@
         }
 
         function isAdminRole() {
-            return datacontext.getUserNameAndRole().then(function (response) {
-                vm.workerEmail = response.data.userEmail;
-               return vm.isAdmin = response.data.isAdmin;
-            }).then(filterRoundDate());
+            return datacontext.getUserNameAndRole().then(function(response) {
+                return { workerEmail: response.data.userEmail, isAdmin: response.data.isAdmin };
+            }).then(function(result) {
+                vm.isAdmin = result.isAdmin;
+                vm.workerEmail = result.workerEmail;
+            }).then(function() {
+                filterRoundDate();
+            }).then(function() {
+                getRounds();
+            });
         }
 
         function filterRoundDate() {
             vm.roundFilter = {
                 Today: true,
                 StartDate: null,
-                EndDate: null
+                EndDate: null,
+                Email: vm.workerEmail
             }
-            getRounds();
         }
 
         function getRounds() {
