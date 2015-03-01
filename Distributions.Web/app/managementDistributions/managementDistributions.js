@@ -47,10 +47,10 @@
         vm.updateProductsRound = updateProductsRound;
         vm.removeProductToCustomer = removeProductToCustomer;
         vm.copyRound = copyRound;
-        vm.roundFilter= {
+        vm.roundFilter = {
             Today: true,
             StartDate: null,
-            EndDate:null
+            EndDate: null
         }
         ////date picker
 
@@ -154,7 +154,7 @@
         function filterRoundDate() {
             vm.roundFilter = {
                 Today: false,
-                StartDate: $filter('date')(vm.stratDate,'MM-dd-yyyy'),
+                StartDate: $filter('date')(vm.stratDate, 'MM-dd-yyyy'),
                 EndDate: $filter('date')(vm.endDate, 'MM-dd-yyyy')
             }
             getRounds();
@@ -241,7 +241,20 @@
         }
 
         function removeProductRoundCustomer(product) {
-            vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
+            if (vm.roundId != 0) {
+                managementDistributionsService.deleteProductFromRound({ product: product, roundId: vm.roundId }).then(function (response) {
+                    //success  
+                    logWarning("המוצר נמחק מהסבב בהצלחה");
+                        getRounds();
+                        vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
+                    },
+                    function(response) {
+                        logError(response.status + " " + response.statusText);
+                        return;
+                    });
+            } else {
+                vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
+            }
         }
 
         function customerRoundSelected(selected) {
@@ -251,6 +264,15 @@
                     //vm.productsRoundCustomerSelected = [];
                     vm.productRoundSelected = {};
                     vm.productsRoundCustomer = response.data;
+                    if (!vm.roundBtnUpdateShow) {
+                    _.each(response.data, function (product) {
+                        var productTmp = _.findWhere(vm.productsRoundCustomerSelected, { ProductID: product.ProductID, CustomerID: product.CustomerID });
+                        if (productTmp===undefined) {
+                            vm.productsRoundCustomerSelected.push(product);
+                        }
+                    });
+                    }
+
                 },
               function (response) {
                   //error
@@ -355,7 +377,9 @@
 
         function saveRound() {
 
-            var productsRoundCustomerGroping = _.toArray(_.groupBy(vm.productsRoundCustomerSelected, 'CustomerID'));
+            var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected, function(product) {
+                return product.Amount !== 0 && product.Amount !== undefined;
+            }), 'CustomerID'));
             _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                 var roundCustomers = {
                     RoundId: vm.roundId,
@@ -422,16 +446,15 @@
         }
 
         function removeProductToCustomer(product) {
-            return managementDistributionsService.removeProductToCustomer(product.ProductCustomerID).then(function(response) {
+            return managementDistributionsService.removeProductToCustomer(product.ProductCustomerID).then(function (response) {
                 //success
-                if (response.data == "Success")
-                    {
-                logSuccess("המוצר נמחק בהצלחה.");
-                vm.productsCustomer = _.without(vm.productsCustomer, product);
+                if (response.data == "Success") {
+                    logSuccess("המוצר נמחק בהצלחה.");
+                    vm.productsCustomer = _.without(vm.productsCustomer, product);
                 } else {
                     logWarning("המוצר לא קיים");
                 }
-            }, function(response) {
+            }, function (response) {
                 //error
                 logError(response.status + " " + response.statusText);
             });
@@ -523,7 +546,7 @@
                 _.each(custRound.roundcustomerProducts, function (product) {
                     roundcustomerProducts.push({
                         Amount: product.Amount,
-                        DeliveredAmount:product.DeliveredAmount,
+                        DeliveredAmount: product.DeliveredAmount,
                         ProductCustomerID: product.CustomerRoundProduct.ProductCustomerID,
                         CustomerID: product.CustomerRoundProduct.CustomerID,
                         ProductID: product.CustomerRoundProduct.ProductID,

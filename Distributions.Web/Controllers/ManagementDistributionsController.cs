@@ -214,6 +214,19 @@ namespace Distributions.Web.Controllers
 
             return Request.CreateResponse(HttpStatusCode.Forbidden, result.ToString());
         }
+         [Route("DeleteProductFromRound")]
+        [HttpPost]
+         public HttpResponseMessage DeleteProductFromRound(ProductToCustomer product, int roundId)
+         {
+             var result = _roundsService.DeleteProductFromRound(product, roundId);
+
+            if (result.ToString() == "Success")
+            {
+              return Request.CreateResponse(HttpStatusCode.OK, result.ToString());
+            }
+
+            return Request.CreateResponse(HttpStatusCode.Forbidden, result.ToString());
+        }
         
     }
 }

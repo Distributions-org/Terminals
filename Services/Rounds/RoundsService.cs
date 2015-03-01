@@ -136,6 +136,7 @@ namespace Services
                     .ForMember(a=>a.DelieveredAmount, b=>b.MapFrom(c=>c.DeliveredAmount));
 
                 List<RoundsCustomerProductTbl> NewRoundsCustomerProductTbl = Mapper.Map<List<RoundProductCustomer>, List<RoundsCustomerProductTbl>>(addedProductToCustomerRound);
+                 
                 foreach (var item in NewRoundsCustomerProductTbl)
                 {
                     _RoundsCustomerProductRepository.Add(item);
@@ -334,14 +335,20 @@ namespace Services
                 {
                     if (item.RoundsCustomerProductID != 0)
                     {
-                        _RoundsCustomerProductRepository.Update(item);
+                        if (item.Amount == 0)
+                        {
+                            _RoundsCustomerProductRepository.Delete(item);
+                        }
+                        else
+                        {
+                            _RoundsCustomerProductRepository.Update(item);
+                        }
                     }
                     else
                     {
                         _RoundsCustomerProductRepository.Add(item);
                     }
                 }
-
                 return FunctionReplay.functionReplay.Success;
             
             }
@@ -361,6 +368,26 @@ namespace Services
             }
             return false;
         }
+
+        public FunctionReplay.functionReplay DeleteProductFromRound(ProductToCustomer product,int roundId)
+        {
+            try
+            {
+                var rcId =
+                    _RoundsCustomerRepository.FindBy(x => x.CustomerID == product.CustomerID && x.RoundsID == roundId).Single();
+                var rcp =
+                    _RoundsCustomerProductRepository.FindBy(
+                        x =>
+                            x.ProductID == product.ProductID && x.RoundsCustomersID == rcId.RoundsCustomersID).OfType<RoundsCustomerProductTbl>().FirstOrDefault();
+                return _RoundsCustomerProductRepository.Delete(rcp);
+            }
+            catch (Exception)
+            {
+                return FunctionReplay.functionReplay.Failed;
+            }
+           
+        }
+
 
         private void MappingToDB()
         {

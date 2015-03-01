@@ -22,6 +22,8 @@
                             return r.config.settings && r.config.settings.nav;
                         }).sort(function(r1, r2) {
                             return r1.config.settings.nav - r2.config.settings.nav;
+                        }).filter(function (r) {
+                            return r.url !== "/worker";
                         });
                 } else {
                     vm.navRoutes = [_.findWhere(routes, { url: "/worker" })];
