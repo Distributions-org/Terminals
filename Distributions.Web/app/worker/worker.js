@@ -19,6 +19,13 @@
         vm.rounds = {};
         vm.closeRounds = {};
         vm.date = new Date();
+        vm.customersInRound = {};
+        vm.roundSelected = {};
+        vm.customer = {};
+        vm.customerRoundProducts = {};
+        vm.roundChange = roundChange;
+        vm.customerChange = customerChange;
+
         activate();
 
         function activate() {
@@ -64,5 +71,20 @@
                     logError(response.status + " " + response.statusText);
                 });
         }
+
+        function roundChange(round) {
+            vm.customersInRound = {};
+            if (round != null) {
+                vm.customersInRound = round.custRound;
+            }
+        }
+        function customerChange(customer) {
+            vm.customerRoundProducts = {};
+            if (customer != null) {
+                vm.customerRoundProducts = customer;
+            }
+        }
+        
+        
     }
 })();

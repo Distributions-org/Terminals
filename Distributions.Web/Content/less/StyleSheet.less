@@ -308,12 +308,21 @@ table.date-filter {
         overflow-y: auto;
     }
 }
-div{
-     &.scroll {
+
+div {
+    &.scroll {
         max-height: 500px;
         overflow-y: auto;
     }
 }
+
+@media (max-width: 767px) {
+    .mainbar {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
 /*.ui-grid-column-menu-button
 {
     left:0;

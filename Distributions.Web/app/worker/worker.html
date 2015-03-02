@@ -7,18 +7,42 @@
                     <div class="widget-content user">
                         <h3>סבבים בתאריך {{vm.date | date: 'dd-MM-yyyy'}}</h3>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <select ng-model="vm.roundSelected" ng-options="round.RoundName for round in  vm.rounds  | orderBy:round.RoundDate">
-                                    <option value="">בחר סבב</option>
+                            <div class="col-sm-3">
+                                <strong>בחר סבב: </strong>
+                                <select ng-model="vm.roundSelected" data-ng-change="vm.roundChange(vm.roundSelected)" ng-options="round.RoundName for round in  vm.rounds  | orderBy:round.RoundDate">
+                                    <option value="">סבב</option>
                                 </select>
                             </div>
-                            <div class="col-sm-6">
-                                
+                            <div class="col-sm-3" data-ng-show="vm.customersInRound.length>0">
+                                <strong>בחר לקוח: </strong>
+                                <select ng-model="vm.customer" data-ng-change="vm.customerChange(vm.customer)" ng-options="customer.customerRound.CustomerName for customer in  vm.customersInRound">
+                                    <option value="">לקוח</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
-                                <div data-ng-repeat="round in vm.rounds">{{round.RoundName}}</div>
+                            <div class="col-sm-12" data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0">
+                                <div class="widget wviolet">
+                                    <div data-cc-widget-header title="עדכון מוצרים ללקוח: {{vm.customerRoundProducts.customerRound.CustomerName + ' ח.פ - '+vm.customerRoundProducts.customerRound.CustomerHP  }}"
+                                         allow-collapse="true"></div>
+                                    <div class="widget-content">
+                                        <table class="table date-filter table-condensed table-bordered  table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>שם המוצר</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr data-ng-repeat="product in vm.customerRoundProducts.roundcustomerProducts">
+                                                    <td>{{product.CustomerRoundProduct.ProductName}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="widget-foot">
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
