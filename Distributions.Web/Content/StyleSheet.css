@@ -220,3 +220,28 @@ div.scroll {
     margin-right: 0;
   }
 }
+.workerTbl tr td {
+  width: 20%;
+}
+.workerTbl tr td.productRowTd {
+  display: table-cell;
+}
+.workerTbl tr td.productRowInput {
+  display: none;
+}
+.worker-print,
+.reward-body {
+  font-size: 12px;
+}
+.worker-print .col-sm-4,
+.reward-body .col-sm-4 {
+  display: block;
+}
+.worker-print .col-sm-4.pull-right.text-center,
+.reward-body .col-sm-4.pull-right.text-center {
+  padding-right: 100px;
+}
+.worker-print .print-row div,
+.reward-body .print-row div {
+  display: inline-block;
+}

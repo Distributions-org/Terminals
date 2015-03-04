@@ -246,6 +246,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\ModelErrorChecker.cs" />
+    <Content Include="app\common\print.js" />
     <Content Include="app\reports\reports.html" />
     <Content Include="app\reports\reports.js" />
     <Content Include="app\reports\reportsService.js" />

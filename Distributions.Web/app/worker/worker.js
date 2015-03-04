@@ -2,11 +2,11 @@
     'use strict';
 
     var controllerId = 'worker';
-    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService', worker]);
+    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService','print', worker]);
 
    
 
-    function worker($location, common, datacontext, managementDistributionsService) {
+    function worker($location, common, datacontext, managementDistributionsService, print) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
@@ -25,6 +25,10 @@
         vm.customerRoundProducts = {};
         vm.roundChange = roundChange;
         vm.customerChange = customerChange;
+        vm.editRow = editRow;
+        vm.isSaved = false;
+        vm.saveProductsCustomer = saveProductsCustomer;
+        vm.printBill = printBill;
 
         activate();
 
@@ -84,7 +88,45 @@
                 vm.customerRoundProducts = customer;
             }
         }
-        
-        
+
+        function editRow(index) {
+            if (index > 0)
+                {
+                var row = angular.element('.productRow' + index);
+                if (row.find('.productRowTd' + index).css('display') === 'table-cell') {
+                    row.find('.productRowTd' + index).css('display', 'none');
+                    row.find('.productRowInput' + index).css('display', 'table-cell');
+                    row.find('i').removeClass('glyphicon-edit').addClass('glyphicon-lock'); 
+                    row.find('button').removeClass('btn-info').addClass('btn-warning');
+                } else {
+                    row.find('.productRowTd' + index).css('display', 'table-cell');
+                    row.find('.productRowInput' + index).css('display', 'none');
+                    row.find('i').removeClass('glyphicon-lock').addClass('glyphicon-edit');
+                    row.find('button').removeClass('btn-warning').addClass('btn-info');
+
+                }
+            }
+        }
+
+        function saveProductsCustomer() {
+            if (vm.customerRoundProducts!=null) {
+                return managementDistributionsService.updateCustomerRound(vm.customerRoundProducts).then(function (rsponse) {
+                    //success
+                    logSuccess("הלקוח בסבב עודכן בהצלחה.");
+                    vm.isSaved = true;
+                },
+                        function (rsponse) {
+                            //error
+                            logError(rsponse.status + " " + rsponse.statusText);
+                        }
+                    );
+            }
+            return false;
+        }
+
+        function printBill() {
+            print.printReport('worker-print');
+        }
+
     }
 })();

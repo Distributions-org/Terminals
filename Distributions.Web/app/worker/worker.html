@@ -19,22 +19,38 @@
                                     <option value="">לקוח</option>
                                 </select>
                             </div>
+                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-3">
+                                <button class="btn btn-success" data-ng-click="vm.saveProductsCustomer()">שמור <i class="glyphicon glyphicon-save"></i></button>
+                            </div>
+                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-3">
+                                <button data-ng-disabled="!vm.isSaved" class="btn btn-info" data-ng-click="vm.printBill()">הדפסה <i class="glyphicon glyphicon-print"></i></button>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12" data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0">
                                 <div class="widget wviolet">
-                                    <div data-cc-widget-header title="עדכון מוצרים ללקוח: {{vm.customerRoundProducts.customerRound.CustomerName + ' ח.פ - '+vm.customerRoundProducts.customerRound.CustomerHP  }}"
+                                    <div data-cc-widget-header title="עדכון מוצרים ללקוח: {{vm.customerRoundProducts.customerRound.CustomerName + ' ח.פ. - '+vm.customerRoundProducts.customerRound.CustomerHP  }}"
                                          allow-collapse="true"></div>
                                     <div class="widget-content">
-                                        <table class="table date-filter table-condensed table-bordered  table-striped">
+                                        <table class="table date-filter table-responsive table-condensed table-bordered workerTbl  table-striped">
                                             <thead>
                                                 <tr>
+                                                    <th>מס' סידורי</th>
                                                     <th>שם המוצר</th>
+                                                    <th>כמות</th>
+                                                    <th>החזרות</th>
+                                                    <th>עריכה</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr data-ng-repeat="product in vm.customerRoundProducts.roundcustomerProducts">
+                                                <tr class="productRow{{$index+1}}" data-ng-repeat="product in vm.customerRoundProducts.roundcustomerProducts">
+                                                    <td>{{$index+1}}</td>
                                                     <td>{{product.CustomerRoundProduct.ProductName}}</td>
+                                                    <td class="productRowTd productRowTd{{$index+1}}">{{product.Amount}}</td>
+                                                    <td class="productRowInput productRowInput{{$index+1}}" id=""><input type="text" ng-model="product.Amount" name="productAmount" /></td>
+                                                    <td class="productRowTd productRowTd{{$index+1}}">{{product.DeliveredAmount}}</td>
+                                                    <td class="productRowInput productRowInput{{$index+1}}"><input type="text" ng-model="product.DeliveredAmount" name="deliveredAmount" /></td>
+                                                    <td><button data-ng-click="vm.editRow($index+1)" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-edit"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -49,6 +65,59 @@
                     <div class="widget-foot">
                         <div class="clearfix"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section  class="worker-print">
+        <div id="worker-print" class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4 pull-right text-right">
+                        רחוב בילו 2 כ"ס<br />
+                        פל': 050-8313130<br />
+                        טלפון: 097660133
+                </div>
+                <div class="col-sm-4 pull-right text-center">
+                    <h6>
+                        אלון נתנאל <br />
+                        שיווק פיתות
+                    </h6>
+                </div>
+                <div class="col-sm-4 pull-left text-left">
+                        ע.מ. מס' &nbsp;&nbsp;&nbsp;<br />
+                        028 942 232
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 print-row">
+                    <div class="text-right pull-right"> תעודת משלוח מספר: {{vm.roundSelected.RoundID}}</div>
+                    <div class="text-left pull-left">תאריך: {{vm.date | date: 'dd-MM-yyyy'}}</div>
+                </div>
+               
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center"><h6>לכבוד: {{vm.customerRoundProducts.customerRound.CustomerName + ' ח.פ. - '+vm.customerRoundProducts.customerRound.CustomerHP }}</h6></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table date-filter table-responsive table-condensed table-bordered  table-striped">
+                        <thead>
+                            <tr>
+                                <th>מס' סידורי</th>
+                                <th>שם המוצר</th>
+                                <th>כמות</th>
+                                <th>החזרות</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="product in vm.customerRoundProducts.roundcustomerProducts">
+                                <td>{{$index+1}}</td>
+                                <td>{{product.CustomerRoundProduct.ProductName}}</td>
+                                <td>{{product.Amount}}</td>
+                                <td>{{product.DeliveredAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
