@@ -49,6 +49,7 @@
           <Property Name="RoundsCustomersID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoundsID" Type="int" />
           <Property Name="CustomerID" Type="int" />
+          <Property Name="RoundCustomerStatus" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="RoundsTbl">
           <Key>
@@ -166,6 +167,7 @@
           <Property Name="RoundsCustomersID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="RoundsID" Type="Int32" />
           <Property Name="CustomerID" Type="Int32" />
+          <Property Name="RoundCustomerStatus" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="RoundsTbl">
           <Key>
@@ -335,6 +337,7 @@
           <EntitySetMapping Name="RoundsCustomerTbl">
             <EntityTypeMapping TypeName="TerminalsModel.RoundsCustomerTbl">
               <MappingFragment StoreEntitySet="RoundsCustomerTbl">
+                <ScalarProperty Name="RoundCustomerStatus" ColumnName="RoundCustomerStatus" />
                 <ScalarProperty Name="RoundsCustomersID" ColumnName="RoundsCustomersID" />
                 <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />

@@ -225,7 +225,7 @@ namespace Distributions.Web.Controllers
         [AuthorizeUser(AccessRole = "Admin")]
         public HttpResponseMessage GetCustomers()
         {
-            var customers = _customersService.GetValidCustomers();
+            var customers = _customersService.GetValidCustomers(null);
             if (customers != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, customers);

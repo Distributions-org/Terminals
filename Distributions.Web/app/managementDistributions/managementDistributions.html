@@ -229,7 +229,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr data-ng-repeat="product in vm.productsRoundCustomerSelected">
+                                                        <tr data-ng-repeat="product in vm.productsRoundCustomerSelected | orderBy:product.CustomerName">
                                                             <td>{{product.CustomerName}}</td>
                                                             <td>{{product.ProductName}}</td>
                                                             <td>{{product.Cost}}</td>

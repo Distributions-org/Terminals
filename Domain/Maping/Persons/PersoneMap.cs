@@ -10,10 +10,10 @@ namespace Data.Maping.Persons
 {
     public class PersoneMap : EntityTypeConfiguration<Person>
     {
-        public PersoneMap()
-        {
-            this.ToTable("Person")
-                .HasKey(x => x.Id);
-        }
+        //public PersoneMap()
+        //{
+        //    this.ToTable("Person")
+        //        .HasKey(x => x.Id);
+        //}
     }
 }

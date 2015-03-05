@@ -38,7 +38,7 @@ namespace Distributions.Web.Controllers
         [Route("GetActiveCustomers")]
         public HttpResponseMessage Get()
         {
-            var customers = _customersService.GetValidCustomers();
+            var customers = _customersService.GetValidCustomers(null);
             if (customers != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, customers);

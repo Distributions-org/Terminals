@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'dashboard';
-    angular.module('app').controller(controllerId, ['$filter', 'common', 'datacontext', 'managementDistributionsService', dashboard]);
+    angular.module('app').controller(controllerId, ['$filter', '$modal', 'common', 'datacontext', 'managementDistributionsService', dashboard]);
 
-    function dashboard($filter, common, datacontext, managementDistributionsService) {
+    function dashboard($filter, $modal, common, datacontext, managementDistributionsService) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
 
@@ -12,6 +12,7 @@
         vm.roundFilter = {};
         vm.rounds = {};
         vm.closeRounds = {};
+        vm.showRound = showRound;
         activate();
 
         function activate() {
@@ -69,5 +70,40 @@
         //        return vm.people = data;
         //    });
         //}
+        function showRound(round) {
+            var modalInstance = $modal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl as vm',
+                size: 'lg',
+                resolve: {
+                    round: function () {
+                        return round;
+                    }
+                }
+            });
+        }
+       
+    }
+})();
+
+(function() {
+    'use strict';
+    var controllerId = 'ModalInstanceCtrl';
+    angular.module('app').controller(controllerId, ['$modalInstance', 'round', ModalInstanceCtrl]);
+
+    function ModalInstanceCtrl($modalInstance, round) {
+        var vm = this;
+
+        vm.round = round;
+        vm.ok = ok;
+        vm.cancel = cancel;
+
+        function ok() {
+            $modalInstance.close(vm.round);
+        };
+
+        function cancel () {
+            $modalInstance.dismiss('cancel');
+        };
     }
 })();

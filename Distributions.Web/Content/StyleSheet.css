@@ -245,3 +245,12 @@ div.scroll {
 .reward-body .print-row div {
   display: inline-block;
 }
+.modal-body table {
+  margin: 0 !important;
+}
+.modal-body table td {
+  width: 20%;
+}
+.modal-body table .applay {
+  background-color: #e6f7ec !important;
+}

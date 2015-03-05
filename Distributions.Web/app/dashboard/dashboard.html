@@ -21,7 +21,7 @@
                                         <td>{{round.RoundDate | date:'dd-MM-yyyy HH:mm'}}</td>
                                         <td>{{round.RoundName}}</td>
                                         <td><input type="checkbox" data-ng-disabled="true" ng-checked="{{round.roundStatus==1?'true':'false'}}" />{{round.roundStatus==1?"פעיל":"לא פעיל"}}</td>
-                                        <td>{{round.RoundUser[0].FirstName + ' '+ round.RoundUser[0].LastName}}</td>
+                                        <td>{{round.RoundUser[0].FirstName + ' '+ round.RoundUser[0].LastName}} <button data-ng-click="vm.showRound(round)" class="pull-left btn btn-info btn-xs"><i class="glyphicon glyphicon-user"></i> פרטים</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -63,4 +63,36 @@
             </div>
         </div>
     </section>
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                שם הסבב: {{vm.round.RoundName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;מפיץ: {{vm.round.RoundUser[0].FirstName + ' '+ vm.round.RoundUser[0].LastName}}
+                &nbsp;&nbsp;&nbsp;&nbsp; תאריך: {{vm.round.RoundDate | date:'dd-MM-yyyy'}}
+            </h4>
+        </div>
+        <div class="modal-body">
+            <table data-ng-repeat="custRound in vm.round.custRound" class="table date-filter table-condensed table-bordered  table-striped">
+                <thead ng-if="$index==0">
+                    <tr>
+                        <th>לקוח</th>
+                        <th>מוצר</th>
+                        <th>התקבל</th>
+                        <th>חזרות</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="product in custRound.roundcustomerProducts">
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.CustomerRoundProduct.CustomerName}}</td>
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.CustomerRoundProduct.ProductName}}</td>
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.Amount}}</td>
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.DeliveredAmount}}</td>
+                    </tr>
+                </tbody>
+            </table>                   
+        </div>
+        <!--<div class="modal-footer">
+            <button class="btn btn-primary" ng-click="vm.ok()">OK</button>
+            <button class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+        </div>-->
+    </script>
 </section>

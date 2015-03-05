@@ -217,7 +217,6 @@ namespace Services
                                 return firstOrDefault != null && x.UserID==firstOrDefault.UserID;
                             }).ToList(),
                             custRound = MapRoundCustomer(_RoundsCustomerRepository.FindBy(x => x.RoundsID == round.RoundsID).Where(r=>r!=null).ToList())
-
                     }));
                 }
 
@@ -274,7 +273,7 @@ namespace Services
             RoundsCustomerProductTbl currentRoundCustomerProducts = _RoundsCustomerProductRepository.FindBy(x => x.RoundsCustomerProductID == RoundProductCustomerID).FirstOrDefault();
             currentRoundCustomerProducts.DelieveredAmount = DeliveredAmount;
 
-           return _RoundsCustomerProductRepository.Update(currentRoundCustomerProducts);
+            return _RoundsCustomerProductRepository.Update(currentRoundCustomerProducts);
 
         }
 
@@ -298,17 +297,22 @@ namespace Services
                 Mapper.CreateMap<CustomerRound, RoundsCustomerTbl>()
                     .ForMember(a=>a.RoundsCustomersID,b=>b.MapFrom(c=>_RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.customerRound.CustomerID).FirstOrDefault().RoundsCustomersID))
                  .ForMember(a => a.RoundsID, b => b.MapFrom(c => roundId))
-                 .ForMember(a => a.CustomerID, b => b.MapFrom(c => c.customerRound.CustomerID));
+                 .ForMember(a => a.CustomerID, b => b.MapFrom(c => c.customerRound.CustomerID))
+                 .ForMember(a=>a.RoundCustomerStatus,b=>b.MapFrom(c=>c.customerRound.RoundCustomerStatus));
                 List<RoundsCustomerTbl> newRoundCust = Mapper.Map<List<CustomerRound>, List<RoundsCustomerTbl>>(roundCustomers);
-                foreach (var roundCust in newRoundCust)
+             
+                foreach (var entity in newRoundCust)
                 {
-                    if(roundCust.RoundsCustomersID!=0)
+                    if (entity.RoundsCustomersID != 0)
                     {
-                    _RoundsCustomerRepository.Update(roundCust);
+                        RoundsCustomerTbl entity1 = entity;
+                        var cast = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == entity1.RoundsCustomersID).First();
+                        cast.RoundCustomerStatus = entity1.RoundCustomerStatus;
+                        _RoundsCustomerRepository.Update(cast);
                     }
                     else
                     {
-                        _RoundsCustomerRepository.Add(roundCust);
+                        _RoundsCustomerRepository.Add(entity);
                     }
                 }
                 return FunctionReplay.functionReplay.Success;
@@ -435,7 +439,7 @@ namespace Services
             {
                 roundsCustomerTbl.Each(roundsCustomer => customerRoundTmp.Add(new CustomerRound
                 {
-                    customerRound = _customerService.GetValidCustomers().FirstOrDefault(x => x.CustomerID == roundsCustomer.CustomerID),
+                    customerRound = _customerService.GetValidCustomers(roundsCustomer.RoundsCustomersID).FirstOrDefault(x => x.CustomerID == roundsCustomer.CustomerID),
                     roundcustomerProducts = GetRoundCustomerProducts(roundsCustomer.CustomerID.GetValueOrDefault(), roundsCustomer.RoundsID.GetValueOrDefault())
                 }));
             }

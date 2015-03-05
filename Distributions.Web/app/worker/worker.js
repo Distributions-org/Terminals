@@ -109,8 +109,18 @@
         }
 
         function saveProductsCustomer() {
-            if (vm.customerRoundProducts!=null) {
-                return managementDistributionsService.updateCustomerRound(vm.customerRoundProducts).then(function (rsponse) {
+            if (vm.customerRoundProducts != null) {
+                vm.customerRoundProducts.customerRound.RoundCustomerStatus = true;
+                var roundCustomers = {
+                    RoundId: vm.roundSelected.RoundID,
+                    RoundCustomers: [
+                        {
+                            customerRound: vm.customerRoundProducts.customerRound,
+                            roundcustomerProducts: vm.customerRoundProducts.roundcustomerProducts
+                        }
+                    ]
+                }
+                return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (rsponse) {
                     //success
                     logSuccess("הלקוח בסבב עודכן בהצלחה.");
                     vm.isSaved = true;
