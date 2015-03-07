@@ -71,39 +71,41 @@
         //    });
         //}
         function showRound(round) {
-            var modalInstance = $modal.open({
-                templateUrl: 'myModalContent.html',
-                controller: 'ModalInstanceCtrl as vm',
-                size: 'lg',
-                resolve: {
-                    round: function () {
-                        return round;
-                    }
-                }
-            });
+            common.modalDialog.roundDialog(round);
+
+            //var modalInstance = $modal.open({
+            //    templateUrl: 'myModalContent.html',
+            //    controller: 'ModalInstanceCtrl as vm',
+            //    size: 'lg',
+            //    resolve: {
+            //        round: function () {
+            //            return round;
+            //        }
+            //    }
+            //});
         }
        
     }
 })();
 
-(function() {
-    'use strict';
-    var controllerId = 'ModalInstanceCtrl';
-    angular.module('app').controller(controllerId, ['$modalInstance', 'round', ModalInstanceCtrl]);
+//(function() {
+//    'use strict';
+//    var controllerId = 'ModalInstanceCtrl';
+//    angular.module('app').controller(controllerId, ['$modalInstance', 'round', ModalInstanceCtrl]);
 
-    function ModalInstanceCtrl($modalInstance, round) {
-        var vm = this;
+//    function ModalInstanceCtrl($modalInstance, round) {
+//        var vm = this;
 
-        vm.round = round;
-        vm.ok = ok;
-        vm.cancel = cancel;
+//        vm.round = round;
+//        vm.ok = ok;
+//        vm.cancel = cancel;
 
-        function ok() {
-            $modalInstance.close(vm.round);
-        };
+//        function ok() {
+//            $modalInstance.close(vm.round);
+//        };
 
-        function cancel () {
-            $modalInstance.dismiss('cancel');
-        };
-    }
-})();
+//        function cancel () {
+//            $modalInstance.dismiss('cancel');
+//        };
+//    }
+//})();
