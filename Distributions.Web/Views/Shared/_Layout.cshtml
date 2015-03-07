@@ -40,70 +40,78 @@
     @RenderSection("Css",false)
 </head>
 <body>
-        @RenderBody()
-        <!-- Vendor Scripts -->
-        <script src="~/scripts/jquery-2.1.1.js"></script>
-        <script src="~/scripts/angular.js"></script>
-        <script src="~/scripts/angular-messages.js"></script>
-        <script src="~/scripts/angular-animate.js"></script>
-        <script src="~/scripts/angular-route.js"></script>
-        <script src="~/scripts/angular-sanitize.js"></script>
-        <script src="~/Scripts/ui-grid-unstable.min.js"></script>
-        <script src="~/Scripts/csv.js"></script>
-        <script src="~/Scripts/pdfmake.js"></script>
-        <script src="~/Scripts/vfs_fonts.js"></script>
-        @*<script src="~/Scripts/smart-table.debug.js"></script>*@
-        <script src="~/scripts/bootstrap.js"></script>
-        <script src="~/scripts/toastr.js"></script>
-        <script src="~/scripts/moment.js"></script>
-        <script src="~/scripts/ui-bootstrap-tpls-0.10.0.js"></script>
-        <script src="~/scripts/spin.js"></script>
-        <script src="~/scripts/breeze.debug.js"></script>
+    @RenderBody()
+    <!-- Vendor Scripts -->
+    @*<script src="~/scripts/jquery-2.1.1.js"></script>
+    <script src="~/scripts/angular.js"></script>
+    <script src="~/scripts/angular-messages.js"></script>
+    <script src="~/scripts/angular-animate.js"></script>
+    <script src="~/scripts/angular-route.js"></script>
+    <script src="~/scripts/angular-sanitize.js"></script>
+    <script src="~/Scripts/ui-grid-unstable.min.js"></script>
+    <script src="~/Scripts/csv.js"></script>
+    <script src="~/Scripts/pdfmake.js"></script>
+    <script src="~/Scripts/vfs_fonts.js"></script>*@
+    @*<script src="~/Scripts/smart-table.debug.js"></script>*@
+    @*<script src="~/scripts/bootstrap.js"></script>
+    <script src="~/scripts/toastr.js"></script>
+    <script src="~/scripts/moment.js"></script>
+    <script src="~/scripts/ui-bootstrap-tpls-0.10.0.js"></script>
+    <script src="~/scripts/spin.js"></script>*@
+    @*<script src="~/scripts/breeze.debug.js"></script>
         <script src="~/scripts/breeze.angular.js"></script>
         <script src="~/scripts/breeze.directives.js"></script>
-        <script src="~/scripts/breeze.saveErrorExtensions.js"></script><!-- Bootstrapping -->
-        <script src="~/app/app.js"></script>
-        <script src="~/app/config.js"></script>
-        <script src="~/app/config.exceptionHandler.js"></script>
-        <script src="~/app/config.interceptor.js"></script>
-        <script src="~/app/config.route.js"></script>
-        <script src="~/scripts/breeze.debug.js"></script>
+        <script src="~/scripts/breeze.saveErrorExtensions.js"></script>*@
+    <!-- Bootstrapping -->
+    @*<script src="~/app/app.js"></script>
+    <script src="~/app/config.js"></script>
+    <script src="~/app/config.exceptionHandler.js"></script>
+    <script src="~/app/config.interceptor.js"></script>
+    <script src="~/app/config.route.js"></script>*@
+        @*<script src="~/scripts/breeze.debug.js"></script>
         <script src="~/scripts/breeze.angular.js"></script>
         <script src="~/scripts/breeze.directives.js"></script>
-    <script src="~/scripts/breeze.saveErrorExtensions.js"></script>
-    <script src="~/Scripts/underscore.min.js"></script>
-    <script src="~/Scripts/bootstrap-timepicker.min.js"></script>
-
+        <script src="~/scripts/breeze.saveErrorExtensions.js"></script>
         <script src="~/scripts/breeze.to$q.shim.js"></script> <!-- Needed only if you are using to$q -->
-        <script src="~/app/services/entityManagerFactory.js"></script>
-        <!-- common Modules -->
-        <script src="~/app/common/common.js"></script>
-        <script src="~/app/common/logger.js"></script>
+        *@
+    @*<script src="~/Scripts/underscore.min.js"></script>
+    <script src="~/Scripts/bootstrap-timepicker.min.js"></script>*@
+
+
+    @*<script src="~/app/services/entityManagerFactory.js"></script>*@
+    <!-- common Modules -->
+    @*<script src="~/app/common/common.js"></script>
+    <script src="~/app/common/logger.js"></script>
     <script src="~/app/common/spinner.js"></script>
-    <script src="~/app/common/print.js"></script>
+    <script src="~/app/common/print.js"></script>*@
 
-        <!-- common.bootstrap Modules -->
-        <script src="~/app/common/bootstrap/bootstrap.dialog.js"></script>
+    <!-- common.bootstrap Modules -->
+    @*<script src="~/app/common/bootstrap/bootstrap.dialog.js"></script>*@
 
-        <!-- app -->
-        <script src="~/app/admin/admin.js"></script>
-        <script src="~/app/dashboard/dashboard.js"></script>
-        <script src="~/app/layout/shell.js"></script>
-        <script src="~/app/layout/sidebar.js"></script>
-        <script src="~/app/managementDistributions/managementDistributions.js"></script>
-        <script src="~/app/reports/reports.js"></script>
-    <script src="~/app/worker/worker.js"></script>
+    <!-- app -->
+    @*<script src="~/app/admin/admin.js"></script>
+    <script src="~/app/dashboard/dashboard.js"></script>
+    <script src="~/app/layout/shell.js"></script>
+    <script src="~/app/layout/sidebar.js"></script>
+    <script src="~/app/managementDistributions/managementDistributions.js"></script>
+    <script src="~/app/reports/reports.js"></script>
+    <script src="~/app/worker/worker.js"></script>*@
 
-        <!-- app Services -->
-        <script src="~/app/admin/adminService.js"></script>
-        <script src="~/app/services/datacontext.js"></script>
-        <script src="~/app/services/directives.js"></script>
-        <script src="~/app/managementDistributions/managementDistributionsService.js"></script>
-    <script src="~/app/reports/reportsService.js"></script>
-    
+    <!-- app Services -->
+    @*<script src="~/app/admin/adminService.js"></script>
+    <script src="~/app/services/datacontext.js"></script>
+    <script src="~/app/services/directives.js"></script>
+    <script src="~/app/managementDistributions/managementDistributionsService.js"></script>
+    <script src="~/app/reports/reportsService.js"></script>*@
 
-        @*@Scripts.Render("~/bundles/jquery")
-            @Scripts.Render("~/bundles/bootstrap")*@
-        @RenderSection("scripts", required: false)
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/ui-grid")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("scripts", required: false)
 </body>
 </html>
