@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="widget wgreen">
-                        <div data-cc-widget-header title=":סבבים סגורים בחודש הנוכחי {{vm.roundFilter.EndDateView+ ' - '+vm.roundFilter.StartDateView }}"
+                        <div data-cc-widget-header title="סבבים סגורים בחודש הנוכחי: {{vm.roundFilter.EndDateView+ ' - '+vm.roundFilter.StartDateView }}"
                              allow-collapse="true"></div>
                         <div class="widget-content">
                             <table class="table date-filter table-condensed table-bordered  table-striped">
@@ -50,7 +50,7 @@
                                         <td>{{closeRound.RoundDate | date:'dd-MM-yyyy HH:mm'}}</td>
                                         <td>{{closeRound.RoundName}}</td>
                                         <td><input type="checkbox" data-ng-disabled="true" ng-checked="{{closeRound.roundStatus==1?'true':'false'}}" />{{closeRound.roundStatus==1?"פעיל":"לא פעיל"}}</td>
-                                        <td>{{closeRound.RoundUser[0].FirstName + ' '+ closeRound.RoundUser[0].LastName}}</td>
+                                        <td>{{closeRound.RoundUser[0].FirstName + ' '+ closeRound.RoundUser[0].LastName}} <button data-ng-click="vm.showRound(closeRound)" class="pull-left btn btn-info btn-xs"><i class="glyphicon glyphicon-user"></i> פרטים</button></td>
                                     </tr>
                                 </tbody>
                             </table>

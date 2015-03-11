@@ -71,11 +71,15 @@
                                         </tr>
                                         <tr>
                                             <td>מחיר</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost}}</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ללא מע"מ</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{(report.TotalSum-(report.TotalSum*0.18)) | currency }}</td>
                                         </tr>
                                         <tr>
                                             <td>סכום</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum}}</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency }}</td>
                                         </tr>
                                     </tfoot>
                                 </table>

@@ -337,7 +337,7 @@
                 popupWin.window.focus();
                 popupWin.document.write('<!DOCTYPE html><html><head>' +
                     '<link href="/content/bootstrap.min.css" rel="stylesheet">' + '<link href="/Content/bootstrap-rtl.css" rel="stylesheet"> <link href="/content/customtheme.css" rel="stylesheet">' +
-                    '<link href="/content/styles.css" rel="stylesheet"> <link href="/Content/StyleSheet.min.css" rel="stylesheet">' +
+                    '<link href="/content/styles.css" rel="stylesheet"> <link href="/Content/StyleSheet.min.css" rel="stylesheet"> <link href="/Content/print.css" rel="stylesheet">' +
                     '</head><body onload="window.print()"><div class="reward-body">' + printContents + '</div></html>');
                 popupWin.onbeforeunload = function (event) {
                     popupWin.close();

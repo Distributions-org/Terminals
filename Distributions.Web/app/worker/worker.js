@@ -29,6 +29,7 @@
         vm.isSaved = false;
         vm.saveProductsCustomer = saveProductsCustomer;
         vm.printBill = printBill;
+        vm.closeRound = closeRound;
 
         activate();
 
@@ -47,7 +48,15 @@
             }).then(function() {
                 filterRoundDate();
             }).then(function() {
-                getRounds();
+                getRounds().then(function () {
+                    if (vm.rounds.length > 0) {
+                        roundChange(vm.rounds[0]);
+                    }
+                }).then(function() {
+                    if (vm.customersInRound.length > 0) {
+                        customerChange(vm.customersInRound[0]);
+                    }
+                });
             });
         }
 
@@ -57,7 +66,7 @@
                 StartDate: null,
                 EndDate: null,
                 Email: vm.workerEmail
-            }
+            };
         }
 
         function getRounds() {
@@ -78,14 +87,46 @@
 
         function roundChange(round) {
             vm.customersInRound = {};
+            vm.customerRoundProducts = {};
+            vm.isSaved = false;
             if (round != null) {
-                vm.customersInRound = round.custRound;
+                vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function(r) { return r.roundcustomerProducts.length == 0; }));
             }
         }
         function customerChange(customer) {
             vm.customerRoundProducts = {};
+            vm.isSaved = false;
             if (customer != null) {
                 vm.customerRoundProducts = customer;
+            }
+        }
+
+        function closeRound() {
+            if (vm.isSaved) {
+                common.modalDialog.confirmationDialog("סגירת סבב", "האם לסגור את הסבב?", "מאשר", "בטל").then(function(result) {
+                    if (result == "ok") {
+                        vm.roundSelected.roundStatus = 2;
+                         managementDistributionsService.changeRoundStatus(vm.roundSelected).then(function (response) {
+                            //success
+                            if (response.data.roundStatus !== 1) {
+                                logSuccess("הסבב נסגר בהצלחה");
+                                vm.customerRoundProducts = {};
+                                vm.customersInRound = {};
+                                vm.isSaved = false;
+                                vm.rounds = {};
+                                getRounds();
+                            } else {
+                                logWarning("הסבב פעיל");
+                            }
+                        }, function (response) {
+                            //error
+                            logError(response.status + " " + response.statusText);
+                        });
+                    }
+
+                }, function(result) {
+                    
+                });
             }
         }
 
@@ -119,7 +160,7 @@
                             roundcustomerProducts: vm.customerRoundProducts.roundcustomerProducts
                         }
                     ]
-                }
+                };
                 return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (rsponse) {
                     //success
                     logSuccess("הלקוח בסבב עודכן בהצלחה.");

@@ -49,7 +49,7 @@
             return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
                 //success
                 vm.rounds = _.where(response.data, { roundStatus: 1 });
-                vm.closeRounds = _.where(response.data, { roundStatus: 0 });
+                vm.closeRounds = _.where(response.data, { roundStatus: 2 });
             },
                 function (response) {
                     //error

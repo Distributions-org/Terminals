@@ -237,19 +237,21 @@
                 logError("המוצר קיים!");
                 return;
             }
-            vm.productsRoundCustomerSelected.push(product);
+            vm.productsRoundCustomerSelected.unshift(product);
         }
 
         function removeProductRoundCustomer(product) {
-            if (vm.roundId != 0) {
+            if (vm.roundId != 0 && vm.roundBtnUpdateShow) {
                 managementDistributionsService.deleteProductFromRound({ product: product, roundId: vm.roundId }).then(function (response) {
                     //success  
                     logWarning("המוצר נמחק מהסבב בהצלחה");
                         getRounds();
                         vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
                     },
-                    function(response) {
-                        logError(response.status + " " + response.statusText);
+                    function (response) {
+                        vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
+                        logWarning("המוצר נמחק מהסבב בהצלחה");
+                        //logError(response.status + " " + response.statusText);
                         return;
                     });
             } else {
@@ -268,7 +270,7 @@
                     _.each(response.data, function (product) {
                         var productTmp = _.findWhere(vm.productsRoundCustomerSelected, { ProductID: product.ProductID, CustomerID: product.CustomerID });
                         if (productTmp===undefined) {
-                            vm.productsRoundCustomerSelected.push(product);
+                            vm.productsRoundCustomerSelected.unshift(product);
                         }
                     });
                     }
@@ -377,7 +379,7 @@
 
         function saveRound() {
 
-            var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected, function(product) {
+            var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected.reverse(), function(product) {
                 return product.Amount !== 0 && product.Amount !== undefined;
             }), 'CustomerID'));
             _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
@@ -594,7 +596,7 @@
 
         function getRoundDate() {
             var date = $filter('date')(vm.dt, 'MM-dd-yyyy') + " " + vm.time.split(':')[0] + ":" + vm.time.split(':')[1];
-            if (new Date(date) == 'Invalid Date') {
+            if (new Date(vm.dt) == 'Invalid Date') {
                 date = new Date();
                 date.setHours(vm.time.split(':')[0], vm.time.split(':')[1], 0);
                 return date.toUTCString();

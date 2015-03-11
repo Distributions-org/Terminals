@@ -15,7 +15,7 @@ namespace Distributions.Web
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include("~/scripts/angular.js", "~/scripts/angular-messages.js", "~/scripts/angular-animate.js", "~/scripts/angular-route.js"
-              , "~/scripts/angular-sanitize.js", "~/Scripts/bootstrap-timepicker.min.js", "~/scripts/ui-bootstrap-tpls-0.10.0.js"));
+              , "~/scripts/angular-sanitize.js", "~/scripts/angular-locale_he-il.js", "~/Scripts/bootstrap-timepicker.min.js", "~/scripts/ui-bootstrap-tpls-0.10.0.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/ui-grid").Include("~/Scripts/ui-grid-unstable.min.js", "~/scripts/csv.js", "~/scripts/pdfmake.js",
                 "~/scripts/vfs_fonts.js"));
