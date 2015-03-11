@@ -248,6 +248,9 @@ div.scroll {
 .modal-body table {
   margin: 0 !important;
 }
+.modal-body table th {
+  width: 10%;
+}
 .modal-body table td {
   width: 20%;
 }

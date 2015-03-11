@@ -50,10 +50,12 @@
             }).then(function() {
                 getRounds().then(function () {
                     if (vm.rounds.length > 0) {
+                        vm.roundSelected = vm.rounds[0];
                         roundChange(vm.rounds[0]);
                     }
                 }).then(function() {
                     if (vm.customersInRound.length > 0) {
+                        vm.customer = vm.customersInRound[0];
                         customerChange(vm.customersInRound[0]);
                     }
                 });
