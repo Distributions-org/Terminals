@@ -2,17 +2,18 @@
     'use strict';
 
     var controllerId = 'worker';
-    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'managementDistributionsService','print', worker]);
+    angular.module('app').controller(controllerId, ['$location','$q', 'common', 'datacontext', 'managementDistributionsService','print', worker]);
 
    
 
-    function worker($location, common, datacontext, managementDistributionsService, print) {
+    function worker($location,$q, common, datacontext, managementDistributionsService, print) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
         var logError = common.logger.getLogFn(controllerId, 'error');
         var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
+        vm.isBusy = common.serviceCallPreloader;
         vm.title = 'worker';
         vm.isAdmin = false;
         vm.workerEmail = "";
@@ -29,6 +30,7 @@
         vm.isSaved = false;
         vm.saveProductsCustomer = saveProductsCustomer;
         vm.printBill = printBill;
+        vm.productsPrint = [];
         vm.closeRound = closeRound;
 
         activate();
@@ -178,8 +180,21 @@
         }
 
         function printBill() {
-            print.printReport('worker-print');
+            createTblPrint();
+            setTimeout(function () {
+                print.printReport('worker-print');
+            }, 1000);
+                
+            
         }
 
+        function createTblPrint() {
+            vm.productsPrint = [];
+            _.filter(vm.customerRoundProducts.roundcustomerProducts, function(product) {
+                if (product.Amount > 0  || product.DeliveredAmount > 0) {
+                    vm.productsPrint.push(product);
+                }
+            });
+        }
     }
 })();

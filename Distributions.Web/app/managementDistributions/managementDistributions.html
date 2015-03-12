@@ -183,7 +183,10 @@
                                            
                                         </div>
                                         <div class="row addProduct">
-                                            <div class="col-sm-4 col-sm-offset-2">
+                                            <div  class="col-sm-3">
+                                                <input ng-show="vm.customersRoundShow" type="checkbox" data-ng-model="vm.activeProductsNoAmount" data-ng-change="vm.activeChecked()" id="active" /><label ng-show="vm.customersRoundShow" for="active">הסתר כמות 0</label>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <div class="input-group date-picker">
                                                     <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
                                                            date-disabled="vm.disabled(date, mode)" min="vm.minDate" datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
@@ -207,12 +210,12 @@
                                             </div>
                                             <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
                                                 <label>בחר מוצר:</label>
-                                                <select class="form-control" ng-model="vm.productRoundSelected" ng-options="product.ProductName for product in vm.productsRoundCustomer track by product.ProductName">
+                                                <select class="form-control" data-ng-change="vm.productValueSelected()" ng-model="vm.productRoundSelected" ng-options="product.ProductName for product in vm.productsRoundCustomer track by product.ProductName">
                                                     <option value="">בחר מוצר</option>
                                                 </select>
                                             </div>
                                             <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
-                                                <button ng-disabled="vm.productRoundSelected===undefined" ng-click="vm.addProductToRound(vm.productRoundSelected)" class="btn btn-info">הוסף מוצר לסבב<i class="glyphicon glyphicon-collapse-down"></i></button>
+                                                <button ng-disabled="vm.btnAddPruduct" ng-click="vm.addProductToRound(vm.productRoundSelected)" class="btn btn-info">הוסף מוצר לסבב<i class="glyphicon glyphicon-collapse-down"></i></button>
                                             </div>
                                         </div>
                                         <div ng-show="vm.productsRoundCustomerSelected.length>0" class="row addProduct">

@@ -1,18 +1,18 @@
 ﻿(function () {
     'use strict';
 
-    angular
-        .module('app')
-        .factory('print', print);
-
+    var serviceId = 'print';
+    angular.module('app').factory(serviceId, ['common',print]);
     
-
-    function print() {
+    function print(common) {
+        
         var service = {
             printReport: printReport
         };
 
         return service;
+
+
 
         function printReport(divName) {
             var printContents = document.getElementById(divName).innerHTML;

@@ -52,6 +52,12 @@
             StartDate: null,
             EndDate: null
         }
+        vm.productValueSelected = productValueSelected;
+        vm.btnAddPruduct = true;
+        vm.activeProductsNoAmount = false;
+        vm.activeChecked = activeChecked;
+        var tempproductsRoundCustomerSelected = [];
+
         ////date picker
 
         vm.today = today();
@@ -80,6 +86,31 @@
             vm.minDate = (vm.minDate) ? null : new Date();
         };
 
+        function productValueSelected() {
+            if (vm.productRoundSelected!=undefined) {
+                vm.btnAddPruduct = false;
+            } else {
+                vm.btnAddPruduct = true;
+            }
+        }
+
+        function activeChecked() {
+            if (tempproductsRoundCustomerSelected.length == 0) {
+                tempproductsRoundCustomerSelected = _.clone(vm.productsRoundCustomerSelected);
+            }
+            var tmp=[];
+            if (vm.activeProductsNoAmount) {
+                $filter('filter')(tempproductsRoundCustomerSelected, function (value, index) {
+                    if (value.Amount > 0) {
+                        tmp.push(value);
+                    }
+                    vm.productsRoundCustomerSelected = tmp;
+                });
+            }
+            else {
+                vm.productsRoundCustomerSelected = tempproductsRoundCustomerSelected;
+            }
+        }
         //vm.gridOptions = {
         //    columnDefs: [
         //     { name: 'id', enableCellEdit: false, width: '10%' },
@@ -237,6 +268,7 @@
                 logError("המוצר קיים!");
                 return;
             }
+            product.Amount = 0;
             vm.productsRoundCustomerSelected.unshift(product);
         }
 
@@ -247,15 +279,18 @@
                     logWarning("המוצר נמחק מהסבב בהצלחה");
                         getRounds();
                         vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
+                        tempproductsRoundCustomerSelected = vm.productsRoundCustomerSelected;
                     },
                     function (response) {
                         vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
                         logWarning("המוצר נמחק מהסבב בהצלחה");
+                        tempproductsRoundCustomerSelected = vm.productsRoundCustomerSelected;
                         //logError(response.status + " " + response.statusText);
                         return;
                     });
             } else {
                 vm.productsRoundCustomerSelected = _.without(vm.productsRoundCustomerSelected, product);
+                tempproductsRoundCustomerSelected = vm.productsRoundCustomerSelected;
             }
         }
 
@@ -265,11 +300,13 @@
                     //success
                     //vm.productsRoundCustomerSelected = [];
                     vm.productRoundSelected = {};
+                    tempproductsRoundCustomerSelected = [];
                     vm.productsRoundCustomer = response.data;
                     if (!vm.roundBtnUpdateShow) {
                     _.each(response.data, function (product) {
                         var productTmp = _.findWhere(vm.productsRoundCustomerSelected, { ProductID: product.ProductID, CustomerID: product.CustomerID });
-                        if (productTmp===undefined) {
+                        if (productTmp === undefined) {
+                            product.Amount = 0;
                             vm.productsRoundCustomerSelected.unshift(product);
                         }
                     });
@@ -289,6 +326,7 @@
 
 
         function addProductToCustomer(productId) {
+            tempproductsRoundCustomerSelected = [];
             var product = _.findWhere(vm.products, { ProductID: productId });
             if (_.findWhere(vm.productsCustomer, { ProductID: productId }) !== undefined) {
                 logError("המוצר קיים!!!");
@@ -378,9 +416,10 @@
 
 
         function saveRound() {
-
+            vm.activeProductsNoAmount = false;
+            activeChecked();
             var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected.reverse(), function(product) {
-                return product.Amount !== 0 && product.Amount !== undefined;
+                return  product.Amount !== undefined;
             }), 'CustomerID'));
             _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                 var roundCustomers = {
@@ -617,6 +656,7 @@
             vm.time = $('#timepicker').val();
             vm.roundBtnUpdateShow = false;
             vm.round = {};
+            tempproductsRoundCustomerSelected = [];
         }
 
         function roundStatusChange(round) {
