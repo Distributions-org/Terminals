@@ -15,6 +15,7 @@
         var logError = common.logger.getLogFn(controllerId, 'error');
         var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
+        vm.isBusy = common.serviceCallPreloader;
         vm.title = 'דוחות';
         vm.isBusy = common.serviceCallPreloader;
         vm.isAdmin = false;
@@ -47,6 +48,7 @@
         vm.totalAmount = 0;
         vm.totalDeliveredAmount = 0;
         vm.savePrc = savePrc;
+        vm.tax = 18;
 
         vm.dateFilter = new Date();
         // Disable weekend selection
@@ -94,7 +96,8 @@
         function activate() {
             var promises = [isAdminRole(), getValidCustomers(), toggleMin(), getRounds()];
             common.activateController([promises], controllerId)
-                .then(function () { log('מסך ' + vm.title + ' פעיל'); });
+                .then(function () {
+                vm.isBusy(true); log('מסך ' + vm.title + ' פעיל'); });
         }
 
         function isAdminRole() {
@@ -110,7 +113,9 @@
 
         function getProducts() {
             return adminService.getAllProducts().then(function (response) {
-                vm.products = response.data;
+                vm.roundProductCustomer = {};
+                    vm.roundProductCustomerEdit = {};
+                    vm.products = response.data;
             }
                 , function (response) {
                     logError(response.status + " " + response.statusText);
@@ -126,7 +131,9 @@
                 function (response) {
                     //error
                     logError(response.status + " " + response.statusText);
-                });
+                }).then(function() {
+                vm.isBusy(false);
+            });
         }
 
         function roundSelectedChange(round) {

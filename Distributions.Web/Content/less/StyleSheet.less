@@ -269,6 +269,12 @@ table.date-filter {
             display: none;
         }
     }
+    .col-sm-3{
+        width:22%;
+    }
+    input[type=number]{
+        width:22%;
+    }
 }
 
 .table-report {
@@ -336,37 +342,51 @@ div {
         td.productRowInput {
             display: none;
         }
+        td.applay {
+            background-color: #e6f7ec !important;
+     
+               }                    
+    }
+    tr:nth-child(odd)  {
+        >td.applay{
+            background-color: rgba(197, 238, 212, 0.21) !important;
+        }
+        } 
+    
+}
+
+.worker-print, .reward-body {
+    font-size: 12px;
+
+    .col-sm-4 {
+        display: block;
+    }
+
+    .col-sm-4.pull-right.text-center {
+        padding-right: 100px;
+    }
+
+    .print-row {
+        div {
+            display: inline-block;
+        }
     }
 }
 
-.worker-print,.reward-body{   
-    font-size:12px;  
-    .col-sm-4
-    {
-        display:block;        
-    }
-    
-    .col-sm-4.pull-right.text-center{
-        padding-right:100px;
-    }
-    .print-row{
-        div{
-            display:inline-block;
+.modal-body {
+    table {
+        th {
+            width: 10%;
         }
-    }
-}
-.modal-body
-{
-    table{
-        th{
-            width:10%;
+
+        margin: 0 !important;
+
+        td {
+            width: 20%;
         }
-        margin:0 !important;
-        td{
-            width:20%;
-        }
-        .applay{
-            background-color:#e6f7ec !important;
+
+        .applay {
+            background-color: #e6f7ec !important;
         }
     }
 }

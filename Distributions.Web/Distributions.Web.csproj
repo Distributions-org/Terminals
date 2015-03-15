@@ -262,6 +262,7 @@
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\underscore.min.map" />
+    <None Include="Views\Shared\_Layout-Copy.old" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\admin\admin.html" />

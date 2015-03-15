@@ -8,6 +8,7 @@
         var log = getLogFn(controllerId);
 
         var vm = this;
+        vm.isBusy = common.serviceCallPreloader;
         vm.title = 'Dashboard';
         vm.roundFilter = {};
         vm.rounds = {};
@@ -18,7 +19,7 @@
         function activate() {
             var promises = [isAdminRole(), filterRoundDate()];
             common.activateController(promises, controllerId)
-                .then(function () { log('מידע כללי פעיל'); });
+                .then(function () { vm.isBusy(true); log('מידע כללי פעיל'); });
         }
 
         function isAdminRole() {
@@ -42,16 +43,18 @@
                 StartDateView: $filter('date')(new Date(s.setDate(1)), 'dd-MM-yyyy'),
                 EndDateView: $filter('date')(new Date(e.getFullYear(), e.getMonth() + 1, 0), 'dd-MM-yyyy')
             }
-            getRounds();
+            getRounds().then(function () {
+                vm.isBusy(false);
+            });
         }
 
         function getRounds() {
-            return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
-                //success
-                vm.rounds = _.where(response.data, { roundStatus: 1 });
-                vm.closeRounds = _.where(response.data, { roundStatus: 2 });
-            },
-                function (response) {
+            return managementDistributionsService.getRounds(vm.roundFilter).then(function(response) {
+                    //success
+                    vm.rounds = _.where(response.data, { roundStatus: 1 });
+                    vm.closeRounds = _.where(response.data, { roundStatus: 2 });
+                },
+                function(response) {
                     //error
                     logError(response.status + " " + response.statusText);
                 });

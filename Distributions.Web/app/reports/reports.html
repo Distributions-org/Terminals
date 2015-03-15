@@ -30,9 +30,13 @@
                                 <button type="button" class="btn btn-default btn-date" ng-click="vm.openeEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>
                             <div ng-show="vm.showDate" class="col-sm-2">
+                                <label>מע"מ %</label>
+                                <input ng-model="vm.tax" type="number" value="18"/>
+                            </div>
+                            <div ng-show="vm.showDate" class="col-sm-1">
                                 <button type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
                             </div>
-                            <div ng-show="vm.tblShow" class="col-sm-2">
+                            <div ng-show="vm.tblShow" class="col-sm-1">
                                 <button type="button" class="btn btn-info" ng-click="vm.printReport('reportDiv')">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
                             </div>
                         </div>
@@ -51,7 +55,7 @@
                                     </thead>
                                     <tbody>
                                         <tr data-ng-repeat="date in vm.dateRange">
-                                            <td>{{date | date:'dd-MM-yyyy'}}</td>
+                                            <td>{{date}}</td>
                                             <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
                                                 <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
                                                     <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-right">
@@ -74,12 +78,12 @@
                                             <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency}}</td>
                                         </tr>
                                         <tr>
-                                            <td>ללא מע"מ</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{(report.TotalSum-(report.TotalSum*0.18)) | currency }}</td>
+                                            <td>סה"כ לפני</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency }}</td>
                                         </tr>
                                         <tr>
-                                            <td>סכום</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency }}</td>
+                                            <td>סה"כ אחרי</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{(report.TotalSum+(report.TotalSum*(vm.tax/100))) | currency }}</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -109,7 +113,7 @@
                                             <form name="form">
                                                 <div class="col-sm-4">
                                                     <label>בחר סבב:</label>
-                                                    <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.rounds | orderBy:round.RoundDate"
+                                                    <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.rounds | orderBy:'RoundDate':true"
                                                             ng-change="vm.roundSelectedChange(vm.roundSelected)">
                                                         <option value="">סבב</option>
                                                     </select>

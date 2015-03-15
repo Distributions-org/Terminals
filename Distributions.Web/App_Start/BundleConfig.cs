@@ -36,8 +36,9 @@ namespace Distributions.Web
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include("~/content/ie10mobile.css","~/content/bootstrap.min.css","~/Content/bootstrap-rtl.css","~/Content/ui-grid-unstable.min.css"
+                ,"~/content/font-awesome.min.css","~/content/toastr.css","~/content/customtheme.css","~/content/styles.css","~/content/breeze.directives.css","~/Content/bootstrap-timepicker.min.css"
+                ,"~/Content/StyleSheet.min.css","~/Content/site.css"));
         }
     }
 }

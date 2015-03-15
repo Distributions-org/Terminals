@@ -57,8 +57,9 @@
                     }
                 }).then(function() {
                     if (vm.customersInRound.length > 0) {
-                        vm.customer = vm.customersInRound[0];
-                        customerChange(vm.customersInRound[0]);
+                        var custTmp = vm.customersInRound.reverse();
+                        vm.customer = custTmp[0];
+                        customerChange(custTmp[0]);
                     }
                 });
             });
@@ -94,7 +95,11 @@
             vm.customerRoundProducts = {};
             vm.isSaved = false;
             if (round != null) {
-                vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function(r) { return r.roundcustomerProducts.length == 0; }));
+                vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function (r) { return r.roundcustomerProducts.length == 0; })).reverse();
+                if (vm.customersInRound.length > 0) {
+                    vm.customer = vm.customersInRound[0];
+                    customerChange(vm.customersInRound[0]);
+                }
             }
         }
         function customerChange(customer) {

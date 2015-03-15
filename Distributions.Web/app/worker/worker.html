@@ -45,13 +45,13 @@
                                             </thead>
                                             <tbody>
                                                 <tr class="productRow{{$index+1}}" data-ng-repeat="product in vm.customerRoundProducts.roundcustomerProducts">
-                                                    <td>{{$index+1}}</td>
-                                                    <td>{{product.CustomerRoundProduct.ProductName}}</td>
-                                                    <td class="productRowTd productRowTd{{$index+1}}">{{product.Amount}}</td>
-                                                    <td class="productRowInput productRowInput{{$index+1}}" id=""><input type="text" ng-model="product.Amount" name="productAmount" /></td>
-                                                    <td class="productRowTd productRowTd{{$index+1}}">{{product.DeliveredAmount}}</td>
-                                                    <td class="productRowInput productRowInput{{$index+1}}"><input type="text" ng-model="product.DeliveredAmount" name="deliveredAmount" /></td>
-                                                    <td><button data-ng-click="vm.editRow($index+1)" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-edit"></i></button></td>
+                                                    <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}}">{{$index+1}}</td>
+                                                    <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.CustomerRoundProduct.ProductName}}</td>
+                                                    <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}} productRowTd productRowTd{{$index+1}}">{{product.Amount}}</td>
+                                                    <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}} productRowInput productRowInput{{$index+1}}" id=""><input type="text" ng-model="product.Amount" name="productAmount" /></td>
+                                                    <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}} productRowTd productRowTd{{$index+1}}">{{product.DeliveredAmount}}</td>
+                                                    <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}} productRowInput productRowInput{{$index+1}}"><input type="text" ng-model="product.DeliveredAmount" name="deliveredAmount" /></td>
+                                                    <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}}"><button data-ng-click="vm.editRow($index+1)" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-edit"></i></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>

@@ -53,7 +53,7 @@ namespace Services
             string CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == CustomerID).FirstOrDefault().CustomerName;
             List<int> MonthRoundIds = _RoundsRepository.FindBy(x => x.RoundDate >= startOftheMonth && x.RoundDate < endOfthMonth).Select(x => x.RoundsID).ToList();
             List<int> RoundCustomerIds = _RoundsCustomerRepository.FindBy(x => x.CustomerID == CustomerID && MonthRoundIds.Any(z => z == x.RoundsID)).Select(x => x.RoundsCustomersID).ToList();
-            List<RoundsCustomerProductTbl> roundcustomerProducts = _RoundsCustomerProductRepository.FindBy(x => RoundCustomerIds.Any(z => z == x.RoundsCustomersID)).OrderBy(x => x.ProductID).ToList();
+            List<RoundsCustomerProductTbl> roundcustomerProducts = _RoundsCustomerProductRepository.FindBy(x => RoundCustomerIds.Any(z => z == x.RoundsCustomersID)).Where(x=>x.Amount>0||x.DelieveredAmount>0).OrderBy(x => x.ProductID).ToList();
             List<ProductCustomerTbl> allProductcustomer = _ProductCustomerRepository.GetAll().ToList();
             List<CustmerReports> customerReports = new List<CustmerReports>();
             foreach (var roundcustomerproduct in roundcustomerProducts)
@@ -145,7 +145,7 @@ namespace Services
                 }
             }
 
-            return customerReports;
+            return customerReports.Where(x=>x.AllCustomerProductReports.Count>0).ToList();
         }
     }
 }

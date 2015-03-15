@@ -61,9 +61,11 @@ namespace Services.Users
 
         public Core.Domain.Customers.Customers GetCustomersById(int id)
         {
+            Mapper.Reset();
             Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
                 .ForMember(a => a.custStatus, b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status));
             Data.Customers FoundCustomer = _CustomersRepository.FindBy(x => x.CustomerID==id).FirstOrDefault();
+            var customer = _roundsCustomerRepository.FindBy(x => x.CustomerID == id);
             return Mapper.Map<Data.Customers, Core.Domain.Customers.Customers>(FoundCustomer);
         }
 

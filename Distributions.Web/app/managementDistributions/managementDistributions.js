@@ -10,6 +10,7 @@
         var logError = common.logger.getLogFn(controllerId, 'error');
         var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
+        vm.isBusy = common.serviceCallPreloader;
         vm.isAdmin = false;
         vm.title = 'ניהול מוצרים ללקוח';
         vm.customers = {};
@@ -168,7 +169,8 @@
         function activate() {
             var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), toggleMin(), init()];
             common.activateController([promises], controllerId)
-                .then(function () { log('מסך ניהול הפצות פעיל'); });
+                .then(function () {
+                vm.isBusy(true); log('מסך ניהול הפצות פעיל'); });
         }
 
         function init() {
@@ -199,7 +201,9 @@
                 function (response) {
                     //error
                     logError(response.status + " " + response.statusText);
-                });
+                }).then(function() {
+                    vm.isBusy(false);
+            });
         }
 
         function isAdminRole() {

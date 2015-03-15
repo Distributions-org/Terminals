@@ -190,6 +190,12 @@ table.date-filter thead > tr:first-child {
 .report .date .btn-group {
   display: none;
 }
+.report .col-sm-3 {
+  width: 22%;
+}
+.report input[type=number] {
+  width: 22%;
+}
 .table-report {
   border-top: 1px solid #ccc !important;
   margin-top: 15px !important;
@@ -228,6 +234,12 @@ div.scroll {
 }
 .workerTbl tr td.productRowInput {
   display: none;
+}
+.workerTbl tr td.applay {
+  background-color: #e6f7ec !important;
+}
+.workerTbl tr:nth-child(odd) > td.applay {
+  background-color: rgba(197, 238, 212, 0.21) !important;
 }
 .worker-print,
 .reward-body {
