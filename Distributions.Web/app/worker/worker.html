@@ -15,7 +15,9 @@
                             </div>
                             <div class="col-sm-3" data-ng-show="vm.customersInRound.length>0">
                                 <strong>בחר לקוח: </strong>
-                                <select ng-model="vm.customer" data-ng-change="vm.customerChange(vm.customer)" ng-options="customer.customerRound.CustomerName for customer in  vm.customersInRound">
+                                <select ng-model="vm.customer" data-ng-change="vm.customerChange(vm.customer)"
+                                        ng-options="customer.customerRound.CustomerName for customer in  vm.customersInRound"
+                                        options-class="{ 'applay' : customerRound.RoundCustomerStatus }">
                                     <option value="">לקוח</option>
                                 </select>
                             </div>

@@ -194,7 +194,7 @@ table.date-filter thead > tr:first-child {
   width: 22%;
 }
 .report input[type=number] {
-  width: 22%;
+  width: 35%;
 }
 .table-report {
   border-top: 1px solid #ccc !important;
@@ -268,4 +268,21 @@ div.scroll {
 }
 .modal-body table .applay {
   background-color: #e6f7ec !important;
+}
+.user .applay {
+  background-color: #abeec3 !important;
+}
+input.form-control,
+select.form-control {
+  width: 50%;
+}
+.total {
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: inline-block;
+  margin: 5px 0 0 10px;
+  float: right;
+}
+header .btn-info {
+  margin-top: 10px;
 }

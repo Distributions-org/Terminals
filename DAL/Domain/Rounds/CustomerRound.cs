@@ -9,6 +9,6 @@ namespace Core.Domain.Rounds
     public class CustomerRound
     {
         public Customers.Customers customerRound { get; set; }
-        public List<RoundProductCustomer> roundcustomerProducts { get; set; }
+        public IEnumerable<RoundProductCustomer> roundcustomerProducts { get; set; }
     }
 }

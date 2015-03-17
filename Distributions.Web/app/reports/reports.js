@@ -49,12 +49,26 @@
         vm.totalDeliveredAmount = 0;
         vm.savePrc = savePrc;
         vm.tax = 18;
+        vm.getTotlalSum = getTotlalSum;
 
         vm.dateFilter = new Date();
         // Disable weekend selection
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
+
+        function getTotlalSum() {
+            var total = 0;
+            if (vm.report.length>0) {
+                _.each(vm.report, function (r) {
+                    total = total + r.TotalSum;
+                });
+                return total;
+            }
+            return 0;
+        }
+
+        
 
         vm.roundFilter = {
             Today: false,
@@ -97,7 +111,12 @@
             var promises = [isAdminRole(), getValidCustomers(), toggleMin(), getRounds()];
             common.activateController([promises], controllerId)
                 .then(function () {
-                vm.isBusy(true); log('מסך ' + vm.title + ' פעיל'); });
+                    log('מסך ' + vm.title + ' פעיל');
+                }).then(function () {
+                    if (common.cache.get('rounds') == null) {
+                        vm.isBusy(true);
+                    }
+                });
         }
 
         function isAdminRole() {
@@ -124,16 +143,24 @@
         };
 
         function getRounds() {
-            return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
-                //success
-                vm.rounds = response.data;
-            },
-                function (response) {
-                    //error
-                    logError(response.status + " " + response.statusText);
-                }).then(function() {
-                vm.isBusy(false);
-            });
+            var roundscache = common.cache.get('rounds');
+            if (roundscache != null) {
+                vm.rounds = _.where(roundscache, { roundStatus: 1 });
+                vm.closeRounds = _.where(roundscache, { roundStatus: 2 });
+            } else {
+                return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
+                    //success
+                    vm.rounds = _.where(response.data, { roundStatus: 1 });
+                    vm.closeRounds = _.where(response.data, { roundStatus: 2 });
+                    common.cache.put('rounds', response.data);
+                    vm.isBusy(false);
+                },
+                  function (response) {
+                      //error
+                      logError(response.status + " " + response.statusText);
+                  });
+            }
+
         }
 
         function roundSelectedChange(round) {

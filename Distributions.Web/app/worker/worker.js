@@ -38,9 +38,9 @@
         function activate() {
             var promises = [isAdminRole()];
             common.activateController([promises], controllerId)
-                .then(function () { log('מסך חלוקה פעיל'); });
+                .then(function () { log('מסך חלוקה פעיל'); }).then(function () { vm.isBusy(true); });
         }
-
+        
         function isAdminRole() {
             return datacontext.getUserNameAndRole().then(function(response) {
                 return { workerEmail: response.data.userEmail, isAdmin: response.data.isAdmin };
@@ -57,10 +57,12 @@
                     }
                 }).then(function() {
                     if (vm.customersInRound.length > 0) {
-                        var custTmp = vm.customersInRound.reverse();
+                        var custTmp = vm.customersInRound;
                         vm.customer = custTmp[0];
                         customerChange(custTmp[0]);
                     }
+                }).finally(function() {
+                    vm.isBusy(false);
                 });
             });
         }
@@ -95,7 +97,7 @@
             vm.customerRoundProducts = {};
             vm.isSaved = false;
             if (round != null) {
-                vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function (r) { return r.roundcustomerProducts.length == 0; })).reverse();
+                vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function (r) { return r.roundcustomerProducts.length == 0; }));
                 if (vm.customersInRound.length > 0) {
                     vm.customer = vm.customersInRound[0];
                     customerChange(vm.customersInRound[0]);

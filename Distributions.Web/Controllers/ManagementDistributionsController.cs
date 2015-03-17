@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.OData.Extensions;
 using Core.Domain.ProductTocustomer;
@@ -49,10 +50,10 @@ namespace Distributions.Web.Controllers
 
         [Route("GetRounds")]
         [HttpPost]
-        public HttpResponseMessage GetRounds(RoundFilterModel model)
+        public async Task<HttpResponseMessage> GetRounds(RoundFilterModel model)
         {
-            var rounds = _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate,model.Email);
-            if (rounds != null)
+            var rounds = await _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate,model.Email);
+            if (rounds.Any())
             {
                 return Request.CreateResponse(HttpStatusCode.OK, rounds);
             }
@@ -142,7 +143,7 @@ namespace Distributions.Web.Controllers
                 {
                     foreach (var roundCustomer in model.RoundCustomers)
                     {
-                        _roundsService.AddRoundProductCustomer(roundCustomer.roundcustomerProducts, model.RoundId);
+                        _roundsService.AddRoundProductCustomer(roundCustomer.roundcustomerProducts.ToList(), model.RoundId);
                     }
 
                     // model.RoundCustomers.ForEach(roundProducts =>  _roundsService.AddRoundProductCustomer(roundProducts.roundcustomerProducts, model.RoundId));
@@ -191,7 +192,7 @@ namespace Distributions.Web.Controllers
                 {
                     foreach (var roundCustomer in model.RoundCustomers)
                     {
-                        _roundsService.UpdateRoundProductCustomer(roundCustomer.roundcustomerProducts, model.RoundId);
+                        _roundsService.UpdateRoundProductCustomer(roundCustomer.roundcustomerProducts.ToList(), model.RoundId);
                     }
                     return Request.CreateResponse(HttpStatusCode.OK, model);
                 }

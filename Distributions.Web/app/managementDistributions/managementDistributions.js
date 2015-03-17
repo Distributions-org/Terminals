@@ -68,7 +68,7 @@
 
         // Disable weekend selection
         vm.disabled = function (date, mode) {
-            return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
+            return false; //(mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
 
         vm.open = function ($event) {
@@ -170,7 +170,8 @@
             var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), toggleMin(), init()];
             common.activateController([promises], controllerId)
                 .then(function () {
-                vm.isBusy(true); log('מסך ניהול הפצות פעיל'); });
+                    log('מסך ניהול הפצות פעיל');
+                }).then(function () { vm.isBusy(true); });
         }
 
         function init() {
@@ -422,9 +423,13 @@
         function saveRound() {
             vm.activeProductsNoAmount = false;
             activeChecked();
-            var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected.reverse(), function(product) {
+            var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected, function(product) {
                 return  product.Amount !== undefined;
             }), 'CustomerID'));
+
+            productsRoundCustomerGroping = _.sortBy(productsRoundCustomerGroping, function(p) {
+              return   Number(p[0].$$hashKey.replace("object:", ""));
+            });
             _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                 var roundCustomers = {
                     RoundId: vm.roundId,
@@ -509,6 +514,9 @@
             updateRoundById(roundId).then(function (response) {
                 //success
                 var productsRoundCustomerGroping = _.toArray(_.groupBy(vm.productsRoundCustomerSelected, 'CustomerID'));
+                productsRoundCustomerGroping = _.sortBy(productsRoundCustomerGroping, function (p) {
+                    return Number(p[0].$$hashKey.replace("object:", ""));
+                });
                 _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                     var roundCustomers = {
                         RoundId: vm.roundId,
@@ -603,7 +611,7 @@
                     });
                 });
             });
-            vm.productsRoundCustomerSelected = roundcustomerProducts;
+            vm.productsRoundCustomerSelected = roundcustomerProducts.reverse();
             vm.customersRoundShow = true;
             vm.roundBtnUpdateShow = true;
             vm.round = round;
@@ -631,7 +639,7 @@
                     });
                 });
             });
-            vm.productsRoundCustomerSelected = roundcustomerProducts;
+            vm.productsRoundCustomerSelected = roundcustomerProducts.reverse();
             vm.customersRoundShow = false;
             vm.roundBtnUpdateShow = false;
             vm.round = round;

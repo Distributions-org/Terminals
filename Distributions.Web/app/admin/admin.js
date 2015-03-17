@@ -48,7 +48,8 @@
             var promises = [isAdminRole(),getAllUsers(), getRoles(), getProducts(),getCustomers()];
             common.activateController([promises], controllerId)
                 .then(function () {
-                vm.isBusy(true); log('מסך ניהול פעיל'); });
+                     log('מסך ניהול פעיל');
+                }).then(function () { vm.isBusy(true); });
         }
 
         function isAdminRole() {

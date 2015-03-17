@@ -25,9 +25,9 @@
     });
 
     commonModule.factory('common',
-        ['$q', '$rootScope', '$timeout', '$http', 'commonConfig', 'logger', 'bootstrap.dialog', common]);
+        ['$q', '$rootScope', '$timeout', '$http', 'commonConfig', 'logger', 'bootstrap.dialog', 'cache', common]);
 
-    function common($q, $rootScope, $timeout, $http, commonConfig, logger,dialog) {
+    function common($q, $rootScope, $timeout, $http, commonConfig, logger, dialog, cache) {
         var throttles = {};
 
         var service = {
@@ -43,7 +43,8 @@
             logger: logger, // for accessibility
             modalDialog: dialog,
             textContains: textContains,
-            serviceCallPreloader: serviceCallPreloader
+            serviceCallPreloader: serviceCallPreloader,
+            cache: cache
         };
 
         return service;
