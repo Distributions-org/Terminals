@@ -15,6 +15,7 @@
         vm.antiForgeryToken ="";
         vm.busyMessage = 'אנא המתן ...';
         vm.isBusy = true;
+        vm.clearcache = clearcache;
         vm.spinnerOptions = {
             radius: 40,
             lines: 7,
@@ -32,6 +33,11 @@
             logSuccess('הדף נטען!', null, true);
             var promises = [getuserNameAndRole(), isAuthenticated(), getAntiForgeryToken()];
             common.activateController([promises], controllerId);
+        }
+
+        function clearcache() {
+            common.cache.clear('rounds');
+            logSuccess('נקיון cache סבבים עבר בהצלחה');
         }
 
         function toggleSpinner(on) {

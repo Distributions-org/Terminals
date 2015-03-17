@@ -1,0 +1,9 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    font-size: 10px;
+}
+table {
+    display: block !important;
+    font-size: 10px !important;
+}

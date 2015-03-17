@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function() {
     'use strict';
 
     var serviceId = 'managementDistributionsService';
@@ -20,45 +20,46 @@
             changeRoundStatus: changeRoundStatus,
             updateRound: updateRound,
             updateCustomerRound: updateCustomerRound,
-            removeProductToCustomer: removeProductToCustomer
+            removeProductToCustomer: removeProductToCustomer,
+            deleteProductFromRound: deleteProductFromRound
         };
 
         return service;
 
         function getCustomers() {
-            return $http.get("/GetActiveCustomers").success(function (data) {
-                return data;
-            })
+            return $http.get("/GetActiveCustomers").success(function(data) {
+                    return data;
+                })
                 .error(function(data, status) {
-                return status;
-            });
+                    return status;
+                });
         }
 
         function getRounds(model) {
-            return $http.post("/GetRounds",model).success(function (data) {
-                return data;
-            })
-                .error(function (data, status) {
+            return $http.post("/GetRounds", model).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
                     return status;
                 });
         }
 
         function getWorkers() {
-            return $http.get("/GetWorkers").success(function (data) {
-                return data;
-            })
-                .error(function (data, status) {
+            return $http.get("/GetWorkers").success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
                     return status;
                 });
         }
 
         function getProductsCustomer(customerId) {
-            return $http.get("/GetProductsCustomer?customerId="+customerId).success(function (data) {
-                return data;
-            })
-               .error(function (data, status) {
-                   return status;
-               });
+            return $http.get("/GetProductsCustomer?customerId=" + customerId).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
         }
 
         function addProductToCustomer(parameters) {
@@ -66,15 +67,15 @@
                     return data;
                 })
                 .error(function(data, status) {
-                return status;
-            });
+                    return status;
+                });
         }
 
         function saveProductToCustomer(parameters) {
-            return $http.post("/UpdateProductsCustomer", parameters).success(function (data) {
-                return data;
-            })
-                .error(function (data, status) {
+            return $http.post("/UpdateProductsCustomer", parameters).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
                     return status;
                 });
         }
@@ -84,63 +85,73 @@
                     return data;
                 })
                 .error(function(data, status) {
-                return status;
-            });
+                    return status;
+                });
         }
 
         function addUserToRound(roundModel) {
-            return $http.post("/AddUserToRound", roundModel).success(function (data) {
-                return data;
-            })
-              .error(function (data, status) {
-                  return status;
-              });
+            return $http.post("/AddUserToRound", roundModel).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
         }
 
         function addCustomerRound(roundCustomersModel) {
-            return $http.post("/AddCustomerRound", roundCustomersModel).success(function (data) {
-                return data;
-            })
-              .error(function (data, status) {
-                  return status;
-              });
+            return $http.post("/AddCustomerRound", roundCustomersModel).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
         }
 
         function changeRoundStatus(round) {
-            return $http.post("/ChangeRoundStatus", round).success(function (data) {
-                return data;
-            })
-              .error(function (data, status) {
-                  return status;
-              });
+            return $http.post("/ChangeRoundStatus", round).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
         }
-        
+
         function updateRound(round) {
-            return $http.post("/UpdateRound", round).success(function (data) {
-                return data;
-            })
-              .error(function (data, status) {
-                  return status;
-              });
+            return $http.post("/UpdateRound", round).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
         }
 
         function updateCustomerRound(roundCustomersModel) {
-            return $http.post("/UpdateCustomerRound", roundCustomersModel).success(function (data) {
-                return data;
-            })
-              .error(function (data, status) {
-                  return status;
-              });
+            return $http.post("/UpdateCustomerRound", roundCustomersModel).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
         }
 
         function removeProductToCustomer(productCustomerId) {
-            return $http.post("/RemoveProductToCustomer?productCustomerId=" + productCustomerId).success(function (data) {
-                return data;
-            })
-              .error(function (data, status) {
-                  return status;
-              });
+            return $http.post("/RemoveProductToCustomer?productCustomerId=" + productCustomerId).success(function(data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
+        }
+
+        function deleteProductFromRound(productModel) {
+            return $http.post("/DeleteProductFromRound?roundId=" + productModel.roundId, productModel.product).success(function (data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
         }
         
-    }
+       } 
+    
 })();

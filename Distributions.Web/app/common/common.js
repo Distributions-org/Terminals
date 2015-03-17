@@ -25,9 +25,9 @@
     });
 
     commonModule.factory('common',
-        ['$q', '$rootScope', '$timeout', 'commonConfig', 'logger', common]);
+        ['$q', '$rootScope', '$timeout', '$http', 'commonConfig', 'logger', 'bootstrap.dialog', 'cache', common]);
 
-    function common($q, $rootScope, $timeout, commonConfig, logger) {
+    function common($q, $rootScope, $timeout, $http, commonConfig, logger, dialog, cache) {
         var throttles = {};
 
         var service = {
@@ -41,14 +41,17 @@
             debouncedThrottle: debouncedThrottle,
             isNumber: isNumber,
             logger: logger, // for accessibility
+            modalDialog: dialog,
             textContains: textContains,
-            serviceCallPreloader: serviceCallPreloader
+            serviceCallPreloader: serviceCallPreloader,
+            cache: cache
         };
 
         return service;
 
         function activateController(promises, controllerId) {
             return $q.all(promises).then(function (eventArgs) {
+                isAuthenticated();
                 var data = { controllerId: controllerId };
                 $broadcast(commonConfig.config.controllerActivateSuccessEvent, data);
             });
@@ -56,6 +59,14 @@
 
         function $broadcast() {
             return $rootScope.$broadcast.apply($rootScope, arguments);
+        }
+
+        function isAuthenticated() {
+            return $http.get("/Account/IsAuthenticated").then(function (response) {
+                if (response.data !== "True") {
+                    window.location = '/';
+                }
+            });
         }
 
         function serviceCallPreloader(isBusy) {

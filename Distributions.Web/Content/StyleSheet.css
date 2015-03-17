@@ -190,10 +190,99 @@ table.date-filter thead > tr:first-child {
 .report .date .btn-group {
   display: none;
 }
+.report .col-sm-3 {
+  width: 22%;
+}
+.report input[type=number] {
+  width: 35%;
+}
 .table-report {
   border-top: 1px solid #ccc !important;
-  margin-top: 15px;
+  margin-top: 15px !important;
 }
 .table-report tfoot {
   font-weight: 600;
+}
+.round-product .btn {
+  margin: 0 !important;
+}
+.edit-eport-tbl input[type="text"] {
+  max-width: 50px;
+}
+.table thead tr th[ng-click] {
+  cursor: pointer;
+}
+.widget-content.scroll {
+  max-height: 500px;
+  overflow-y: auto;
+}
+div.scroll {
+  max-height: 500px;
+  overflow-y: auto;
+}
+@media (max-width: 767px) {
+  .mainbar {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+.workerTbl tr td {
+  width: 20%;
+}
+.workerTbl tr td.productRowTd {
+  display: table-cell;
+}
+.workerTbl tr td.productRowInput {
+  display: none;
+}
+.workerTbl tr td.applay {
+  background-color: #e6f7ec !important;
+}
+.workerTbl tr:nth-child(odd) > td.applay {
+  background-color: rgba(197, 238, 212, 0.21) !important;
+}
+.worker-print,
+.reward-body {
+  font-size: 12px;
+}
+.worker-print .col-sm-4,
+.reward-body .col-sm-4 {
+  display: block;
+}
+.worker-print .col-sm-4.pull-right.text-center,
+.reward-body .col-sm-4.pull-right.text-center {
+  padding-right: 100px;
+}
+.worker-print .print-row div,
+.reward-body .print-row div {
+  display: inline-block;
+}
+.modal-body table {
+  margin: 0 !important;
+}
+.modal-body table th {
+  width: 10%;
+}
+.modal-body table td {
+  width: 20%;
+}
+.modal-body table .applay {
+  background-color: #e6f7ec !important;
+}
+.user .applay {
+  background-color: #abeec3 !important;
+}
+input.form-control,
+select.form-control {
+  width: 50%;
+}
+.total {
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: inline-block;
+  margin: 5px 0 0 10px;
+  float: right;
+}
+header .btn-info {
+  margin-top: 10px;
 }

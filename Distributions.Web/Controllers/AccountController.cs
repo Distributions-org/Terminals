@@ -6,6 +6,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Security;
 using Core.Domain.Users;
+using Core.Enums;
 using Distributions.Web.Models;
 using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
@@ -46,6 +47,10 @@ namespace Distributions.Web.Controllers
                 if (model != null)
                 {
                     _userStorage.ObjectValue = model;
+                    if (model.RoleID == UserRoles.userRoles.Worker)
+                    {
+                        return RedirectToLocal("/#/worker");
+                    }
                  return RedirectToLocal(returnUrl);
                 }
             }

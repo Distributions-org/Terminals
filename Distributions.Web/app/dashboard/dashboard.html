@@ -2,48 +2,26 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <ul class="today-datas">
-                        <li class="blightblue">
-                            <div class="pull-left"><i class="fa fa-plane"></i></div>
-                            <div class="datas-text pull-right">
-                                <span class="bold">May 18 - 19, 2015</span> Castle Resort, Neverland
-                            </div>
-                            <div class="clearfix"></div>
-                        </li>
-
-                        <li class="borange">
-                            <div class="pull-left"><i class="fa fa-envelope"></i></div>
-                            <div class="datas-text pull-right">
-                                <span class="bold">{{vm.messageCount}}</span> Messages
-                            </div>
-                            <div class="clearfix"></div>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6">
                     <div class="widget wviolet">
-                        <div data-cc-widget-header title="People"
+                        <div data-cc-widget-header title="סבבים פתוחים בחודש הנוכחי: {{vm.roundFilter.EndDateView+ ' - '+vm.roundFilter.StartDateView }}"
                              allow-collapse="true"></div>
-                        <div class="widget-content text-center text-info">
-                            <table class="table table-condensed table-striped">
+                        <div class="widget-content">
+                            <table class="table date-filter table-condensed table-bordered  table-striped">
                                 <thead>
                                     <tr>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Age</th>
-                                        <th>Location</th>
+                                        <th>תאריך ושעה</th>
+                                        <th>שם</th>
+                                        <th>סטטוס</th>
+                                        <th>מפיץ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-ng-repeat="p in vm.people">
-                                        <td>{{p.firstName}}</td>
-                                        <td>{{p.lastName}}</td>
-                                        <td>{{p.age}}</td>
-                                        <td>{{p.location}}</td>
+                                    <tr data-ng-repeat="round in vm.rounds | orderBy:'RoundDate':true">
+                                        <td>{{round.RoundDate | date:'dd-MM-yyyy HH:mm'}}</td>
+                                        <td>{{round.RoundName}}</td>
+                                        <td><input type="checkbox" data-ng-disabled="true" ng-checked="{{round.roundStatus==1?'true':'false'}}" />{{round.roundStatus==1?"פעיל":"לא פעיל"}}</td>
+                                        <td>{{round.RoundUser[0].FirstName + ' '+ round.RoundUser[0].LastName}} <button data-ng-click="vm.showRound(round)" class="pull-left btn btn-info btn-xs"><i class="glyphicon glyphicon-user"></i> פרטים</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -55,10 +33,27 @@
                 </div>
                 <div class="col-md-6">
                     <div class="widget wgreen">
-                        <div data-cc-widget-header title="{{vm.news.title}}"
+                        <div data-cc-widget-header title="סבבים סגורים בחודש הנוכחי: {{vm.roundFilter.EndDateView+ ' - '+vm.roundFilter.StartDateView }}"
                              allow-collapse="true"></div>
-                        <div class="widget-content text-center text-info">
-                            <small>{{vm.news.description}}</small>
+                        <div class="widget-content">
+                            <table class="table date-filter table-condensed table-bordered  table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>תאריך ושעה</th>
+                                        <th>שם</th>
+                                        <th>סטטוס</th>
+                                        <th>מפיץ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-ng-repeat="closeRound in vm.closeRounds | orderBy:'RoundDate':true">
+                                        <td>{{closeRound.RoundDate | date:'dd-MM-yyyy HH:mm'}}</td>
+                                        <td>{{closeRound.RoundName}}</td>
+                                        <td><input type="checkbox" data-ng-disabled="true" ng-checked="{{closeRound.roundStatus==1?'true':'false'}}" />{{closeRound.roundStatus==1?"פעיל":"לא פעיל"}}</td>
+                                        <td>{{closeRound.RoundUser[0].FirstName + ' '+ closeRound.RoundUser[0].LastName}} <button data-ng-click="vm.showRound(closeRound)" class="pull-left btn btn-info btn-xs"><i class="glyphicon glyphicon-user"></i> פרטים</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="widget-foot">
                             <div class="clearfix"></div>
@@ -68,4 +63,36 @@
             </div>
         </div>
     </section>
+    <!--<script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                שם הסבב: {{vm.round.RoundName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;מפיץ: {{vm.round.RoundUser[0].FirstName + ' '+ vm.round.RoundUser[0].LastName}}
+                &nbsp;&nbsp;&nbsp;&nbsp; תאריך: {{vm.round.RoundDate | date:'dd-MM-yyyy'}}
+            </h4>
+        </div>
+        <div class="modal-body">
+            <table data-ng-repeat="custRound in vm.round.custRound" class="table date-filter table-condensed table-bordered  table-striped">
+                <thead ng-if="$index==0">
+                    <tr>
+                        <th>לקוח</th>
+                        <th>מוצר</th>
+                        <th>התקבל</th>
+                        <th>חזרות</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="product in custRound.roundcustomerProducts">
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.CustomerRoundProduct.CustomerName}}</td>
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.CustomerRoundProduct.ProductName}}</td>
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.Amount}}</td>
+                        <td class="{{custRound.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.DeliveredAmount}}</td>
+                    </tr>
+                </tbody>
+            </table>                   
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="vm.ok()">OK</button>
+            <button class="btn btn-warning" ng-click="vm.cancel()">סגור</button>
+        </div>
+    </script>-->
 </section>

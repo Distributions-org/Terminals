@@ -19,4 +19,11 @@ namespace Distributions.Web.Models
             ProductIDs=new List<int>();
         }
     }
+
+    public class ProductAmountPerRound
+    {
+        public int ProductId { get; set; }
+        public int RoundId { get; set; }
+        public int TotalAmount { get; set; }
+    }
 }

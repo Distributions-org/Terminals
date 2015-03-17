@@ -68,7 +68,8 @@ namespace Distributions.Web.Controllers
             if (user != null)
                 return Request.CreateResponse(HttpStatusCode.OK, new {
                     userName = user.FirstName +" "+ user.LastName,
-                    isAdmin = user.RoleID.ToString() == "Admin" });
+                    isAdmin = user.RoleID.ToString() == "Admin" ,
+                    userEmail = user.Email});
 
             return null;
         }
@@ -224,7 +225,7 @@ namespace Distributions.Web.Controllers
         [AuthorizeUser(AccessRole = "Admin")]
         public HttpResponseMessage GetCustomers()
         {
-            var customers = _customersService.GetValidCustomers();
+            var customers = _customersService.GetValidCustomers(null);
             if (customers != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, customers);

@@ -24,7 +24,7 @@ namespace Services
             _ProductCustomerRepository = ProductCustomerRepository;
         }
 
-        public FunctionReplay.functionReplay AddNewProduct(Core.Domain.Product newProduct)
+        public  FunctionReplay.functionReplay AddNewProduct(Core.Domain.Product newProduct)
         {
             Mapper.CreateMap<Core.Domain.Product, Data.Product>()
                 .ForMember(a => a.ProductStatus,b => b.MapFrom(c => (ProductStatus.productStatus)c.productStatus));

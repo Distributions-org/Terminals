@@ -8,7 +8,7 @@
                         <div class="row date">
                             <div class="col-sm-2">
                                 <label>בחר לקוח:</label>
-                                <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers"
+                                <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers | orderBy:'CustomerName':false"
                                         ng-change="vm.customerSelectedChange(vm.customerSelected)">
                                     <option value="">לקוח</option>
                                 </select>
@@ -30,9 +30,13 @@
                                 <button type="button" class="btn btn-default btn-date" ng-click="vm.openeEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>
                             <div ng-show="vm.showDate" class="col-sm-2">
+                                <label>מע"מ %</label>
+                                <input ng-model="vm.tax" type="number" value="18"/>
+                            </div>
+                            <div ng-show="vm.showDate" class="col-sm-1">
                                 <button type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
                             </div>
-                            <div ng-show="vm.tblShow" class="col-sm-2">
+                            <div ng-show="vm.tblShow" class="col-sm-1">
                                 <button type="button" class="btn btn-info" ng-click="vm.printReport('reportDiv')">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
                             </div>
                         </div>
@@ -51,14 +55,14 @@
                                     </thead>
                                     <tbody>
                                         <tr data-ng-repeat="date in vm.dateRange">
-                                            <td>{{date | date:'dd-MM-yyyy'}}</td>
+                                            <td>{{date}}</td>
                                             <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
                                                 <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
                                                     <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-right">
-                                                        נשלח:  <strong>{{allCustomerProductReports.DelieverySent}}</strong>
+                                                        ק:  <strong>{{allCustomerProductReports.DelieverySent}}</strong>
                                                     </span>
-                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-left">
-                                                        החזרות:  <strong>{{allCustomerProductReports.DelieveryTaken}}</strong>
+                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-left red">
+                                                        ח:  <strong>{{allCustomerProductReports.DelieveryTaken}}</strong>
                                                     </span>
                                                 </span>
                                             </td>
@@ -71,22 +75,153 @@
                                         </tr>
                                         <tr>
                                             <td>מחיר</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost}}</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency}}</td>
                                         </tr>
-                                        <tr>
-                                            <td>סכום</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum}}</td>
-                                        </tr>
+                                       <!--<tr>
+                                                <td>סה"כ לפני</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>סה"כ אחרי</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{(report.TotalSum+(report.TotalSum*(vm.tax/100))) | currency }}</td>
+                                            </tr>-->
                                     </tfoot>
                                 </table>
+                                <div class="total">
+                                    <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency }}</strong>
+                                </div>
+                                <div class="total">
+                                    <strong> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency }}</strong>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
-                <div class="widget-foot">
-                    <div class="clearfix"></div>
+
+            </div>
+        </div>
+    </section>
+    <section class="matter round-product">
+        <div class="container">
+            <div class="row">
+                <div class="widget wlightblue">
+                    <div allow-collapse="true" data-cc-widget-header title="בדיקת כמות בסבב"></div>
+                    <div class="widget-content">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="widget wlightblue">
+                                    <div allow-collapse="true" data-cc-widget-header title="בחר סבב - מוצר - כמות"></div>
+                                    <div class="widget-content">
+                                        <div class="row">
+                                            <form name="form">
+                                                <div class="col-sm-4">
+                                                    <label>בחר סבב:</label>
+                                                    <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.rounds | orderBy:'RoundDate':true"
+                                                            ng-change="vm.roundSelectedChange(vm.roundSelected)">
+                                                        <option value="">סבב</option>
+                                                    </select>
+                                                </div>
+                                                <div data-ng-show="vm.products.length>0" class="col-sm-4">
+                                                    <label>בחר מוצר:</label>
+                                                    <select class="form-control" ng-model="vm.productSelected" ng-options="product.ProductName for product in vm.products | orderBy:'ProductName'">
+                                                        <option value="">מוצר</option>
+                                                    </select>
+                                                </div>
+                                                <div data-ng-show="vm.products.length>0 && vm.productSelected !=null" class="col-sm-3">
+                                                    <input type="number" required name="inputNumber" data-ng-model="vm.amount" placeholder="כמות" />
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <button data-ng-disabled="!form.inputNumber.$valid" data-ng-click="vm.getCustomerRoundAmount()" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 text-left">
+                                                <span class="field-validation-error" ng-show="form.inputNumber.$error.number">מספרים בלבד</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <table ng-show="vm.roundProductCustomer.length>0" class="table table-condensed table-bordered  table-striped table-report">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>שם הלקוח</th>
+                                                            <th>מוצר</th>
+                                                            <th>כמות</th>
+                                                            <th>החזרות</th>
+                                                            <th>ערוך</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="rpc in vm.roundProductCustomer">
+                                                            <td>{{rpc.CustomerRoundProduct.CustomerName}}</td>
+                                                            <td>{{rpc.CustomerRoundProduct.ProductName}}</td>
+                                                            <td>{{rpc.Amount}}</td>
+                                                            <td>{{rpc.DeliveredAmount}}</td>
+                                                            <td class="text-center"><button data-ng-click="vm.editRpc(rpc)" class="btn btn-info btn-sm">ערוך <i class="glyphicon glyphicon-arrow-left"></i></button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td>סכ"ה</td>
+                                                            <td></td>
+                                                            <td>{{vm.totalAmount}}</td>
+                                                            <td>{{vm.totalDeliveredAmount}}</td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="widget-foot">
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="widget wlightblue">
+                                    <div allow-collapse="true" data-cc-widget-header title="עריכת לקוח בסבב"></div>
+                                    <div class="widget-content">
+                                        <table data-ng-show="vm.roundProductCustomerEdit.hasOwnProperty('Amount')" class="table table-condensed table-bordered  table-striped table-report edit-eport-tbl">
+                                            <thead>
+                                                <tr>
+                                                    <th>סבב</th>
+                                                    <th>שם הלקוח</th>
+                                                    <th>מוצר</th>
+                                                    <th>כמות</th>
+                                                    <th>החזרות</th>
+                                                    <th>שמירה</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{vm.roundSelected.RoundName+' '+(vm.roundSelected.RoundDate | date:'dd-MM-yyyy')}}</td>
+                                                    <td>{{vm.roundProductCustomerEdit.CustomerRoundProduct.CustomerName}}</td>
+                                                    <td>{{vm.roundProductCustomerEdit.CustomerRoundProduct.ProductName}}</td>
+                                                    <td><input data-ng-model="vm.roundProductCustomerEdit.Amount" type="text" /></td>
+                                                    <td><input data-ng-model="vm.roundProductCustomerEdit.DeliveredAmount" type="text" /></td>
+                                                    <td class="text-center"><button data-ng-click="vm.savePrc()" class="btn btn-success btn-sm">שמור <i class="glyphicon glyphicon-save"></i></button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="widget-foot">
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 </section>
+
