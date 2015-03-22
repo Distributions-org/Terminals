@@ -19,10 +19,16 @@ namespace Console.Test
             var kernal = new StandardKernel();
             RegisterServices(kernal);
 
-            //var reportService = kernal.Get<IReportsService>();
-            //List<int> ProductIds = new List<int>();
-            //ProductIds.Add(1);
-            //reportService.GetCustomerProductsReports(ProductIds, 1, 2014, 12, 2015, 1);
+            var reportService = kernal.Get<IReportsService>();
+            List<int> ProductIds = new List<int>();
+            ProductIds.Add(3011);
+            ProductIds.Add(3012);
+            ProductIds.Add(3013);
+            ProductIds.Add(3015);
+            ProductIds.Add(3016);
+            ProductIds.Add(3017);
+            ProductIds.Add(3018);
+            reportService.GetCustomerProductsReports(ProductIds, 7, 2015, 2, 2015, 4);
 
             //var userService = kernal.Get<IUserService>();
 
@@ -44,8 +50,8 @@ namespace Console.Test
             //productService.AddProductTocustomer(1, 1, Core.Enums.DaysType.DayType.SunToWen, 20.5);
             //productService.AddNewProduct("test",Core.Enums.ProductStatus.productStatus.Active);
 
-            var RoundService = kernal.Get<IRoundsService>();
-            List<Rounds> allRounds = RoundService.GetRoundsByDate(new DateTime(2014, 12, 20), DateTime.Now);
+            //var RoundService = kernal.Get<IRoundsService>();
+            //List<Rounds> allRounds = RoundService.GetRoundsByDate(new DateTime(2014, 12, 20), DateTime.Now);
             ////RoundService.CreateNewRound(new Core.Domain.Rounds.Rounds { RoundDate = DateTime.Now, RoundName = "Test Round" });
             //User RoundUser = userService.GetUserById(7);
             //List<User> roundUsers = new List<User>();
