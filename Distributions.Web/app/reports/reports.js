@@ -35,6 +35,7 @@
         vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
         vm.format = vm.formats[3];
         vm.rounds = {};
+        vm.allRounds = {};
         vm.roundSelected = {};
         vm.roundSelectedChange = roundSelectedChange;
         vm.customersRound = {};
@@ -54,7 +55,7 @@
         vm.dateFilter = new Date();
         // Disable weekend selection
         vm.disabled = function (date, mode) {
-            return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
+            return false;// (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
 
         function getTotlalSum() {
@@ -145,11 +146,13 @@
         function getRounds() {
             var roundscache = common.cache.get('rounds');
             if (roundscache != null) {
+                vm.allRounds = roundscache;
                 vm.rounds = _.where(roundscache, { roundStatus: 1 });
                 vm.closeRounds = _.where(roundscache, { roundStatus: 2 });
             } else {
                 return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
                     //success
+                        vm.allRounds = response.data;
                     vm.rounds = _.where(response.data, { roundStatus: 1 });
                     vm.closeRounds = _.where(response.data, { roundStatus: 2 });
                     common.cache.put('rounds', response.data);
@@ -327,7 +330,7 @@
                         }
                     ]
                 }
-                return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (responsedata) {
+                return managementDistributionsService.updateCustomerRound([roundCustomers]).then(function (responsedata) {
                     //success
                     logSuccess("המוצר עודכן בסבב בהצלחה");
                     angular.element('.edit-eport-tbl .btn-success > i').removeClass('glyphicon-save').addClass('glyphicon-saved');

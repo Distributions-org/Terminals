@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Diagnostics;
 using System.Linq;
 using Core.Data;
 using Core.Domain.Persons;
@@ -41,6 +43,51 @@ namespace Services
             _RoundsCustomerProductRepository = RoundsCustomerProductRepository;
         }
 
+        //public List<CustmerReports> GetCustomerProductsReport(List<int> ProductIDs, int CustomerID, int year, int month,int endYear, int endMonth)
+        //{
+        //    var customerReports = new List<CustmerReports>();
+        //    if (month == endMonth && endMonth < 12)
+        //    {
+        //        endMonth++;
+        //    }
+        //    var startOftheMonth = new DateTime(year, month, 1);
+        //    var endOfthMonth = new DateTime(endYear, endMonth, 1);
+        //    var customerName = _CustomersRepository.FindBy(x => x.CustomerID == CustomerID).First().CustomerName;
+        //    var monthRoundIds = _RoundsRepository.FindBy(x => x.RoundDate >= startOftheMonth && x.RoundDate < endOfthMonth).Select(x => x.RoundsID).ToList();
+        //    var roundCustomerIds = _RoundsCustomerRepository.FindBy(f => f.CustomerID == CustomerID && monthRoundIds.Any(z => z == f.RoundsID)).Select(z => z.RoundsCustomersID).ToList();
+
+
+        //    var roundcustomerProducts = _RoundsCustomerProductRepository.FindBy(x => roundCustomerIds.Contains(x.RoundsCustomersID.Value)).Where(x=>x.Amount>0||x.DelieveredAmount>0).OrderBy(x=>x.ProductID).ToList();
+        //    roundcustomerProducts.Each(x =>
+        //    {
+        //        int RoundID = _RoundsCustomerRepository.FindBy(r => r.RoundsCustomersID == x.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
+
+        //        customerReports.Add(new CustmerReports
+        //        {
+        //            AllCustomerProductReports =roundcustomerProducts.Select(c=>new ProductCustomerReport
+        //            {
+        //                DelieverySent = c.Amount.Value,
+        //                DelieveryTaken = c.DelieveredAmount.Value,
+        //                currentDate = _RoundsRepository.FindBy(r => r.RoundsID == RoundID).FirstOrDefault(d=>d.RoundDate==c).FirstOrDefault().RoundDate.Value
+        //            }).Where(b => b.currentDate == _RoundsRepository.FindBy(r => r.RoundsID == RoundID).FirstOrDefault().RoundDate.Value).ToList(),
+        //            Cost =(double) _ProductCustomerRepository.FindBy(p=>p.ProductID==x.ProductID).First().Cost,
+        //            CustomerID = CustomerID,
+        //            CustomerName = customerName,
+        //            ProductID = x.ProductID.Value,
+        //            ProductName = _ProductsRepository.FindBy(p => p.ProductID == x.ProductID).First().ProductName,
+        //            SumOfProducts = x.Amount.Value,
+        //            TotalSum = x.Amount.Value * (double)_ProductCustomerRepository.FindBy(p => p.ProductID == x.ProductID).First().Cost
+
+        //        }
+        //            );
+        //    });
+                
+            
+
+        //    return customerReports;
+        //}
+
+
         public List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, int year, int month, int endYear, int endMonth)
         {
             if (month == endMonth && endMonth < 12)
@@ -53,7 +100,7 @@ namespace Services
             string CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == CustomerID).FirstOrDefault().CustomerName;
             List<int> MonthRoundIds = _RoundsRepository.FindBy(x => x.RoundDate >= startOftheMonth && x.RoundDate < endOfthMonth).Select(x => x.RoundsID).ToList();
             List<int> RoundCustomerIds = _RoundsCustomerRepository.FindBy(x => x.CustomerID == CustomerID && MonthRoundIds.Any(z => z == x.RoundsID)).Select(x => x.RoundsCustomersID).ToList();
-            List<RoundsCustomerProductTbl> roundcustomerProducts = _RoundsCustomerProductRepository.FindBy(x => RoundCustomerIds.Any(z => z == x.RoundsCustomersID)).Where(x=>x.Amount>0||x.DelieveredAmount>0).OrderBy(x => x.ProductID).ToList();
+            List<RoundsCustomerProductTbl> roundcustomerProducts = _RoundsCustomerProductRepository.FindBy(x => RoundCustomerIds.Any(z => z == x.RoundsCustomersID)).OrderBy(x => x.ProductID).ToList();
             List<ProductCustomerTbl> allProductcustomer = _ProductCustomerRepository.GetAll().ToList();
             List<CustmerReports> customerReports = new List<CustmerReports>();
             foreach (var roundcustomerproduct in roundcustomerProducts)
@@ -93,7 +140,7 @@ namespace Services
                 {
                     int RoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                     DateTime currentDate = _RoundsRepository.FindBy(x => x.RoundsID == RoundID).FirstOrDefault().RoundDate.Value;
-                    if (customerReports.FirstOrDefault(x => x.ProductID == roundcustomerproduct.ProductID && x.AllCustomerProductReports.Any(z => z.currentDate == currentDate)) == null)
+                    if (customerReports.FirstOrDefault(x => x.ProductID == roundcustomerproduct.ProductID && x.AllCustomerProductReports.Any(z => z.currentDate.ToShortDateString() == currentDate.ToShortDateString())) == null)
                     {
                         CustmerReports customerReport = new CustmerReports();
                         customerReport.CustomerName = CustomerName;
@@ -119,33 +166,83 @@ namespace Services
                             customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
                             customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
                         }
-                        customerReports.Add(customerReport);
+                        var cr = customerReports.First(x => x.ProductID == roundcustomerproduct.ProductID).AllCustomerProductReports.Find(p => p.currentDate.ToShortDateString() == newproductCustomerReport.currentDate.ToShortDateString());
+                        if(cr!=null)
+                        { 
+                             cr.DelieverySent =  newproductCustomerReport.DelieverySent;
+                        if (newproductCustomerReport.DelieveryTaken > 0)
+                        {
+                            cr.DelieveryTaken =  newproductCustomerReport.DelieveryTaken;
+                        }
+                        else
+                        {
+                            cr.DelieveryTaken =  newproductCustomerReport.DelieveryTaken;
+                        }
+                        }
+                        else
+                        {
+                            customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
+                            customerReports.First(x => x.ProductID == roundcustomerproduct.ProductID).AllCustomerProductReports.Add(newproductCustomerReport);
+                        }
+                        //customerReports.Add(customerReport);
                     }
                     else
                     {
-                        CustmerReports CurrentCustomerReport = customerReports.FirstOrDefault(x => x.ProductID == roundcustomerproduct.ProductID && x.AllCustomerProductReports.Any(z => z.currentDate == currentDate));
-                        ProductCustomerReport currentProductCustomerReport = CurrentCustomerReport.AllCustomerProductReports.FirstOrDefault(x => x.currentDate == currentDate);
+                        CustmerReports CurrentCustomerReport = customerReports.FirstOrDefault(x => x.ProductID == roundcustomerproduct.ProductID && x.AllCustomerProductReports.Any(z => z.currentDate.ToShortDateString() == currentDate.ToShortDateString()));
+                        ProductCustomerReport currentProductCustomerReport = CurrentCustomerReport.AllCustomerProductReports.FirstOrDefault(x => x.currentDate.ToShortDateString() == currentDate.ToShortDateString());
                         if (roundcustomerproduct.Amount < 0)
                         {
-                            currentProductCustomerReport.DelieverySent += roundcustomerproduct.Amount.Value;
-                            currentProductCustomerReport.DelieveryTaken += roundcustomerproduct.DelieveredAmount.Value;
+                            currentProductCustomerReport.DelieverySent -= roundcustomerproduct.Amount.Value;
+                            currentProductCustomerReport.DelieveryTaken -= roundcustomerproduct.DelieveredAmount.Value;
                             CurrentCustomerReport.TotalSum -= roundcustomerproduct.Amount.Value * CurrentCustomerReport.Cost;
                             CurrentCustomerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
                         }
                         else
                         {
-                            currentProductCustomerReport.DelieverySent -= roundcustomerproduct.Amount.Value;
-                            currentProductCustomerReport.DelieveryTaken -= roundcustomerproduct.DelieveredAmount.Value;
+                            currentProductCustomerReport.DelieverySent += roundcustomerproduct.Amount.Value;
+                            currentProductCustomerReport.DelieveryTaken += roundcustomerproduct.DelieveredAmount.Value;
                             CurrentCustomerReport.TotalSum += roundcustomerproduct.Amount.Value * CurrentCustomerReport.Cost;
                             CurrentCustomerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
                         }
-                        CurrentCustomerReport.AllCustomerProductReports.Add(currentProductCustomerReport);
+                        if (
+                            CurrentCustomerReport.AllCustomerProductReports.Exists(
+                                x =>
+                                    x.currentDate.ToShortDateString() ==
+                                    currentProductCustomerReport.currentDate.ToShortDateString()))
+                        {
+                            var cr = CurrentCustomerReport.AllCustomerProductReports.Find(x => x.currentDate.ToShortDateString() == currentProductCustomerReport.currentDate.ToShortDateString());
+                            if (cr != null)
+                            {
+                                cr.DelieverySent = currentProductCustomerReport.DelieverySent;
+                                if (currentProductCustomerReport.DelieveryTaken > 0)
+                                {
+                                    cr.DelieveryTaken =  currentProductCustomerReport.DelieveryTaken;
+                                }
+                                else
+                                {
+                                    cr.DelieveryTaken= currentProductCustomerReport.DelieveryTaken;
+                                } 
+                            }
+                            
+                        }
+                        else
+                        {
+                            CurrentCustomerReport.AllCustomerProductReports.Add(currentProductCustomerReport);
+                        }
+                           
                     }
 
                 }
             }
 
-            return customerReports.Where(x=>x.AllCustomerProductReports.Count>0).ToList();
+            customerReports.ForEach(x =>
+            {
+                x.SumOfProducts = x.AllCustomerProductReports.Sum(d => d.DelieverySent);
+                x.TotalSum = x.Cost * x.SumOfProducts;
+                
+            });
+
+            return customerReports.ToList();
         }
     }
 }

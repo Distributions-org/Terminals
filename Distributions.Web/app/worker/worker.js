@@ -172,11 +172,11 @@
                         }
                     ]
                 };
-                return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (rsponse) {
+                return managementDistributionsService.updateCustomerRound([roundCustomers]).then(function (rsponse) {
                     //success
                     logSuccess("הלקוח בסבב עודכן בהצלחה.");
                     vm.isSaved = true;
-                },
+                    },
                         function (rsponse) {
                             //error
                             logError(rsponse.status + " " + rsponse.statusText);

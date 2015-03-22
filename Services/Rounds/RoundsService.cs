@@ -355,14 +355,15 @@ namespace Services
                 {
                     if (item.RoundsCustomerProductID != 0)
                     {
-                        if (item.Amount == 0)
-                        {
-                            _RoundsCustomerProductRepository.Delete(item);
-                        }
-                        else
-                        {
-                            _RoundsCustomerProductRepository.Update(item);
-                        }
+                        _RoundsCustomerProductRepository.Update(item);
+                        //if (item.Amount == 0)
+                        //{
+                        //    _RoundsCustomerProductRepository.Delete(item);
+                        //}
+                        //else
+                        //{
+                        //    _RoundsCustomerProductRepository.Update(item);
+                        //}
                     }
                     else
                     {

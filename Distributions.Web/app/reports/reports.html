@@ -119,7 +119,7 @@
                                             <form name="form">
                                                 <div class="col-sm-4">
                                                     <label>בחר סבב:</label>
-                                                    <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.rounds | orderBy:'RoundDate':true"
+                                                    <select class="form-control" ng-model="vm.roundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.allRounds | orderBy:'RoundDate':true"
                                                             ng-change="vm.roundSelectedChange(vm.roundSelected)">
                                                         <option value="">סבב</option>
                                                     </select>

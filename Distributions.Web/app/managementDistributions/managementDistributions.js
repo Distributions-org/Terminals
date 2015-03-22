@@ -201,7 +201,12 @@
             },
                 function (response) {
                     //error
-                    logError(response.status + " " + response.statusText);
+                    if (response.status == 403) {
+                        logError("לא נמצאו סבבים לתאריך המבוקש");
+
+                    } else {
+                        logError(response.status + " " + response.statusText);
+                    }
                 }).then(function() {
                     vm.isBusy(false);
             });
@@ -430,7 +435,8 @@
             productsRoundCustomerGroping = _.sortBy(productsRoundCustomerGroping, function(p) {
               return   Number(p[0].$$hashKey.replace("object:", ""));
             });
-            _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
+            var productsRoundCustomernew = [];
+            _.each(productsRoundCustomerGroping, function(productsRoundCustomer) {
                 var roundCustomers = {
                     RoundId: vm.roundId,
                     RoundCustomers: [
@@ -440,60 +446,48 @@
                         }
                     ]
                 }
-                return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
-                    //success
-                    logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
-                    if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
-                        getRounds();
-                        resetRound();
-                    }
-                },
-                    function (response) {
-                        //error
-                        logError(response.status + " " + response.statusText);
-                    }
-                );
+                productsRoundCustomernew.push(roundCustomers);
             });
-            //var roundcustomerProducts = [];
-            //_.each(vm.productsRoundCustomerSelected, function(product) {
-            //    roundcustomerProducts.push({
-            //        CustomerRoundProduct: {
-            //            ProductCustomerID:product.ProductCustomerID,
-            //            CustomerID:product.CustomerID,
-            //            ProductID:product.ProductID,
-            //            dayType:product.dayType,
-            //            Cost:product.Cost,
-            //            ProductName:product.ProductName,
-            //            CustomerName: product.CustomerName
-            //        },
-            //        Amount:Number(product.Amount),
-            //        DeliveredAmount:0
-            //    });
-            //});
-
-            //var customerRound= {
-            //    customerRound: vm.customerRoundSelected,
-            //    roundcustomerProducts: roundcustomerProducts
-            //}
-            //var round= {
-            //    RoundID:0,
-            //    RoundName:vm.roundName,
-            //    RoundDate: getRoundDate(),
-            //    RoundUser:[vm.workerSelected],
-            //    custRound: [customerRound],
-            //    roundStatus:1
-            //}
-
-            //return managementDistributionsService.newRound(round).then(function (response) {
-            //    //success
-            //    logSuccess("הסבב נוצר בהצלחה.");
-            //    },
-            //    function (response) {
-            //        //error
-            //        logError(response.status + " " + response.statusText);
-            //    }
-            //);
+            return managementDistributionsService.addCustomerRound(productsRoundCustomernew).then(function (response) {
+                //success
+                if (response != "") {
+                    logSuccess("הסבב נוצר בהצלחה:" + " " + response.data);
+                    getRounds();
+                    resetRound();
+                } else {
+                    logWarning("שגיאה !!!");
+                }
+                    },
+                        function (response) {
+                            //error
+                            logError(response.status + " " + response.statusText);
+                        }
+                    );
         }
+            //_.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
+            //    var roundCustomers = {
+            //        RoundId: vm.roundId,
+            //        RoundCustomers: [
+            //            {
+            //                customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
+            //                roundcustomerProducts: createRoundcustomerProducts(productsRoundCustomer)
+            //            }
+            //        ]
+            //    }
+            //    return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
+            //        //success
+            //        logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
+            //        if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
+            //            getRounds();
+            //            resetRound();
+            //        }
+            //    },
+            //        function (response) {
+            //            //error
+            //            logError(response.status + " " + response.statusText);
+            //        }
+            //    );
+            //});
 
         function removeProductToCustomer(product) {
             return managementDistributionsService.removeProductToCustomer(product.ProductCustomerID).then(function (response) {
@@ -517,6 +511,7 @@
                 productsRoundCustomerGroping = _.sortBy(productsRoundCustomerGroping, function (p) {
                     return Number(p[0].$$hashKey.replace("object:", ""));
                 });
+                var productsRoundCustomernew = [];
                 _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                     var roundCustomers = {
                         RoundId: vm.roundId,
@@ -527,20 +522,19 @@
                             }
                         ]
                     }
-                    return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (innerRsponse) {
-                        //success
-                        logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב עודכן בהצלחה.");
-                        if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
-                            getRounds();
-                            resetRound();
-                        }
-                    },
-                        function (innerRsponse) {
-                            //error
-                            logError(innerRsponse.status + " " + innerRsponse.statusText);
-                        }
-                    );
+                    productsRoundCustomernew.push(roundCustomers);
                 });
+                return managementDistributionsService.updateCustomerRound(productsRoundCustomernew).then(function (rsponse) {
+                    //success
+                    logSuccess("הלקוח בסבב עודכן בהצלחה. " + rsponse.data);
+                    getRounds();
+                    resetRound();
+                },
+                       function (innerRsponse) {
+                           //error
+                           logError(innerRsponse.status + " " + innerRsponse.statusText);
+                       }
+                   );
             },
                 function (response) {
                     //error
