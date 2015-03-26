@@ -88,12 +88,12 @@
                 </div>
                 <div class="col-sm-4 pull-left text-left">
                         ע.מ. מס' &nbsp;&nbsp;&nbsp;<br />
-                        028 042 232
+                      028042232
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 print-row">
-                    <div class="text-right pull-right"> תעודת משלוח מספר: {{vm.roundSelected.RoundID}}</div>
+                    <div class="text-right pull-right"> תעודת משלוח מספר: {{vm.roundSelected.RoundID + vm.customerRoundProducts.customerRound.CustomerID}}</div>
                     <div class="text-left pull-left">תאריך: {{vm.date | date: 'dd-MM-yyyy'}}</div>
                 </div>
                

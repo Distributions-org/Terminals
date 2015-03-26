@@ -196,6 +196,9 @@ table.date-filter thead > tr:first-child {
 .report input[type=number] {
   width: 35%;
 }
+.report #reportDiv table tr {
+  white-space: nowrap;
+}
 .table-report {
   border-top: 1px solid #ccc !important;
   margin-top: 15px !important;

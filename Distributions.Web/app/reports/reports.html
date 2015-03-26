@@ -49,8 +49,8 @@
                                 <table class="table table-condensed table-bordered  table-striped table-report">
                                     <thead>
                                         <tr>
-                                            <th>תאריך</th>
-                                            <th data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.ProductName}}</th>
+                                            <th style="background-color: #f3f55e !important;">תאריך</th>
+                                            <th style="background-color: #f3f55e !important;" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.ProductName}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -58,10 +58,10 @@
                                             <td>{{date}}</td>
                                             <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
                                                 <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
-                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-right">
+                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="">
                                                         ק:  <strong>{{allCustomerProductReports.DelieverySent}}</strong>
                                                     </span>
-                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="pull-left red">
+                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="red">
                                                         ח:  <strong>{{allCustomerProductReports.DelieveryTaken}}</strong>
                                                     </span>
                                                 </span>
@@ -70,28 +70,31 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td>סה"כ</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.SumOfProducts}}</td>
+                                            <td>סה"כ ק - ח</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">
+                                                <span>ק: <strong>{{report.SumOfProductsSent}}</strong></span>
+                                                <span class="red">ח: <strong class="red">{{report.SumOfProductsTakens}}</strong></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>סיכום</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.SumOfProductsSent - report.SumOfProductsTakens }}</td>
                                         </tr>
                                         <tr>
                                             <td>מחיר</td>
                                             <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency}}</td>
                                         </tr>
-                                       <!--<tr>
-                                                <td>סה"כ לפני</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>סה"כ אחרי</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{(report.TotalSum+(report.TotalSum*(vm.tax/100))) | currency }}</td>
-                                            </tr>-->
+                                        <tr>
+                                            <td>סה"כ</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{(report.TotalSum+(report.TotalSum*(vm.tax/100))) | currency }}</td>
+                                        </tr>
                                     </tfoot>
                                 </table>
                                 <div class="total">
                                     <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency }}</strong>
                                 </div>
-                                <div class="total">
-                                    <strong> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency }}</strong>
+                                <div class="total byellow">
+                                    <strong class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency }}</strong>
                                 </div>
                             </div>
                         </div>

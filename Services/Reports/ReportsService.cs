@@ -132,9 +132,12 @@ namespace Services
                         customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
                         customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
                     }
-
-                    customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
-                    customerReports.Add(customerReport);
+                    if (newproductCustomerReport.DelieverySent != 0 || newproductCustomerReport.DelieveryTaken != 0)
+                    {
+                        customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
+                        customerReports.Add(customerReport);
+                    }
+                   
                 }
                 else
                 {
@@ -181,8 +184,13 @@ namespace Services
                         }
                         else
                         {
-                            customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
-                            customerReports.First(x => x.ProductID == roundcustomerproduct.ProductID).AllCustomerProductReports.Add(newproductCustomerReport);
+                            if (newproductCustomerReport.DelieverySent != 0 ||
+                                newproductCustomerReport.DelieveryTaken != 0)
+                            {
+                                customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
+                                customerReports.First(x => x.ProductID == roundcustomerproduct.ProductID)
+                                    .AllCustomerProductReports.Add(newproductCustomerReport);
+                            }
                         }
                         //customerReports.Add(customerReport);
                     }
@@ -227,7 +235,11 @@ namespace Services
                         }
                         else
                         {
-                            CurrentCustomerReport.AllCustomerProductReports.Add(currentProductCustomerReport);
+                            if (currentProductCustomerReport.DelieverySent != 0 ||
+                                currentProductCustomerReport.DelieveryTaken != 0)
+                            {
+                                CurrentCustomerReport.AllCustomerProductReports.Add(currentProductCustomerReport);
+                            }
                         }
                            
                     }
@@ -237,9 +249,11 @@ namespace Services
 
             customerReports.ForEach(x =>
             {
-                x.SumOfProducts = x.AllCustomerProductReports.Sum(d => d.DelieverySent);
-                x.TotalSum = x.Cost * x.SumOfProducts;
-                
+                x.SumOfProducts = x.AllCustomerProductReports.Sum(d => d.DelieverySent+d.DelieveryTaken);
+                x.SumOfProductsSent = x.AllCustomerProductReports.Sum(d => d.DelieverySent);
+                x.SumOfProductsTakens = x.AllCustomerProductReports.Sum(d => d.DelieveryTaken);
+                x.TotalSum = x.Cost * (x.SumOfProductsSent-x.SumOfProductsTakens);
+
             });
 
             return customerReports.ToList();

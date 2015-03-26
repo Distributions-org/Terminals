@@ -1,9 +1,27 @@
 ﻿body {
     padding: 0;
     margin: 0;
-    font-size: 10px;
+    font-size: 8px;
 }
 table {
     display: block !important;
-    font-size: 10px !important;
+    font-size: 8px !important;
+}
+table tr {
+    white-space: nowrap;
+}
+.table-report {
+margin: 0 !important;    
+}
+.red {
+      color: #fa3031 !important;
+}
+.red strong {
+    color: #fa3031 !important;
+}
+.byellow {
+     background-color: #f3f55e !important;
+}
+.yellow {
+    color: #f3f55e !important;
 }

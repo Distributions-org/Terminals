@@ -207,6 +207,7 @@
         }
 
         function getReport() {
+            vm.isBusy(true);
             var sdate = new Date(vm.stratDate);
             var edate = new Date(vm.endDate);
             //var productsIDs = _.pluck(vm.productsCustomer, 'ProductCustomerID');
@@ -242,9 +243,11 @@
                     //vm.reportGroup = _.groupBy(vm.report, 'ProductName');
                     logSuccess('הדוח נטען בהצלחה');
                     vm.tblShow = true;
-                }, function (response) {
+                vm.isBusy(false);
+            }, function (response) {
                     //error
-                    logError(response.status + " " + response.statusText);
+                logError(response.status + " " + response.statusText);
+                vm.isBusy(false);
                 });
         }
 
