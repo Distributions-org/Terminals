@@ -186,6 +186,7 @@
         }
 
         function filterRoundDate() {
+            vm.isBusy(true);
             vm.roundFilter = {
                 Today: false,
                 StartDate: $filter('date')(vm.stratDate, 'MM-dd-yyyy'),
@@ -198,11 +199,13 @@
             return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
                 //success
                 vm.rounds = response.data;
-            },
+                    vm.isBusy(false);
+                },
                 function (response) {
                     //error
                     if (response.status == 403) {
                         logError("לא נמצאו סבבים לתאריך המבוקש");
+                        vm.isBusy(false);
 
                     } else {
                         logError(response.status + " " + response.statusText);
@@ -605,7 +608,7 @@
                     });
                 });
             });
-            vm.productsRoundCustomerSelected = roundcustomerProducts.reverse();
+            vm.productsRoundCustomerSelected = roundcustomerProducts;
             vm.customersRoundShow = true;
             vm.roundBtnUpdateShow = true;
             vm.round = round;
@@ -633,7 +636,7 @@
                     });
                 });
             });
-            vm.productsRoundCustomerSelected = roundcustomerProducts.reverse();
+            vm.productsRoundCustomerSelected = roundcustomerProducts;
             vm.customersRoundShow = false;
             vm.roundBtnUpdateShow = false;
             vm.round = round;

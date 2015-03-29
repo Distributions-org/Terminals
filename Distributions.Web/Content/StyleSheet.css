@@ -289,3 +289,6 @@ select.form-control {
 header .btn-info {
   margin-top: 10px;
 }
+.total-print {
+  display: none;
+}

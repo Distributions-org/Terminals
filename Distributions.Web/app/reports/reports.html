@@ -31,7 +31,7 @@
                             </div>
                             <div ng-show="vm.showDate" class="col-sm-2">
                                 <label>מע"מ %</label>
-                                <input ng-model="vm.tax" type="number" value="18"/>
+                                <input ng-model="vm.tax" type="number" value="18" />
                             </div>
                             <div ng-show="vm.showDate" class="col-sm-1">
                                 <button type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
@@ -43,9 +43,21 @@
                         <div class="row">
                             <div id="reportDiv" data-ng-show="vm.tblShow" class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-6"><label>{{vm.customerSelected.CustomerName}}</label></div>
-                                    <div class="col-sm-6"><label>אלון שיווק פיתות ודברי מאפה</label></div>
-                                </div>
+                                    <div class="col-xs-4">
+                                        <label style="background-color: #f3f55e !important;" class="text-center">{{vm.customerSelected.CustomerName}} ח.פ: {{vm.customerSelected.CustomerHP}}</label>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="total-print">
+                                            <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
+                                        </div>
+                                        <div class="total-print byellow">
+                                            <strong class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label class="text-center">אלון שיווק פיתות ודברי מאפה</label>
+                                    </div>
+                                    </div>
                                 <table class="table table-condensed table-bordered  table-striped table-report">
                                     <thead>
                                         <tr>
@@ -59,10 +71,10 @@
                                             <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
                                                 <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
                                                     <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="">
-                                                        ק:  <strong>{{allCustomerProductReports.DelieverySent}}</strong>
+                                                        <strong>{{allCustomerProductReports.DelieverySent}}</strong>
                                                     </span>
                                                     <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="red">
-                                                        ח:  <strong>{{allCustomerProductReports.DelieveryTaken}}</strong>
+                                                        <strong class="red">   {{allCustomerProductReports.DelieveryTaken}}</strong>
                                                     </span>
                                                 </span>
                                             </td>
@@ -72,8 +84,8 @@
                                         <tr>
                                             <td>סה"כ ק - ח</td>
                                             <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">
-                                                <span>ק: <strong>{{report.SumOfProductsSent}}</strong></span>
-                                                <span class="red">ח: <strong class="red">{{report.SumOfProductsTakens}}</strong></span>
+                                                <span><strong>{{report.SumOfProductsSent}}</strong></span>
+                                                <span class="red"><strong class="red">   {{report.SumOfProductsTakens}}</strong></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -82,19 +94,19 @@
                                         </tr>
                                         <tr>
                                             <td>מחיר</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency}}</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency:""}}</td>
                                         </tr>
                                         <tr>
                                             <td>סה"כ</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{(report.TotalSum+(report.TotalSum*(vm.tax/100))) | currency }}</td>
+                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency:undefined:0 }}</td>
                                         </tr>
                                     </tfoot>
                                 </table>
                                 <div class="total">
-                                    <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency }}</strong>
+                                    <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
                                 </div>
                                 <div class="total byellow">
-                                    <strong class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency }}</strong>
+                                    <strong class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
                                 </div>
                             </div>
                         </div>

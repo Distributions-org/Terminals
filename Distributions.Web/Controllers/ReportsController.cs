@@ -24,9 +24,9 @@ namespace Distributions.Web.Controllers
 
         [Route("ManageReport")]
          [HttpPost]
-         public HttpResponseMessage ManageReport(ReportModel model)
+         public HttpResponseMessage ManageReport(ReportsModel model)
          {
-             var result = _reportsService.GetCustomerProductsReports(model.ProductIDs, model.CustomerId, model.Year, model.Month, model.EndYear, model.EndMonth);
+             var result = _reportsService.GetCustomerProductsReports(model.ProductIDs, model.CustomerId,model.StartDate,model.EndDate);
              return Request.CreateResponse(result.Count>0 ? HttpStatusCode.OK : HttpStatusCode.ExpectationFailed, result);
          }
 

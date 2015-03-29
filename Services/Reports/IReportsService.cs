@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Core.Domain.Users;
 using Core.Enums;
@@ -12,6 +13,6 @@ namespace Services
     public interface IReportsService
     {
         List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, int year, int month, int endYear, int endMonth);
-        //List<CustmerReports> GetCustomerProductsReport(List<int> ProductIDs, int CustomerID, int year, int month, int endYear, int endMonth);
+        List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, DateTime startDate,DateTime endDate);
     }
 }

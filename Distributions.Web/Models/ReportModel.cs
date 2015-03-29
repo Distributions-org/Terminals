@@ -20,6 +20,19 @@ namespace Distributions.Web.Models
         }
     }
 
+    public class ReportsModel
+    {
+        public List<int> ProductIDs { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        
+        public ReportsModel()
+        {
+            ProductIDs = new List<int>();
+        }
+    }
+
     public class ProductAmountPerRound
     {
         public int ProductId { get; set; }
