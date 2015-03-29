@@ -74,7 +74,7 @@
                                                         <strong>{{allCustomerProductReports.DelieverySent}}</strong>
                                                     </span>
                                                     <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="red">
-                                                        <strong class="red">   {{allCustomerProductReports.DelieveryTaken}}</strong>
+                                                        <strong class="red">   {{allCustomerProductReports.DelieveryTaken>0?allCustomerProductReports.DelieveryTaken:"" }}</strong>
                                                     </span>
                                                 </span>
                                             </td>
@@ -85,7 +85,7 @@
                                             <td>סה"כ ק - ח</td>
                                             <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">
                                                 <span><strong>{{report.SumOfProductsSent}}</strong></span>
-                                                <span class="red"><strong class="red">   {{report.SumOfProductsTakens}}</strong></span>
+                                                <span class="red"><strong class="red">   {{report.SumOfProductsTakens>0?report.SumOfProductsTakens:""}}</strong></span>
                                             </td>
                                         </tr>
                                         <tr>
