@@ -176,6 +176,7 @@
                     //success
                     logSuccess("הלקוח בסבב עודכן בהצלחה.");
                     vm.isSaved = true;
+                        angular.element("select[ng-model='vm.customer']").find(":selected").addClass('applay');
                     },
                         function (rsponse) {
                             //error
