@@ -272,6 +272,8 @@ namespace Services
                 currentCustomer.CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID).FirstOrDefault().CustomerName;
                 ProductCustomerTbl PCT = new ProductCustomerTbl();
                 PCT = _ProductCustomerRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID && x.ProductID == item.ProductID).FirstOrDefault();
+                if(PCT==null)
+                    continue;
                 currentCustomer.ProductCustomerID = PCT.ProductCustomerID;
                 currentCustomer.Cost = PCT.Cost.Value;
                 
