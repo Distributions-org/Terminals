@@ -429,6 +429,7 @@
 
 
         function saveRound() {
+            vm.isBusy(true);
             vm.activeProductsNoAmount = false;
             activeChecked();
             var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected, function(product) {
@@ -455,15 +456,20 @@
                 //success
                 if (response != "") {
                     logSuccess("הסבב נוצר בהצלחה:" + " " + response.data);
-                    getRounds();
-                    resetRound();
+                    getRounds().then(function() {
+                        vm.isBusy(false);
+                        resetRound();
+                    });
+                    
                 } else {
                     logWarning("שגיאה !!!");
+                    vm.isBusy(false);
                 }
                     },
                         function (response) {
                             //error
                             logError(response.status + " " + response.statusText);
+                            vm.isBusy(false);
                         }
                     );
         }
@@ -510,6 +516,7 @@
         function updateProductsRound(roundId) {
             updateRoundById(roundId).then(function (response) {
                 //success
+                vm.isBusy(true);
                 var productsRoundCustomerGroping = _.toArray(_.groupBy(vm.productsRoundCustomerSelected, 'CustomerID'));
                 productsRoundCustomerGroping = _.sortBy(productsRoundCustomerGroping, function (p) {
                     return Number(p[0].$$hashKey.replace("object:", ""));
@@ -530,12 +537,16 @@
                 return managementDistributionsService.updateCustomerRound(productsRoundCustomernew).then(function (rsponse) {
                     //success
                     logSuccess("הלקוח בסבב עודכן בהצלחה. " + rsponse.data);
-                    getRounds();
-                    resetRound();
+                    getRounds().then(function() {
+                        resetRound();
+                        vm.isBusy(false);
+                    });
+                    
                 },
                        function (innerRsponse) {
                            //error
                            logError(innerRsponse.status + " " + innerRsponse.statusText);
+                           vm.isBusy(false);
                        }
                    );
             },
@@ -546,6 +557,7 @@
         }
 
         function updateRoundById(roundId) {
+            vm.isBusy(true);
             var round = {
                 RoundID: roundId,
                 RoundName: vm.roundName,
@@ -554,7 +566,9 @@
             return managementDistributionsService.updateRound(round).then(function (response) {
                 //success
                 logSuccess("הסבב עודכן בהצלחה!");
+                vm.isBusy(false);
                 return response;
+
 
             }, function (response) {
                 //error
