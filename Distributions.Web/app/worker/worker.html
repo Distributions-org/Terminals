@@ -21,10 +21,10 @@
                                     <option value="">לקוח</option>
                                 </select>
                             </div>
-                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-3">
+                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-2">
                                 <button class="btn btn-success" data-ng-click="vm.saveProductsCustomer()">שמור <i class="glyphicon glyphicon-save"></i></button>
                             </div>
-                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-3">
+                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-4">
                                 <button data-ng-disabled="!vm.isSaved" class="btn btn-info" data-ng-click="vm.printBill()">הדפסה <i class="glyphicon glyphicon-print"></i></button>
                                 <button data-ng-disabled="!vm.isSaved" class="btn btn-info" data-ng-click="vm.closeRound()">סגור סבב <i class="glyphicon glyphicon-share"></i></button>
                             </div>

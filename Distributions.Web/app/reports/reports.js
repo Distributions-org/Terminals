@@ -33,7 +33,7 @@
         vm.tblShow = false;
         vm.printReport = printReport;
         vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
-        vm.format = vm.formats[3];
+        vm.format = vm.formats[4];
         vm.rounds = {};
         vm.allRounds = {};
         vm.roundSelected = {};
@@ -101,8 +101,9 @@
 
         function today() {
             var date = new Date();
+            return date.toISOString().slice(0, 10);//.toLocaleDateString();
             //vm.dt = $filter('date')(date, 'MM.dd.yyyy'); // date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-            return $filter('date')(date, 'MM.dd.yyyy');
+            //return $filter('date')(date, 'MM.dd.yyyy');
         };
 
 
@@ -208,8 +209,8 @@
 
         function getReport() {
             vm.isBusy(true);
-            var sdate = new Date(vm.stratDate);
-            var edate = new Date(vm.endDate);
+            var sdate = new Date(vm.stratDate).toISOString().slice(0, 10);//.toLocaleDateString();
+            var edate = new Date(vm.endDate).toISOString().slice(0, 10);//.toLocaleDateString();
           
             //var model = {
             //    ProductIDs: _.pluck(vm.productsCustomer, 'ProductCustomerID'),
@@ -239,7 +240,7 @@
                     } else {
                         lastDayOfMonth = new Date(e.getFullYear(), e.getMonth(), 0);
                     }
-                    vm.dateRange = getRangeDtes(edate, sdate);
+                    vm.dateRange = getRangeDtes(e, s);
                     vm.report = response.data;
                     //vm.reportGroup = _.groupBy(vm.report, 'ProductName');
                     logSuccess('הדוח נטען בהצלחה');
@@ -262,7 +263,7 @@
                 sdate = new Date(sdate.setDate(--day));
                 between.push(fillterDate(sdate));
             }
-            console.log(between);
+            //console.log(between);
             return between.reverse();
         }
 
@@ -366,6 +367,13 @@
 
         function printReport(divName) {
             print.printReport(divName);
+        }
+        function createDateAsUTC(date) {
+            return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        }
+
+        function convertDateToUTC(date) {
+            return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
         }
     }
 })();

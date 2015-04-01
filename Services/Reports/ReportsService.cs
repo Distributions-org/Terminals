@@ -47,10 +47,10 @@ namespace Services
         {
             
             DateTime startOftheMonth = startDate;
-            DateTime endOfthMonth = endDate;
+            DateTime endOfthMonth = endDate.AddDays(1);
             List<Data.Product> AllProducts = _ProductsRepository.GetAll().ToList();
             string CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == CustomerID).FirstOrDefault().CustomerName;
-            List<int> MonthRoundIds = _RoundsRepository.FindBy(x => x.RoundDate >= startOftheMonth && x.RoundDate < endOfthMonth).Select(x => x.RoundsID).ToList();
+            List<int> MonthRoundIds = _RoundsRepository.GetAll().Where(x => x.RoundDate >= startOftheMonth && x.RoundDate <= endOfthMonth).Select(x => x.RoundsID).ToList();
             List<int> RoundCustomerIds = _RoundsCustomerRepository.FindBy(x => x.CustomerID == CustomerID && MonthRoundIds.Any(z => z == x.RoundsID)).Select(x => x.RoundsCustomersID).ToList();
             List<RoundsCustomerProductTbl> roundcustomerProducts = _RoundsCustomerProductRepository.FindBy(x => RoundCustomerIds.Any(z => z == x.RoundsCustomersID)).OrderBy(x => x.ProductID).ToList();
             List<ProductCustomerTbl> allProductcustomer = _ProductCustomerRepository.GetAll().ToList();
