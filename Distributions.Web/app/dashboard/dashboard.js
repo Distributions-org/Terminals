@@ -6,7 +6,9 @@
     function dashboard($filter, $modal, common, datacontext, managementDistributionsService) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
-
+        var logSuccess = common.logger.getLogFn(controllerId, 'success');
+        var logError = common.logger.getLogFn(controllerId, 'error');
+        var logWarning = common.logger.getLogFn(controllerId, 'warning');
         var vm = this;
         vm.isBusy = common.serviceCallPreloader;
         vm.title = 'Dashboard';
@@ -65,7 +67,13 @@
              },
                function (response) {
                    //error
-                   logError(response.status + " " + response.statusText);
+                   if (response.status == 403) {
+                       logError("לא נמצאו סבבים");
+                       vm.isBusy(false);
+                   } else {
+                       logError(response.status + " " + response.statusText);
+                   }
+                   vm.isBusy(false);
                });
          }
            

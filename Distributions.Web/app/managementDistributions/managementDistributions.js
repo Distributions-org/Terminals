@@ -186,6 +186,7 @@
         }
 
         function filterRoundDate() {
+            vm.isBusy(true);
             vm.roundFilter = {
                 Today: false,
                 StartDate: $filter('date')(vm.stratDate, 'MM-dd-yyyy'),
@@ -198,10 +199,17 @@
             return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
                 //success
                 vm.rounds = response.data;
-            },
+                    vm.isBusy(false);
+                },
                 function (response) {
                     //error
-                    logError(response.status + " " + response.statusText);
+                    if (response.status == 403) {
+                        logError("לא נמצאו סבבים לתאריך המבוקש");
+                        vm.isBusy(false);
+
+                    } else {
+                        logError(response.status + " " + response.statusText);
+                    }
                 }).then(function() {
                     vm.isBusy(false);
             });
@@ -421,6 +429,7 @@
 
 
         function saveRound() {
+            vm.isBusy(true);
             vm.activeProductsNoAmount = false;
             activeChecked();
             var productsRoundCustomerGroping = _.toArray(_.groupBy(_.filter(vm.productsRoundCustomerSelected, function(product) {
@@ -430,7 +439,8 @@
             productsRoundCustomerGroping = _.sortBy(productsRoundCustomerGroping, function(p) {
               return   Number(p[0].$$hashKey.replace("object:", ""));
             });
-            _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
+            var productsRoundCustomernew = [];
+            _.each(productsRoundCustomerGroping, function(productsRoundCustomer) {
                 var roundCustomers = {
                     RoundId: vm.roundId,
                     RoundCustomers: [
@@ -440,60 +450,53 @@
                         }
                     ]
                 }
-                return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
-                    //success
-                    logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
-                    if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
-                        getRounds();
-                        resetRound();
-                    }
-                },
-                    function (response) {
-                        //error
-                        logError(response.status + " " + response.statusText);
-                    }
-                );
+                productsRoundCustomernew.push(roundCustomers);
             });
-            //var roundcustomerProducts = [];
-            //_.each(vm.productsRoundCustomerSelected, function(product) {
-            //    roundcustomerProducts.push({
-            //        CustomerRoundProduct: {
-            //            ProductCustomerID:product.ProductCustomerID,
-            //            CustomerID:product.CustomerID,
-            //            ProductID:product.ProductID,
-            //            dayType:product.dayType,
-            //            Cost:product.Cost,
-            //            ProductName:product.ProductName,
-            //            CustomerName: product.CustomerName
-            //        },
-            //        Amount:Number(product.Amount),
-            //        DeliveredAmount:0
-            //    });
-            //});
-
-            //var customerRound= {
-            //    customerRound: vm.customerRoundSelected,
-            //    roundcustomerProducts: roundcustomerProducts
-            //}
-            //var round= {
-            //    RoundID:0,
-            //    RoundName:vm.roundName,
-            //    RoundDate: getRoundDate(),
-            //    RoundUser:[vm.workerSelected],
-            //    custRound: [customerRound],
-            //    roundStatus:1
-            //}
-
-            //return managementDistributionsService.newRound(round).then(function (response) {
-            //    //success
-            //    logSuccess("הסבב נוצר בהצלחה.");
-            //    },
-            //    function (response) {
-            //        //error
-            //        logError(response.status + " " + response.statusText);
-            //    }
-            //);
+            return managementDistributionsService.addCustomerRound(productsRoundCustomernew).then(function (response) {
+                //success
+                if (response != "") {
+                    logSuccess("הסבב נוצר בהצלחה:" + " " + response.data);
+                    getRounds().then(function() {
+                        vm.isBusy(false);
+                        resetRound();
+                    });
+                    
+                } else {
+                    logWarning("שגיאה !!!");
+                    vm.isBusy(false);
+                }
+                    },
+                        function (response) {
+                            //error
+                            logError(response.status + " " + response.statusText);
+                            vm.isBusy(false);
+                        }
+                    );
         }
+            //_.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
+            //    var roundCustomers = {
+            //        RoundId: vm.roundId,
+            //        RoundCustomers: [
+            //            {
+            //                customerRound: _.findWhere(vm.customers, { CustomerID: productsRoundCustomer[0].CustomerID }),
+            //                roundcustomerProducts: createRoundcustomerProducts(productsRoundCustomer)
+            //            }
+            //        ]
+            //    }
+            //    return managementDistributionsService.addCustomerRound(roundCustomers).then(function (response) {
+            //        //success
+            //        logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב נוצר בהצלחה.");
+            //        if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
+            //            getRounds();
+            //            resetRound();
+            //        }
+            //    },
+            //        function (response) {
+            //            //error
+            //            logError(response.status + " " + response.statusText);
+            //        }
+            //    );
+            //});
 
         function removeProductToCustomer(product) {
             return managementDistributionsService.removeProductToCustomer(product.ProductCustomerID).then(function (response) {
@@ -513,10 +516,12 @@
         function updateProductsRound(roundId) {
             updateRoundById(roundId).then(function (response) {
                 //success
+                vm.isBusy(true);
                 var productsRoundCustomerGroping = _.toArray(_.groupBy(vm.productsRoundCustomerSelected, 'CustomerID'));
                 productsRoundCustomerGroping = _.sortBy(productsRoundCustomerGroping, function (p) {
                     return Number(p[0].$$hashKey.replace("object:", ""));
                 });
+                var productsRoundCustomernew = [];
                 _.each(productsRoundCustomerGroping, function (productsRoundCustomer) {
                     var roundCustomers = {
                         RoundId: vm.roundId,
@@ -527,20 +532,23 @@
                             }
                         ]
                     }
-                    return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (innerRsponse) {
-                        //success
-                        logSuccess(productsRoundCustomer[0].CustomerName + ": הסבב עודכן בהצלחה.");
-                        if (productsRoundCustomerGroping[productsRoundCustomerGroping.length - 1] == productsRoundCustomer) {
-                            getRounds();
-                            resetRound();
-                        }
-                    },
-                        function (innerRsponse) {
-                            //error
-                            logError(innerRsponse.status + " " + innerRsponse.statusText);
-                        }
-                    );
+                    productsRoundCustomernew.push(roundCustomers);
                 });
+                return managementDistributionsService.updateCustomerRound(productsRoundCustomernew).then(function (rsponse) {
+                    //success
+                    logSuccess("הלקוח בסבב עודכן בהצלחה. " + rsponse.data);
+                    getRounds().then(function() {
+                        resetRound();
+                        vm.isBusy(false);
+                    });
+                    
+                },
+                       function (innerRsponse) {
+                           //error
+                           logError(innerRsponse.status + " " + innerRsponse.statusText);
+                           vm.isBusy(false);
+                       }
+                   );
             },
                 function (response) {
                     //error
@@ -549,6 +557,7 @@
         }
 
         function updateRoundById(roundId) {
+            vm.isBusy(true);
             var round = {
                 RoundID: roundId,
                 RoundName: vm.roundName,
@@ -557,7 +566,9 @@
             return managementDistributionsService.updateRound(round).then(function (response) {
                 //success
                 logSuccess("הסבב עודכן בהצלחה!");
+                vm.isBusy(false);
                 return response;
+
 
             }, function (response) {
                 //error
@@ -611,7 +622,7 @@
                     });
                 });
             });
-            vm.productsRoundCustomerSelected = roundcustomerProducts.reverse();
+            vm.productsRoundCustomerSelected = roundcustomerProducts;
             vm.customersRoundShow = true;
             vm.roundBtnUpdateShow = true;
             vm.round = round;
@@ -639,7 +650,7 @@
                     });
                 });
             });
-            vm.productsRoundCustomerSelected = roundcustomerProducts.reverse();
+            vm.productsRoundCustomerSelected = roundcustomerProducts;
             vm.customersRoundShow = false;
             vm.roundBtnUpdateShow = false;
             vm.round = round;

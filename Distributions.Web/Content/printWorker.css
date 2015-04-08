@@ -6,3 +6,13 @@
 table {
     font-size: 10px !important;
 }
+table tr {
+    white-space: nowrap;
+}
+
+.byellow {
+     background-color: #f3f55e !important;
+}
+.yellow {
+    color: #f3f55e !important;
+}

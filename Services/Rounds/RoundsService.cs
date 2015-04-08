@@ -170,6 +170,8 @@ namespace Services
                 currentCustomer.CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID).FirstOrDefault().CustomerName;
                 ProductCustomerTbl PCT = new ProductCustomerTbl();
                 PCT = _ProductCustomerRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID && x.ProductID == item.ProductID).FirstOrDefault();
+                if (PCT==null)
+                    continue;
                 currentCustomer.ProductCustomerID = PCT.ProductCustomerID;
                 currentCustomer.Cost = PCT.Cost.Value;
                
@@ -270,6 +272,8 @@ namespace Services
                 currentCustomer.CustomerName = _CustomersRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID).FirstOrDefault().CustomerName;
                 ProductCustomerTbl PCT = new ProductCustomerTbl();
                 PCT = _ProductCustomerRepository.FindBy(x => x.CustomerID == currentCustomer.CustomerID && x.ProductID == item.ProductID).FirstOrDefault();
+                if(PCT==null)
+                    continue;
                 currentCustomer.ProductCustomerID = PCT.ProductCustomerID;
                 currentCustomer.Cost = PCT.Cost.Value;
                 
@@ -355,14 +359,15 @@ namespace Services
                 {
                     if (item.RoundsCustomerProductID != 0)
                     {
-                        if (item.Amount == 0)
-                        {
-                            _RoundsCustomerProductRepository.Delete(item);
-                        }
-                        else
-                        {
-                            _RoundsCustomerProductRepository.Update(item);
-                        }
+                        _RoundsCustomerProductRepository.Update(item);
+                        //if (item.Amount == 0)
+                        //{
+                        //    _RoundsCustomerProductRepository.Delete(item);
+                        //}
+                        //else
+                        //{
+                        //    _RoundsCustomerProductRepository.Update(item);
+                        //}
                     }
                     else
                     {

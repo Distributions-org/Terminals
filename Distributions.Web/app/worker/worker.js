@@ -2,11 +2,11 @@
     'use strict';
 
     var controllerId = 'worker';
-    angular.module('app').controller(controllerId, ['$location','$q', 'common', 'datacontext', 'managementDistributionsService','print', worker]);
+    angular.module('app').controller(controllerId, ['$location','$q','$window', 'common', 'datacontext', 'managementDistributionsService','print', worker]);
 
    
 
-    function worker($location,$q, common, datacontext, managementDistributionsService, print) {
+    function worker($location, $q, $window, common, datacontext, managementDistributionsService, print) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
@@ -40,168 +40,181 @@
             common.activateController([promises], controllerId)
                 .then(function () { log('מסך חלוקה פעיל'); }).then(function () { vm.isBusy(true); });
         }
-        
-        function isAdminRole() {
-            return datacontext.getUserNameAndRole().then(function(response) {
-                return { workerEmail: response.data.userEmail, isAdmin: response.data.isAdmin };
-            }).then(function(result) {
-                vm.isAdmin = result.isAdmin;
-                vm.workerEmail = result.workerEmail;
+
+        function hideSideNavIpad() {
+            var userAgent = $window.navigator.userAgent;
+            if( userAgent.match(/Android/i) ||userAgent.match(/webOS/i)|| userAgent.match(/iPhone/i)|| userAgent.match(/iPad/i)
+                    || userAgent.match(/iPod/i)|| userAgent.match(/BlackBerry/i)|| userAgent.match(/Windows Phone/i)) {
+                angular.element(".mainbar").css("margin-right", "0");
+                angular.element(".side-bar").css("display", "none");
+            }
+        }
+    
+
+    function isAdminRole() {
+        return datacontext.getUserNameAndRole().then(function(response) {
+            return { workerEmail: response.data.userEmail, isAdmin: response.data.isAdmin };
+        }).then(function(result) {
+            vm.isAdmin = result.isAdmin;
+            vm.workerEmail = result.workerEmail;
+        }).then(function() {
+            filterRoundDate();
+        }).then(function() {
+            getRounds().then(function () {
+                if (vm.rounds.length > 0) {
+                    vm.roundSelected = vm.rounds[0];
+                    roundChange(vm.rounds[0]);
+                }
             }).then(function() {
-                filterRoundDate();
-            }).then(function() {
-                getRounds().then(function () {
-                    if (vm.rounds.length > 0) {
-                        vm.roundSelected = vm.rounds[0];
-                        roundChange(vm.rounds[0]);
-                    }
-                }).then(function() {
-                    if (vm.customersInRound.length > 0) {
-                        var custTmp = vm.customersInRound;
-                        vm.customer = custTmp[0];
-                        customerChange(custTmp[0]);
-                    }
-                }).finally(function() {
-                    vm.isBusy(false);
-                });
-            });
-        }
-
-        function filterRoundDate() {
-            vm.roundFilter = {
-                Today: true,
-                StartDate: null,
-                EndDate: null,
-                Email: vm.workerEmail
-            };
-        }
-
-        function getRounds() {
-            return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
-                //success
-                    vm.rounds = _.filter(response.data, function(round) {
-                        return round.RoundUser[0].Email === vm.workerEmail && round.roundStatus == 1;
-                    });       
-                    vm.closeRounds = _.filter(response.data, function (round) {
-                        return round.RoundUser[0].Email === vm.workerEmail && round.roundStatus == 0;
-                    });
-            },
-                function (response) {
-                    //error
-                    logError(response.status + " " + response.statusText);
-                });
-        }
-
-        function roundChange(round) {
-            vm.customersInRound = {};
-            vm.customerRoundProducts = {};
-            vm.isSaved = false;
-            if (round != null) {
-                vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function (r) { return r.roundcustomerProducts.length == 0; }));
                 if (vm.customersInRound.length > 0) {
-                    vm.customer = vm.customersInRound[0];
-                    customerChange(vm.customersInRound[0]);
+                    var custTmp = vm.customersInRound;
+                    vm.customer = custTmp[0];
+                    customerChange(custTmp[0]);
                 }
+            }).finally(function() {
+                vm.isBusy(false);
+            });
+        });
+    }
+
+    function filterRoundDate() {
+        vm.roundFilter = {
+            Today: true,
+            StartDate: null,
+            EndDate: null,
+            Email: vm.workerEmail
+        };
+    }
+
+    function getRounds() {
+        return managementDistributionsService.getRounds(vm.roundFilter).then(function (response) {
+            //success
+            vm.rounds = _.filter(response.data, function(round) {
+                return round.RoundUser[0].Email === vm.workerEmail && round.roundStatus == 1;
+            });       
+            vm.closeRounds = _.filter(response.data, function (round) {
+                return round.RoundUser[0].Email === vm.workerEmail && round.roundStatus == 0;
+            });
+        },
+            function (response) {
+                //error
+                logError(response.status + " " + response.statusText);
+            }).then(function() {
+                hideSideNavIpad();
+        });
+    }
+
+    function roundChange(round) {
+        vm.customersInRound = {};
+        vm.customerRoundProducts = {};
+        vm.isSaved = false;
+        if (round != null) {
+            vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function (r) { return r.roundcustomerProducts.length == 0; }));
+            if (vm.customersInRound.length > 0) {
+                vm.customer = vm.customersInRound[0];
+                customerChange(vm.customersInRound[0]);
             }
         }
-        function customerChange(customer) {
-            vm.customerRoundProducts = {};
-            vm.isSaved = false;
-            if (customer != null) {
-                vm.customerRoundProducts = customer;
-            }
+    }
+    function customerChange(customer) {
+        vm.customerRoundProducts = {};
+        vm.isSaved = false;
+        if (customer != null) {
+            vm.customerRoundProducts = customer;
         }
+    }
 
-        function closeRound() {
-            if (vm.isSaved) {
-                common.modalDialog.confirmationDialog("סגירת סבב", "האם לסגור את הסבב?", "מאשר", "בטל").then(function(result) {
-                    if (result == "ok") {
-                        vm.roundSelected.roundStatus = 2;
-                         managementDistributionsService.changeRoundStatus(vm.roundSelected).then(function (response) {
-                            //success
-                            if (response.data.roundStatus !== 1) {
-                                logSuccess("הסבב נסגר בהצלחה");
-                                vm.customerRoundProducts = {};
-                                vm.customersInRound = {};
-                                vm.isSaved = false;
-                                vm.rounds = {};
-                                getRounds();
-                            } else {
-                                logWarning("הסבב פעיל");
-                            }
-                        }, function (response) {
-                            //error
-                            logError(response.status + " " + response.statusText);
-                        });
-                    }
+    function closeRound() {
+        if (vm.isSaved) {
+            common.modalDialog.confirmationDialog("סגירת סבב", "האם לסגור את הסבב?", "מאשר", "בטל").then(function(result) {
+                if (result == "ok") {
+                    vm.roundSelected.roundStatus = 2;
+                    managementDistributionsService.changeRoundStatus(vm.roundSelected).then(function (response) {
+                        //success
+                        if (response.data.roundStatus !== 1) {
+                            logSuccess("הסבב נסגר בהצלחה");
+                            vm.customerRoundProducts = {};
+                            vm.customersInRound = {};
+                            vm.isSaved = false;
+                            vm.rounds = {};
+                            getRounds();
+                        } else {
+                            logWarning("הסבב פעיל");
+                        }
+                    }, function (response) {
+                        //error
+                        logError(response.status + " " + response.statusText);
+                    });
+                }
 
-                }, function(result) {
+            }, function(result) {
                     
-                });
-            }
-        }
-
-        function editRow(index) {
-            if (index > 0)
-                {
-                var row = angular.element('.productRow' + index);
-                if (row.find('.productRowTd' + index).css('display') === 'table-cell') {
-                    row.find('.productRowTd' + index).css('display', 'none');
-                    row.find('.productRowInput' + index).css('display', 'table-cell');
-                    row.find('i').removeClass('glyphicon-edit').addClass('glyphicon-lock'); 
-                    row.find('button').removeClass('btn-info').addClass('btn-warning');
-                } else {
-                    row.find('.productRowTd' + index).css('display', 'table-cell');
-                    row.find('.productRowInput' + index).css('display', 'none');
-                    row.find('i').removeClass('glyphicon-lock').addClass('glyphicon-edit');
-                    row.find('button').removeClass('btn-warning').addClass('btn-info');
-
-                }
-            }
-        }
-
-        function saveProductsCustomer() {
-            if (vm.customerRoundProducts != null) {
-                vm.customerRoundProducts.customerRound.RoundCustomerStatus = true;
-                var roundCustomers = {
-                    RoundId: vm.roundSelected.RoundID,
-                    RoundCustomers: [
-                        {
-                            customerRound: vm.customerRoundProducts.customerRound,
-                            roundcustomerProducts: vm.customerRoundProducts.roundcustomerProducts
-                        }
-                    ]
-                };
-                return managementDistributionsService.updateCustomerRound(roundCustomers).then(function (rsponse) {
-                    //success
-                    logSuccess("הלקוח בסבב עודכן בהצלחה.");
-                    vm.isSaved = true;
-                },
-                        function (rsponse) {
-                            //error
-                            logError(rsponse.status + " " + rsponse.statusText);
-                        }
-                    );
-            }
-            return false;
-        }
-
-        function printBill() {
-            createTblPrint();
-            setTimeout(function () {
-                print.printReport('worker-print');
-            }, 1000);
-                
-            
-        }
-
-        function createTblPrint() {
-            vm.productsPrint = [];
-            _.filter(vm.customerRoundProducts.roundcustomerProducts, function(product) {
-                if (product.Amount > 0  || product.DeliveredAmount > 0) {
-                    vm.productsPrint.push(product);
-                }
             });
         }
     }
+
+    function editRow(index) {
+        if (index > 0)
+        {
+            var row = angular.element('.productRow' + index);
+            if (row.find('.productRowTd' + index).css('display') === 'table-cell') {
+                row.find('.productRowTd' + index).css('display', 'none');
+                row.find('.productRowInput' + index).css('display', 'table-cell');
+                row.find('i').removeClass('glyphicon-edit').addClass('glyphicon-lock'); 
+                row.find('button').removeClass('btn-info').addClass('btn-warning');
+            } else {
+                row.find('.productRowTd' + index).css('display', 'table-cell');
+                row.find('.productRowInput' + index).css('display', 'none');
+                row.find('i').removeClass('glyphicon-lock').addClass('glyphicon-edit');
+                row.find('button').removeClass('btn-warning').addClass('btn-info');
+
+            }
+        }
+    }
+
+    function saveProductsCustomer() {
+        if (vm.customerRoundProducts != null) {
+            vm.customerRoundProducts.customerRound.RoundCustomerStatus = true;
+            var roundCustomers = {
+                RoundId: vm.roundSelected.RoundID,
+                RoundCustomers: [
+                    {
+                        customerRound: vm.customerRoundProducts.customerRound,
+                        roundcustomerProducts: vm.customerRoundProducts.roundcustomerProducts
+                    }
+                ]
+            };
+            return managementDistributionsService.updateCustomerRound([roundCustomers]).then(function (rsponse) {
+                //success
+                logSuccess("הלקוח בסבב עודכן בהצלחה.");
+                vm.isSaved = true;
+                angular.element("select[ng-model='vm.customer']").find(":selected").addClass('applay');
+            },
+                    function (rsponse) {
+                        //error
+                        logError(rsponse.status + " " + rsponse.statusText);
+                    }
+                );
+        }
+        return false;
+    }
+
+    function printBill() {
+        createTblPrint();
+        setTimeout(function () {
+            print.printReport('worker-print');
+        }, 1000);
+                
+            
+    }
+
+    function createTblPrint() {
+        vm.productsPrint = [];
+        _.filter(vm.customerRoundProducts.roundcustomerProducts, function(product) {
+            if (product.Amount > 0  || product.DeliveredAmount > 0) {
+                vm.productsPrint.push(product);
+            }
+        });
+    }
+}
 })();

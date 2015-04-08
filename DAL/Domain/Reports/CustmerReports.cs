@@ -12,6 +12,8 @@ namespace Core.Domain.Reports
         public int CustomerID { get; set; }
         public string CustomerName { get; set; }
         public int SumOfProducts { get; set; }
+        public int SumOfProductsSent { get; set; }
+        public int SumOfProductsTakens { get; set; }
         public double TotalSum { get; set; }
         public int ProductID { get; set; }
         public string ProductName { get; set; }

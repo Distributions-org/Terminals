@@ -287,6 +287,9 @@ a.btn {
     color: #fff !important;
     border: 0 !important;
 }
+.byellow {
+     background-color: #f3f55e !important;
+}
 
     .blightblue h2, .blightblue h3, .blightblue h3, .blightblue h4, .blightblue h5, .blightblue h6,
     .bblue h2, .bblue h3, .bblue h3, .bblue h4, .bblue h5, .bblue h6,
@@ -341,6 +344,9 @@ a.btn {
     color: #932ab6 !important;
 }
 
+.yellow {
+    color: #f3f55e !important;
+}
 
 /* Modal */
 

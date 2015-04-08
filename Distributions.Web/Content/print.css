@@ -3,7 +3,61 @@
     margin: 0;
     font-size: 10px;
 }
+
+#reportDiv {
+    -moz-page-break-inside:avoid;
+    page-break-inside:avoid;
+     page-break-after:always;
+}
+
 table {
-    display: block !important;
+    -moz-page-break-inside: auto;
+    page-break-inside: auto;
     font-size: 10px !important;
+}
+
+    table tr {
+        white-space: nowrap;
+        -moz-page-break-inside: avoid;
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+thead {
+    display: table-header-group;
+}
+
+tfoot {
+    display: table-footer-group;
+}
+
+.table-report {
+    margin: 0 !important;
+}
+
+.red {
+    color: #fa3031 !important;
+}
+
+    .red strong {
+        color: #fa3031 !important;
+    }
+
+.byellow {
+    background-color: #f3f55e !important;
+}
+
+.yellow {
+    color: #f3f55e !important;
+}
+
+.total-print {
+    border: 1px solid #ccc;
+    padding: 1px;
+    display: table-cell;
+    margin: 0 0 0 10px;
+}
+
+.total {
+    display: none;
 }

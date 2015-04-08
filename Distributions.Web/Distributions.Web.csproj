@@ -246,6 +246,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\ModelErrorChecker.cs" />
+    <Content Include="app\common\localStorage.js" />
     <Content Include="app\common\print.js" />
     <Content Include="app\common\cache.js" />
     <Content Include="app\reports\reports.html" />
@@ -260,6 +261,7 @@
     <Content Include="Scripts\angular-locale_he-il.js" />
     <Content Include="Scripts\bootstrap-timepicker.js" />
     <Content Include="Scripts\bootstrap-timepicker.min.js" />
+    <Content Include="Scripts\printThis.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\underscore.min.map" />
