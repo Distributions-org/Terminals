@@ -8,5 +8,6 @@ namespace Core.Domain.Persons
         public string LastName { get; set; }
         public string Address { get; set; }
         public DateTime BirthDate { get; set; }
+        public int ManagerId { get; set; }
     }
 }

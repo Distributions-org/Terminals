@@ -86,6 +86,9 @@
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\IdentityModels.cs" />
+    <Compile Include="ManagersTbl.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
     <Compile Include="Maping\CustomerProduct\CustomerProductMap.cs" />
     <Compile Include="Maping\Customers\CustomersMap.cs" />
     <Compile Include="Maping\Users\UsersMap.cs" />

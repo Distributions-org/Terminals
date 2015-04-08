@@ -18,5 +18,6 @@ namespace Data
         public string RoundName { get; set; }
         public Nullable<System.DateTime> RoundDate { get; set; }
         public Nullable<int> RoundStatus { get; set; }
+        public Nullable<int> ManagerID { get; set; }
     }
 }

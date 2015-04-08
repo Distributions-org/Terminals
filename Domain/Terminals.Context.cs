@@ -34,5 +34,6 @@ namespace Data
         public DbSet<UsersTbl> UsersTbl { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<sysdiagram> sysdiagrams { get; set; }
+        public DbSet<ManagersTbl> ManagersTbls { get; set; }
     }
 }

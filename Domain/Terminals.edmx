@@ -13,6 +13,14 @@
           <Property Name="CustomerName" Type="nvarchar" MaxLength="350" />
           <Property Name="CustomerHP" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="int" />
+          <Property Name="ManagerId" Type="int" />
+        </EntityType>
+        <EntityType Name="ManagersTbl">
+          <Key>
+            <PropertyRef Name="ManagerID" />
+          </Key>
+          <Property Name="ManagerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ManagerName" Type="nvarchar" MaxLength="350" />
         </EntityType>
         <EntityType Name="ProductCustomerTbl">
           <Key>
@@ -31,6 +39,7 @@
           <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="850" />
           <Property Name="ProductStatus" Type="int" />
+          <Property Name="ManagerId" Type="int" />
         </EntityType>
         <EntityType Name="RoundsCustomerProductTbl">
           <Key>
@@ -49,7 +58,7 @@
           <Property Name="RoundsCustomersID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoundsID" Type="int" />
           <Property Name="CustomerID" Type="int" />
-          <Property Name="RoundCustomerStatus" Type="bit" Nullable="false" />
+          <Property Name="RoundCustomerStatus" Type="bit" />
         </EntityType>
         <EntityType Name="RoundsTbl">
           <Key>
@@ -59,6 +68,7 @@
           <Property Name="RoundName" Type="nvarchar" MaxLength="450" />
           <Property Name="RoundDate" Type="datetime" />
           <Property Name="RoundStatus" Type="int" />
+          <Property Name="ManagerID" Type="int" />
         </EntityType>
         <EntityType Name="RoundsUserTbl">
           <Key>
@@ -67,16 +77,6 @@
           <Property Name="RoundsUserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoundsID" Type="int" />
           <Property Name="UserID" Type="int" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="UsersTbl">
           <Key>
@@ -88,16 +88,17 @@
           <Property Name="Email" Type="nvarchar" MaxLength="350" />
           <Property Name="Password" Type="nvarchar" MaxLength="350" />
           <Property Name="RoleID" Type="int" />
+          <Property Name="ManagerID" Type="int" />
         </EntityType>
         <EntityContainer Name="TerminalsModelStoreContainer">
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ManagersTbl" EntityType="Self.ManagersTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductCustomerTbl" EntityType="Self.ProductCustomerTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoundsCustomerProductTbl" EntityType="Self.RoundsCustomerProductTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoundsCustomerTbl" EntityType="Self.RoundsCustomerTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoundsTbl" EntityType="Self.RoundsTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoundsUserTbl" EntityType="Self.RoundsUserTbl" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UsersTbl" EntityType="Self.UsersTbl" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -114,6 +115,7 @@
           <EntitySet Name="UsersTbl" EntityType="TerminalsModel.UsersTbl" />
           <EntitySet Name="Products" EntityType="TerminalsModel.Product" />
           <EntitySet Name="sysdiagrams" EntityType="TerminalsModel.sysdiagram" />
+          <EntitySet Name="ManagersTbls" EntityType="TerminalsModel.ManagersTbl" />
           <!--<EntitySet Name="AspNetRoles" EntityType="TerminalsModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="TerminalsModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="TerminalsModel.AspNetUserLogin" />
@@ -139,6 +141,7 @@
           <Property Name="CustomerName" Type="String" MaxLength="350" Unicode="true" FixedLength="false" />
           <Property Name="CustomerHP" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Type="Int32" Name="Status" />
+          <Property Name="ManagerId" Type="Int32" />
         </EntityType>
         <EntityType Name="ProductCustomerTbl">
           <Key>
@@ -167,7 +170,7 @@
           <Property Name="RoundsCustomersID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="RoundsID" Type="Int32" />
           <Property Name="CustomerID" Type="Int32" />
-          <Property Name="RoundCustomerStatus" Type="Boolean" Nullable="false" />
+          <Property Name="RoundCustomerStatus" Type="Boolean" />
         </EntityType>
         <EntityType Name="RoundsTbl">
           <Key>
@@ -177,6 +180,7 @@
           <Property Name="RoundName" Type="String" MaxLength="450" Unicode="true" FixedLength="false" />
           <Property Name="RoundDate" Type="DateTime" Precision="3" />
           <Property Name="RoundStatus" Type="Int32" />
+          <Property Name="ManagerID" Type="Int32" />
         </EntityType>
         <EntityType Name="RoundsUserTbl">
           <Key>
@@ -196,6 +200,7 @@
           <Property Type="String" Name="Email" MaxLength="350" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Password" MaxLength="350" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="RoleID" />
+          <Property Name="ManagerID" Type="Int32" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -204,6 +209,7 @@
           <Property Type="Int32" Name="ProductID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="ProductName" MaxLength="850" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ProductStatus" />
+          <Property Name="ManagerId" Type="Int32" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -214,6 +220,13 @@
           <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="version" />
           <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="ManagersTbl">
+          <Key>
+            <PropertyRef Name="ManagerID" />
+          </Key>
+          <Property Name="ManagerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ManagerName" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
         </EntityType>
         <!--<EntityType Name="AspNetRole">
           <Key>
@@ -305,6 +318,7 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="TerminalsModel.Customers">
               <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
@@ -347,6 +361,7 @@
           <EntitySetMapping Name="RoundsTbl">
             <EntityTypeMapping TypeName="TerminalsModel.RoundsTbl">
               <MappingFragment StoreEntitySet="RoundsTbl">
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
                 <ScalarProperty Name="RoundStatus" ColumnName="RoundStatus" />
                 <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
                 <ScalarProperty Name="RoundName" ColumnName="RoundName" />
@@ -366,6 +381,7 @@
           <EntitySetMapping Name="UsersTbl">
             <EntityTypeMapping TypeName="TerminalsModel.UsersTbl">
               <MappingFragment StoreEntitySet="UsersTbl">
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -378,20 +394,18 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="TerminalsModel.Product">
               <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="ProductStatus" ColumnName="ProductStatus" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="TerminalsModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="ManagersTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.ManagersTbl">
+              <MappingFragment StoreEntitySet="ManagersTbl">
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -412,7 +426,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
-        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

@@ -17,6 +17,7 @@ namespace Core.Domain.Rounds
         public IEnumerable<User> RoundUser { get; set; }
         public IEnumerable<CustomerRound> custRound { get; set; }
         public RoundStatus.roundStatus roundStatus { get; set; }
+        public int ManagerId { get; set; }
 
         public Rounds()
         {

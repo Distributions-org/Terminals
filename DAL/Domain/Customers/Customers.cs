@@ -13,5 +13,6 @@ namespace Core.Domain.Customers
         public string CustomerHP { get; set; }
         public Core.Enums.CustomerStatus.customerStatus custStatus { get; set; }
         public bool RoundCustomerStatus { get; set; }
+        public int ManagerId { get; set; }
     }
 }

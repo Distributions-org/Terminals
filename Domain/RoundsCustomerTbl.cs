@@ -17,6 +17,6 @@ namespace Data
         public int RoundsCustomersID { get; set; }
         public Nullable<int> RoundsID { get; set; }
         public Nullable<int> CustomerID { get; set; }
-        public bool RoundCustomerStatus { get; set; }
+        public Nullable<bool> RoundCustomerStatus { get; set; }
     }
 }

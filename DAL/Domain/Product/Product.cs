@@ -12,5 +12,6 @@ namespace Core.Domain
         public int ProductID { get; set; }
         public string ProductName { get; set; }
         public ProductStatus.productStatus productStatus { get; set; }
+        public int ManagerId { get; set; }
     }
 }

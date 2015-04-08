@@ -17,5 +17,6 @@ namespace Data
         public int ProductID { get; set; }
         public string ProductName { get; set; }
         public Nullable<int> ProductStatus { get; set; }
+        public Nullable<int> ManagerId { get; set; }
     }
 }
