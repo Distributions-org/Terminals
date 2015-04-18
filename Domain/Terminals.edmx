@@ -106,16 +106,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="TerminalsModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TerminalsEntities" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="Customers" EntityType="TerminalsModel.Customers" />
-          <EntitySet Name="ProductCustomerTbl" EntityType="TerminalsModel.ProductCustomerTbl" />
-          <EntitySet Name="RoundsCustomerProductTbl" EntityType="TerminalsModel.RoundsCustomerProductTbl" />
-          <EntitySet Name="RoundsCustomerTbl" EntityType="TerminalsModel.RoundsCustomerTbl" />
-          <EntitySet Name="RoundsTbl" EntityType="TerminalsModel.RoundsTbl" />
-          <EntitySet Name="RoundsUserTbl" EntityType="TerminalsModel.RoundsUserTbl" />
-          <EntitySet Name="UsersTbl" EntityType="TerminalsModel.UsersTbl" />
-          <EntitySet Name="Products" EntityType="TerminalsModel.Product" />
-          <EntitySet Name="sysdiagrams" EntityType="TerminalsModel.sysdiagram" />
-          <EntitySet Name="ManagersTbls" EntityType="TerminalsModel.ManagersTbl" />
           <!--<EntitySet Name="AspNetRoles" EntityType="TerminalsModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="TerminalsModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="TerminalsModel.AspNetUserLogin" />
@@ -132,32 +122,57 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>-->
+          <EntitySet Name="Customers1" EntityType="TerminalsModel.Customers" />
+          <EntitySet Name="ManagersTbls" EntityType="TerminalsModel.ManagersTbl" />
+          <EntitySet Name="ProductCustomerTbls" EntityType="TerminalsModel.ProductCustomerTbl" />
+          <EntitySet Name="Products" EntityType="TerminalsModel.Product" />
+          <EntitySet Name="RoundsCustomerProductTbls" EntityType="TerminalsModel.RoundsCustomerProductTbl" />
+          <EntitySet Name="RoundsCustomerTbls" EntityType="TerminalsModel.RoundsCustomerTbl" />
+          <EntitySet Name="RoundsTbls" EntityType="TerminalsModel.RoundsTbl" />
+          <EntitySet Name="RoundsUserTbls" EntityType="TerminalsModel.RoundsUserTbl" />
+          <EntitySet Name="UsersTbls" EntityType="TerminalsModel.UsersTbl" />
         </EntityContainer>
         <EntityType Name="Customers">
           <Key>
             <PropertyRef Name="CustomerID" />
           </Key>
-          <Property Name="CustomerID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerName" Type="String" MaxLength="350" Unicode="true" FixedLength="false" />
-          <Property Name="CustomerHP" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Type="Int32" Name="Status" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerHP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
           <Property Name="ManagerId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ManagersTbl">
+          <Key>
+            <PropertyRef Name="ManagerID" />
+          </Key>
+          <Property Name="ManagerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ManagerName" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProductCustomerTbl">
           <Key>
             <PropertyRef Name="ProductCustomerID" />
           </Key>
-          <Property Name="ProductCustomerID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductID" Type="Int32" />
           <Property Name="CustomerID" Type="Int32" />
           <Property Name="DayTypeID" Type="Int32" />
           <Property Name="Cost" Type="Double" />
         </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="850" FixedLength="false" Unicode="true" />
+          <Property Name="ProductStatus" Type="Int32" />
+          <Property Name="ManagerId" Type="Int32" />
+        </EntityType>
         <EntityType Name="RoundsCustomerProductTbl">
           <Key>
             <PropertyRef Name="RoundsCustomerProductID" />
           </Key>
-          <Property Name="RoundsCustomerProductID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RoundsCustomerProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoundsCustomersID" Type="Int32" />
           <Property Name="ProductID" Type="Int32" />
           <Property Name="Amount" Type="Int32" />
@@ -167,7 +182,7 @@
           <Key>
             <PropertyRef Name="RoundsCustomersID" />
           </Key>
-          <Property Name="RoundsCustomersID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RoundsCustomersID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoundsID" Type="Int32" />
           <Property Name="CustomerID" Type="Int32" />
           <Property Name="RoundCustomerStatus" Type="Boolean" />
@@ -176,8 +191,8 @@
           <Key>
             <PropertyRef Name="RoundsID" />
           </Key>
-          <Property Name="RoundsID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="RoundName" Type="String" MaxLength="450" Unicode="true" FixedLength="false" />
+          <Property Name="RoundsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoundName" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="RoundDate" Type="DateTime" Precision="3" />
           <Property Name="RoundStatus" Type="Int32" />
           <Property Name="ManagerID" Type="Int32" />
@@ -186,7 +201,7 @@
           <Key>
             <PropertyRef Name="RoundsUserID" />
           </Key>
-          <Property Name="RoundsUserID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="RoundsUserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoundsID" Type="Int32" />
           <Property Name="UserID" Type="Int32" />
         </EntityType>
@@ -194,39 +209,13 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Type="Int32" Name="UserID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="FirstName" MaxLength="550" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="LastName" MaxLength="550" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Email" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Password" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="RoleID" />
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
           <Property Name="ManagerID" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Product">
-          <Key>
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Type="Int32" Name="ProductID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="ProductName" MaxLength="850" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="ProductStatus" />
-          <Property Name="ManagerId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Type="String" Name="name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="principal_id" Nullable="false" />
-          <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="version" />
-          <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="ManagersTbl">
-          <Key>
-            <PropertyRef Name="ManagerID" />
-          </Key>
-          <Property Name="ManagerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ManagerName" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
         </EntityType>
         <!--<EntityType Name="AspNetRole">
           <Key>
@@ -315,79 +304,33 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TerminalsModelStoreContainer" CdmEntityContainer="TerminalsEntities">
-          <EntitySetMapping Name="Customers">
+          <EntitySetMapping Name="Customers1">
             <EntityTypeMapping TypeName="TerminalsModel.Customers">
               <MappingFragment StoreEntitySet="Customers">
                 <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerHP" ColumnName="CustomerHP" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductCustomerTbl">
+          <EntitySetMapping Name="ManagersTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.ManagersTbl">
+              <MappingFragment StoreEntitySet="ManagersTbl">
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductCustomerTbls">
             <EntityTypeMapping TypeName="TerminalsModel.ProductCustomerTbl">
               <MappingFragment StoreEntitySet="ProductCustomerTbl">
-                <ScalarProperty Name="ProductCustomerID" ColumnName="ProductCustomerID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="DayTypeID" ColumnName="DayTypeID" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RoundsCustomerProductTbl">
-            <EntityTypeMapping TypeName="TerminalsModel.RoundsCustomerProductTbl">
-              <MappingFragment StoreEntitySet="RoundsCustomerProductTbl">
-                <ScalarProperty Name="DelieveredAmount" ColumnName="DelieveredAmount" />
-                <ScalarProperty Name="RoundsCustomerProductID" ColumnName="RoundsCustomerProductID" />
-                <ScalarProperty Name="RoundsCustomersID" ColumnName="RoundsCustomersID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RoundsCustomerTbl">
-            <EntityTypeMapping TypeName="TerminalsModel.RoundsCustomerTbl">
-              <MappingFragment StoreEntitySet="RoundsCustomerTbl">
-                <ScalarProperty Name="RoundCustomerStatus" ColumnName="RoundCustomerStatus" />
-                <ScalarProperty Name="RoundsCustomersID" ColumnName="RoundsCustomersID" />
-                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
+                <ScalarProperty Name="DayTypeID" ColumnName="DayTypeID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RoundsTbl">
-            <EntityTypeMapping TypeName="TerminalsModel.RoundsTbl">
-              <MappingFragment StoreEntitySet="RoundsTbl">
-                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
-                <ScalarProperty Name="RoundStatus" ColumnName="RoundStatus" />
-                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
-                <ScalarProperty Name="RoundName" ColumnName="RoundName" />
-                <ScalarProperty Name="RoundDate" ColumnName="RoundDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RoundsUserTbl">
-            <EntityTypeMapping TypeName="TerminalsModel.RoundsUserTbl">
-              <MappingFragment StoreEntitySet="RoundsUserTbl">
-                <ScalarProperty Name="RoundsUserID" ColumnName="RoundsUserID" />
-                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UsersTbl">
-            <EntityTypeMapping TypeName="TerminalsModel.UsersTbl">
-              <MappingFragment StoreEntitySet="UsersTbl">
-                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductCustomerID" ColumnName="ProductCustomerID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -401,15 +344,61 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ManagersTbls">
-            <EntityTypeMapping TypeName="TerminalsModel.ManagersTbl">
-              <MappingFragment StoreEntitySet="ManagersTbl">
-                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
-                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+          <EntitySetMapping Name="RoundsCustomerProductTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.RoundsCustomerProductTbl">
+              <MappingFragment StoreEntitySet="RoundsCustomerProductTbl">
+                <ScalarProperty Name="DelieveredAmount" ColumnName="DelieveredAmount" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="RoundsCustomersID" ColumnName="RoundsCustomersID" />
+                <ScalarProperty Name="RoundsCustomerProductID" ColumnName="RoundsCustomerProductID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          </EntityContainerMapping>
+          <EntitySetMapping Name="RoundsCustomerTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.RoundsCustomerTbl">
+              <MappingFragment StoreEntitySet="RoundsCustomerTbl">
+                <ScalarProperty Name="RoundCustomerStatus" ColumnName="RoundCustomerStatus" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
+                <ScalarProperty Name="RoundsCustomersID" ColumnName="RoundsCustomersID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoundsTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.RoundsTbl">
+              <MappingFragment StoreEntitySet="RoundsTbl">
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="RoundStatus" ColumnName="RoundStatus" />
+                <ScalarProperty Name="RoundDate" ColumnName="RoundDate" />
+                <ScalarProperty Name="RoundName" ColumnName="RoundName" />
+                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoundsUserTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.RoundsUserTbl">
+              <MappingFragment StoreEntitySet="RoundsUserTbl">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
+                <ScalarProperty Name="RoundsUserID" ColumnName="RoundsUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsersTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.UsersTbl">
+              <MappingFragment StoreEntitySet="UsersTbl">
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

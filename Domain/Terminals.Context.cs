@@ -25,15 +25,14 @@ namespace Data
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Customers> Customers { get; set; }
-        public DbSet<ProductCustomerTbl> ProductCustomerTbl { get; set; }
-        public DbSet<RoundsCustomerProductTbl> RoundsCustomerProductTbl { get; set; }
-        public DbSet<RoundsCustomerTbl> RoundsCustomerTbl { get; set; }
-        public DbSet<RoundsTbl> RoundsTbl { get; set; }
-        public DbSet<RoundsUserTbl> RoundsUserTbl { get; set; }
-        public DbSet<UsersTbl> UsersTbl { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<sysdiagram> sysdiagrams { get; set; }
+        public DbSet<Customers> Customers1 { get; set; }
         public DbSet<ManagersTbl> ManagersTbls { get; set; }
+        public DbSet<ProductCustomerTbl> ProductCustomerTbls { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<RoundsCustomerProductTbl> RoundsCustomerProductTbls { get; set; }
+        public DbSet<RoundsCustomerTbl> RoundsCustomerTbls { get; set; }
+        public DbSet<RoundsTbl> RoundsTbls { get; set; }
+        public DbSet<RoundsUserTbl> RoundsUserTbls { get; set; }
+        public DbSet<UsersTbl> UsersTbls { get; set; }
     }
 }

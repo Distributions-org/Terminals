@@ -66,6 +66,7 @@
     <Compile Include="Domain\Rounds\CustomerRound.cs" />
     <Compile Include="Domain\Rounds\RoundProductCustomer.cs" />
     <Compile Include="Domain\Rounds\Rounds.cs" />
+    <Compile Include="Domain\Rounds\RoundsDbModel.cs" />
     <Compile Include="Domain\Users\User.cs" />
     <Compile Include="Enums\CustomerStatus.cs" />
     <Compile Include="Enums\DaysType.cs" />
