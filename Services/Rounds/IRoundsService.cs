@@ -18,7 +18,7 @@ namespace Services
         FunctionReplay.functionReplay AddCustomersToRound(List<CustomerRound> RoundCustomers, int RoundID);
         List<ProductToCustomer> GetCustomerProducts(int CustomerID, DaysType.DayType currentDayType);
         FunctionReplay.functionReplay AddRoundProductCustomer(List<RoundProductCustomer> addedProductToCustomerRound, int RoundID);
-        List<Rounds> GetRoundsByDate(DateTime startdate, DateTime enddate);
+        List<Rounds> GetRoundsByDate(DateTime startdate, DateTime enddate,int ManagerId)
         IList<RoundProductCustomer> GetRoundCustomerProducts(int CustomerID, int RoundID);
 
         FunctionReplay.functionReplay UpdateRoundProductCustomerDeliveredAmount(int RoundProductCustomerID, int DeliveredAmount);
@@ -33,7 +33,7 @@ namespace Services
 
         bool CheckIfUserCanUseRound(int UserID);
 
-        Task<IList<Rounds>> GetAllRounds(bool today, DateTime? startDate, DateTime? endDate,string email);
+        Task<IList<Rounds>> GetAllRounds(bool today, DateTime? startDate, DateTime? endDate,string email,int ManagerID);
 
         FunctionReplay.functionReplay DeleteProductFromRound(ProductToCustomer product,int roundId);
     }

@@ -55,13 +55,13 @@ namespace Services
             MappingToDB();
             RoundsTbl newDBRound = Mapper.Map<Rounds, RoundsTbl>(NewRound);
             _RoundsRepository.Add(newDBRound);
-            return _RoundsRepository.GetAll().OrderByDescending(x => x.RoundsID).Select(x => x.RoundsID).FirstOrDefault();
+            return _RoundsRepository.FindBy(x => x.ManagerID == NewRound.ManagerId).OrderByDescending(x => x.RoundsID).Select(x => x.RoundsID).FirstOrDefault();
         }
 
-        public List<Rounds> GetRoundsByDate(DateTime startdate, DateTime enddate)
+        public List<Rounds> GetRoundsByDate(DateTime startdate, DateTime enddate,int ManagerId)
         {
             MapDBToRound();
-            List<RoundsTbl> allDbRounds = _RoundsRepository.FindBy(x => x.RoundDate >= startdate && x.RoundDate <= enddate).ToList();
+            List<RoundsTbl> allDbRounds = _RoundsRepository.FindBy(x => x.RoundDate >= startdate && x.RoundDate <= enddate && x.ManagerID == ManagerId).ToList();
             return Mapper.Map<List<RoundsTbl>, List<Rounds>>(allDbRounds);
         }
 
@@ -187,7 +187,7 @@ namespace Services
         }
 
 
-        public async Task<IList<Rounds>> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate,string email)
+        public async Task<IList<Rounds>> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate,string email,int ManagerID)
         {
             IList<Rounds> rounds = new List<Rounds>();
             IQueryable<RoundsTbl> tmpRounds;
@@ -199,11 +199,11 @@ namespace Services
             }
             else if (!today)
             {
-                tmpRounds = _RoundsRepository.GetAll().Where(x=>x!=null);
+                tmpRounds = _RoundsRepository.GetAll().Where(x=>x!=null && x.ManagerID == ManagerID);
             }
             else
             {
-                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) == DbFunctions.TruncateTime(DateTime.Now)).Where(x=>x!=null);
+                tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) == DbFunctions.TruncateTime(DateTime.Now)).Where(x=>x!=null && x.ManagerID == ManagerID);
             }
            
             if (tmpRounds.Any())
@@ -349,7 +349,7 @@ namespace Services
             {
                 Mapper.Reset();
                 Mapper.CreateMap<RoundProductCustomer, RoundsCustomerProductTbl>()
-                    .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
+                    .ForMember(a => a.RoundsCustomersID, b => b.MapFrom(c => _RoundsCustomerRepository.FindBy(x => x.RoundsID == roundId  && x.CustomerID == c.CustomerRoundProduct.CustomerID).FirstOrDefault().RoundsCustomersID))
                     .ForMember(a => a.ProductID, b => b.MapFrom(c => c.CustomerRoundProduct.ProductID))
                     .ForMember(a => a.Amount, b => b.MapFrom(c => c.Amount))
                     .ForMember(a => a.DelieveredAmount, b => b.MapFrom(c => c.DeliveredAmount));

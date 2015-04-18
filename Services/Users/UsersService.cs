@@ -41,6 +41,7 @@ namespace Services
                 CurrentUser.FirstName = user.FirstName;
                 CurrentUser.LastName = user.LastName;
                 CurrentUser.RoleID = (UserRoles.userRoles)user.RoleID;
+                CurrentUser.ManagerId = user.ManagerID;
                 return CurrentUser;
 	        }
             return null;
@@ -56,12 +57,12 @@ namespace Services
             return _usersRepository.Update(UpdateUser);
         }
 
-        public List<User> GetAllUsers()
+        public List<User> GetAllUsers(int ManagerId)
         {
             Mapper.CreateMap<UsersTbl, User>()
                 .ForMember(a => a.RoleID, b => b.MapFrom(c => (UserRoles.userRoles)c.RoleID));
 
-            List<UsersTbl> allUsers = _usersRepository.GetAll().ToList();
+            List<UsersTbl> allUsers = _usersRepository.FindBy(x => x.ManagerID == ManagerId).ToList();
             return Mapper.Map<List<UsersTbl>, List<User>>(allUsers);
 
         }
