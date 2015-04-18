@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Core.Data;
 using Core.Enums;
 
@@ -16,6 +19,36 @@ namespace Data
         {
             _context = context;
         }
+
+        //When you expect a model back (async)
+        public async Task<IList<T>> ExecWithStoreProcedureAsync<T>(string query, params object[] parameters)
+        {
+            return await _context.Database.SqlQuery<T>(query, parameters).ToListAsync();
+        }
+
+        //When you expect a model back
+        public IEnumerable<T> ExecWithStoreProcedure<T>(string query)
+        {
+            return _context.Database.SqlQuery<T>(query);
+        }
+
+        // Fire and forget (async)
+        public async Task ExecuteWithStoreProcedureAsync(string query, params object[] parameters)
+        {
+            await _context.Database.ExecuteSqlCommandAsync(query, parameters);
+        }
+
+        // Fire and forget
+        public void ExecuteWithStoreProcedure(string query, params object[] parameters)
+        {
+            _context.Database.ExecuteSqlCommand(query, parameters);
+        }
+
+        public DbRawSqlQuery<T> ExecWithStoreProcedure(string query, params object[] parameters)
+        {
+            return _context.Database.SqlQuery<T>(query, parameters);
+        }
+
         public IQueryable<T> GetAll()
         {
             return Entities;

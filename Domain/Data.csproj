@@ -86,6 +86,9 @@
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\IdentityModels.cs" />
+    <Compile Include="Customers.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
     <Compile Include="ManagersTbl.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
@@ -95,13 +98,7 @@
     <Compile Include="Product.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>Terminals.tt</DependentUpon>
-    </Compile>
     <Compile Include="TerminalContext.cs" />
-    <Compile Include="Customers.cs">
-      <DependentUpon>Terminals.tt</DependentUpon>
-    </Compile>
     <Compile Include="Maping\Products\ProductsMap.cs" />
     <Compile Include="Maping\Persons\PersoneMap.cs" />
     <Compile Include="ProductCustomerTbl.cs">

@@ -5,15 +5,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="d1de5ad225f8406e9b48a575edf91acd" Name="Diagram1">
-        <EntityTypeShape EntityType="TerminalsModel.Customers" Width="1.5" PointX="7.75" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TerminalsModel.ProductCustomerTbl" Width="1.875" PointX="7.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TerminalsModel.RoundsCustomerProductTbl" Width="1.5" PointX="7.75" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TerminalsModel.RoundsCustomerTbl" Width="2.125" PointX="9.75" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="TerminalsModel.RoundsTbl" Width="1.5" PointX="9.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TerminalsModel.RoundsUserTbl" Width="1.5" PointX="9.75" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="TerminalsModel.UsersTbl" Width="1.5" PointX="5.125" PointY="6.875" />
-        <EntityTypeShape EntityType="TerminalsModel.Product" Width="1.5" PointX="5.5" PointY="2.25" />
-        <EntityTypeShape EntityType="TerminalsModel.sysdiagram" Width="1.5" PointX="3.625" PointY="2.25" />
         <EntityTypeShape EntityType="TerminalsModel.AspNetRole" Width="1.5" PointX="10.375" PointY="12.5" />
         <EntityTypeShape EntityType="TerminalsModel.AspNetUserClaim" Width="1.5" PointX="14.875" PointY="13.625" />
         <EntityTypeShape EntityType="TerminalsModel.AspNetUserLogin" Width="1.5" PointX="14.875" PointY="11" />
@@ -21,7 +12,15 @@
         <AssociationConnector Association="TerminalsModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="TerminalsModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="TerminalsModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="TerminalsModel.ManagersTbl" Width="1.5" PointX="1.25" PointY="2.125" />
+        <EntityTypeShape EntityType="TerminalsModel.Customers" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TerminalsModel.ManagersTbl" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TerminalsModel.ProductCustomerTbl" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="TerminalsModel.Product" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="TerminalsModel.RoundsCustomerProductTbl" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TerminalsModel.RoundsCustomerTbl" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="TerminalsModel.RoundsTbl" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TerminalsModel.RoundsUserTbl" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="TerminalsModel.UsersTbl" Width="1.5" PointX="2.75" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
