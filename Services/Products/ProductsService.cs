@@ -72,21 +72,21 @@ namespace Services
             return Mapper.Map<Data.Product, Core.Domain.Product>(currentProduct);
         }
 
-        public List<Core.Domain.Product> GetProductByStatus(ProductStatus.productStatus pStatus)
+        public List<Core.Domain.Product> GetProductByStatus(ProductStatus.productStatus pStatus,int ManagerId)
         {
             Mapper.CreateMap<Data.Product, Core.Domain.Product>()
                 .ForMember(a => a.productStatus, b => b.MapFrom(c => (ProductStatus.productStatus)c.ProductStatus));
 
-            List<Data.Product> AllStatusProducts = _productsRepository.FindBy(x => x.ProductStatus == (int)pStatus).ToList();
+            List<Data.Product> AllStatusProducts = _productsRepository.FindBy(x => x.ProductStatus == (int)pStatus && x.ManagerId == ManagerId).ToList();
             return Mapper.Map<List<Data.Product>, List<Core.Domain.Product>>(AllStatusProducts);
         }
 
-        public List<Core.Domain.Product> GetProducts()
+        public List<Core.Domain.Product> GetProducts(int ManagerId)
         {
             Mapper.CreateMap<Data.Product, Core.Domain.Product>()
                 .ForMember(a => a.ProductID, b => b.MapFrom(c =>c.ProductID));
 
-            List<Data.Product> allProducts = _productsRepository.GetAll().ToList();
+            List<Data.Product> allProducts = _productsRepository.FindBy(x => x.ManagerId == ManagerId).ToList();
             return Mapper.Map<List<Data.Product>, List<Core.Domain.Product>>(allProducts);
         }
     }

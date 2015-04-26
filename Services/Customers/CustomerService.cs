@@ -40,7 +40,7 @@ namespace Services.Users
             return _CustomersRepository.Add(newCustomers);
         }
 
-        public List<Core.Domain.Customers.Customers> GetValidCustomers(int? roundsCustomerID)
+        public List<Core.Domain.Customers.Customers> GetValidCustomers(int? roundsCustomerID,int ManagerId)
         {
             Mapper.Reset();
             if (roundsCustomerID != null && roundsCustomerID.Value > 0)
@@ -55,7 +55,7 @@ namespace Services.Users
                     .ForMember(a => a.custStatus,
                         b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus) z.Status));
             }
-            List<Data.Customers> FoundCustomer = _CustomersRepository.FindBy(x => x.Status == 1).ToList();
+            List<Data.Customers> FoundCustomer = _CustomersRepository.FindBy(x => x.Status == 1 && x.ManagerId == ManagerId).ToList();
             return Mapper.Map<List<Data.Customers>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
         }
 
@@ -96,6 +96,7 @@ namespace Services.Users
             customerToUpdate.CustomerName = UpdateCustomer.CustomerName;
             customerToUpdate.CustomerHP = UpdateCustomer.CustomerHP;
             customerToUpdate.Status = (int)UpdateCustomer.custStatus;
+            customerToUpdate.ManagerId = UpdateCustomer.ManagerId;
 
             return _CustomersRepository.Update(customerToUpdate);
         }

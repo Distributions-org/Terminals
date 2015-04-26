@@ -140,7 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="Terminals.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Terminals.Designer.cs</LastGenOutput>
