@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'dashboard';
-    angular.module('app').controller(controllerId, ['$filter', '$modal', 'common', 'datacontext', 'managementDistributionsService', dashboard]);
+    angular.module('app').controller(controllerId, ['$filter', '$modal', '$location', 'common', 'datacontext', 'managementDistributionsService', dashboard]);
 
-    function dashboard($filter, $modal, common, datacontext, managementDistributionsService) {
+    function dashboard($filter, $modal, $location, common, datacontext, managementDistributionsService) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');

@@ -684,7 +684,7 @@
 
         function roundStatusChange(round) {
             if (round.roundStatus == 1) {
-                round.roundStatus = 0;
+                round.roundStatus = 2;
             } else {
                 round.roundStatus = 1;
             }

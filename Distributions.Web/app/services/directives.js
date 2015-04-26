@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     var app = angular.module('app');
@@ -15,7 +15,7 @@
         return directive;
 
         function link(scope, element, attrs) {
-            attrs.$observe('ccImgPerson', function(value) {
+            attrs.$observe('ccImgPerson', function (value) {
                 value = basePath + (value || unknownImage);
                 attrs.$set('src', value);
             });
@@ -150,7 +150,7 @@
                 });
 
                 function toggleIcon() {
-                    $win.scrollTop() > 300 ? element.slideDown(): element.slideUp();
+                    $win.scrollTop() > 300 ? element.slideDown() : element.slideUp();
                 }
             }
         }
@@ -179,7 +179,7 @@
         }
     }]);
 
-    app.directive('ccWidgetHeader', function() {
+    app.directive('ccWidgetHeader', function () {
         //Usage:
         //<div data-cc-widget-header title="vm.map.title"></div>
         var directive = {
@@ -201,7 +201,7 @@
     });
 
     app.directive('compareTo', function () {
-       
+
         var directive = {
             require: "ngModel",
             scope: {
@@ -220,7 +220,7 @@
         return directive;
     });
 
-    app.directive('optionsClass', ['$parse',function($parse){
+    app.directive('optionsClass', ['$parse', function ($parse) {
         return {
             require: 'select',
             link: function (scope, elem, attrs, ngSelect) {
@@ -253,5 +253,75 @@
             }
         };
     }]);
+
+    app.directive('reportCounts',['print', function (print) {
+        var directive = {
+            restrict: 'E',
+            scope: {
+                round: '=round',
+                products: '@',
+                printReportCount: '&'
+            },
+            templateUrl: '/app/reports/templates/report-counts.html',
+            link: link
+        }
+        function link(scope, element, attrs) {
+            scope.$watch("round", function () {
+                //console.log(scope.round)
+                if (scope.round.custRound) {
+                    scope.products = getProducts(scope.round.custRound);
+                }
+                scope.$watch('printReportCount', function() {
+                    scope.printReportCount = printReportCount;
+                });
+            });
+        }
+
+        function printReportCount() {
+            print.printThisReportCount('print-report-counts');
+        }
+        
+        function getProducts(custRound) {
+            var products = [],counts = [],productsPager = [],tmpProducts = [];
+            if (custRound.length > 0) {
+                _.each(custRound, function (custr) {
+                    _.each(custr.roundcustomerProducts, function(product) {
+                        var map = { productName: product.CustomerRoundProduct.ProductName, amount: product.Amount };
+                        if (map.amount != 0) {
+                            products.push(map);
+                        }
+                    });
+                });
+                var groupProducts = _.groupBy(products, function(item) {
+                    return item.productName;
+                });
+                
+                _.each(groupProducts, function(item, index) {
+                    counts.push({
+                        productName: index,
+                        count: _.reduce(item, function (memo, item) {
+                            return memo + item.amount;
+                        }, 0)
+                    });
+                });
+                var sortProducts = _.sortBy(counts, 'productName');
+                _.each(sortProducts, function (item, index) {
+                    if (index % 20 == 0) {
+                        if (tmpProducts.length == 20) {
+                            productsPager.push(tmpProducts);
+                        }
+                         tmpProducts = [];
+                    }
+                    tmpProducts.push(item);
+                    if (index == sortProducts.length - 1) {
+                        productsPager.push(tmpProducts);
+                    }
+                });
+                return productsPager; 
+            }
+        }
+        return directive;
+    }]
+    );
 })();
 

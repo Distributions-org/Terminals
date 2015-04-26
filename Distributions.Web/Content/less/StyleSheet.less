@@ -367,7 +367,7 @@ div {
 }
 
 .worker-print, .reward-body {
-    font-size: 12px;
+    font-size: 8px;
 
     .col-sm-4 {
         display: block;
@@ -381,6 +381,14 @@ div {
         div {
             display: inline-block;
         }
+    }
+
+    p {
+        display: block;
+    }
+
+    .billForPay {
+        display: none;
     }
 }
 
@@ -425,9 +433,36 @@ header {
         margin-top: 10px;
     }
 }
-.total-print{
-    display:none;
+
+.total-print {
+    display: none;
 }
+
+.report-counts {
+    table.table-report-counts {
+        float: right;
+        margin-left: 30px;
+        width: auto;
+    }
+
+    .print-btn {
+        button {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+        }
+    }
+}
+
+
+/*@media (max-width: 1024px) and (min-width: 768px){
+.sidebar {  
+  display: none !important;  
+}
+.mainbar{
+    margin-right:0;
+}
+}*/
 
 /*.ui-grid-column-menu-button
 {

@@ -43,21 +43,21 @@
                         <div class="row">
                             <div id="reportDiv" data-ng-show="vm.tblShow" class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-xs-4">
-                                        <label style="background-color: #f3f55e !important;" class="text-center">{{vm.customerSelected.CustomerName}} ח.פ: {{vm.customerSelected.CustomerHP}}</label>
+                                    <div class="col-xs-6">
+                                        <label style="background-color: #f3f55e !important;font-size: 18px;" class="text-center">{{vm.customerSelected.CustomerName}} ח.פ: {{vm.customerSelected.CustomerHP}}</label>
                                     </div>
-                                    <div class="col-xs-4">
+                                    <!--<div class="col-xs-4">
                                         <div class="total-print">
-                                            <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
+                                            <strong style="font-size: 16px;"> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
                                         </div>
                                         <div class="total-print byellow">
-                                            <strong class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
+                                            <strong style="font-size: 16px;" class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
                                         </div>
+                                    </div>-->
+                                    <div class="col-xs-6">
+                                        <label style="font-size: 18px;" class="text-center">אלון שיווק פיתות ודברי מאפה</label>
                                     </div>
-                                    <div class="col-xs-4">
-                                        <label class="text-center">אלון שיווק פיתות ודברי מאפה</label>
-                                    </div>
-                                    </div>
+                                </div>
                                 <table class="table table-condensed table-bordered  table-striped table-report">
                                     <thead>
                                         <tr>
@@ -71,7 +71,7 @@
                                             <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
                                                 <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
                                                     <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="">
-                                                        <strong>{{allCustomerProductReports.DelieverySent}}</strong>
+                                                        <strong>{{allCustomerProductReports.DelieverySent>0?allCustomerProductReports.DelieverySent:""}}</strong>
                                                     </span>
                                                     <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="red">
                                                         <strong class="red">   {{allCustomerProductReports.DelieveryTaken>0?allCustomerProductReports.DelieveryTaken:"" }}</strong>
@@ -228,6 +228,36 @@
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget wgreen">
+                    <div allow-collapse="true" data-cc-widget-header title="הדפסת כמות מוצרים בסבב"></div>
+                    <div class="widget-content report-counts">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>בחר סבב:</label>
+                                <select class="form-control" ng-model="vm.reportCountsRoundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.allRounds | orderBy:'RoundDate':true">
+                                    <option value="">סבב</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1">
+                                <button data-ng-disabled="!vm.reportCountsRoundSelected" data-ng-click="vm.createReportCounts(vm.reportCountsRoundSelected)" class="btn btn-success btn-sm">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <report-counts round="vm.reportCounts"></report-counts>
                             </div>
                         </div>
                     </div>

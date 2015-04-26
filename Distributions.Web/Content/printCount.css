@@ -1,0 +1,16 @@
+﻿body {
+    padding-top: 10px !important; 
+}
+table.table-report-counts {
+  float: right;
+  margin-left: 30px;
+  width: auto;
+}
+table.table-report-counts tr td {
+    padding: 3px;
+    font-size: 12px !important;
+}
+.print-btn button {
+    display: none !important;
+}
+

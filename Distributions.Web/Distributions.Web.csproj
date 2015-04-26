@@ -15,7 +15,7 @@
     <AssemblyName>Distributions.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -252,10 +252,12 @@
     <Content Include="app\reports\reports.html" />
     <Content Include="app\reports\reports.js" />
     <Content Include="app\reports\reportsService.js" />
+    <Content Include="app\reports\templates\report-counts.html" />
     <Content Include="app\worker\worker.html" />
     <Content Include="app\worker\worker.js" />
     <Content Include="Content\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker.min.css" />
+    <Content Include="Content\printCount.css" />
     <Content Include="Content\printWorker.css" />
     <Content Include="Content\print.css" />
     <Content Include="Scripts\angular-locale_he-il.js" />

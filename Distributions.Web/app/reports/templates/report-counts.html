@@ -1,0 +1,24 @@
+﻿<div data-ng-show="products.length>0" id="print-report-counts" class="text-center">
+    <h2>דו"ח כמות מוצרים בסבב</h2>
+    <h6>שם הסבב: {{round.RoundName}},&nbsp;&nbsp;&nbsp;מפיץ: {{round.RoundUser[0].FirstName + ' ' + round.RoundUser[0].LastName }},&nbsp;&nbsp;&nbsp;תאריך: {{round.RoundDate | date:'dd-MM-yyyy'}}</h6>
+    <div class="print-btn">
+        <button type="button" class="btn btn-info" ng-click="printReportCount()">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
+    </div>
+
+    <div>
+        <table data-ng-show="products.length>0" data-ng-repeat="productArray in products" class="table table-condensed table-bordered  table-striped table-report-counts">
+            <thead>
+                <tr>
+                    <th style="background-color: #e6e6cc !important;">שם המוצר</th>
+                    <th style="background-color: #e6e6cc !important;">כמות</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="product in productArray">
+                    <td>{{product.productName}}</td>
+                    <td>{{product.count}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

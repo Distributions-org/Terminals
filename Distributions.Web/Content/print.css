@@ -13,7 +13,8 @@
 table {
     -moz-page-break-inside: auto;
     page-break-inside: auto;
-    font-size: 10px !important;
+    font-size: 12px !important;
+    width: inherit !important;
 }
 
     table tr {
@@ -21,6 +22,9 @@ table {
         -moz-page-break-inside: avoid;
         page-break-inside: avoid;
         page-break-after: auto;
+    }
+     table tr td {
+         padding: 1px !important;
     }
 
 thead {
@@ -59,5 +63,10 @@ tfoot {
 }
 
 .total {
-    display: none;
+    /*display: none;*/
+     border: 1px solid #ccc;
+    padding: 1px;
+    display: table-cell;
+    margin: 0 0 0 10px;
+    font-size: 14px;
 }

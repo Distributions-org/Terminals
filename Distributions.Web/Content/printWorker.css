@@ -4,10 +4,16 @@
     font-size: 10px;
 }
 table {
+     -moz-page-break-inside: auto;
+    page-break-inside: auto;
     font-size: 10px !important;
+    width: auto !important;
 }
 table tr {
-    white-space: nowrap;
+   white-space: nowrap;
+        -moz-page-break-inside: avoid;
+        page-break-inside: avoid;
+        page-break-after: auto;
 }
 
 .byellow {
@@ -15,4 +21,8 @@ table tr {
 }
 .yellow {
     color: #f3f55e !important;
+}
+#worker-print-tbl {
+    width: 100% !important;
+    margin-bottom: 50px;
 }

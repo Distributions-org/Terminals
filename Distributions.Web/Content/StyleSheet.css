@@ -246,7 +246,7 @@ div.scroll {
 }
 .worker-print,
 .reward-body {
-  font-size: 12px;
+  font-size: 8px;
 }
 .worker-print .col-sm-4,
 .reward-body .col-sm-4 {
@@ -259,6 +259,14 @@ div.scroll {
 .worker-print .print-row div,
 .reward-body .print-row div {
   display: inline-block;
+}
+.worker-print p,
+.reward-body p {
+  display: block;
+}
+.worker-print .billForPay,
+.reward-body .billForPay {
+  display: none;
 }
 .modal-body table {
   margin: 0 !important;
@@ -291,4 +299,14 @@ header .btn-info {
 }
 .total-print {
   display: none;
+}
+.report-counts table.table-report-counts {
+  float: right;
+  margin-left: 30px;
+  width: auto;
+}
+.report-counts .print-btn button {
+  position: absolute;
+  top: 10px;
+  right: 12px;
 }

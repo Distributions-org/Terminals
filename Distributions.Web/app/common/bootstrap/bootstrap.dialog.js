@@ -9,7 +9,8 @@
         var service = {
             deleteDialog: deleteDialog,
             confirmationDialog: confirmationDialog,
-            roundDialog: roundDialog
+            roundDialog: roundDialog,
+            workerPrintDialog:workerPrintDialog
         };
 
         $templateCache.put('modalDialog.tpl.html', 
@@ -60,6 +61,22 @@
             '    </div>-->' +
             '</div>');
 
+        $templateCache.put('workerPrintDialog.tpl.html',
+           '<div>' +
+           '    <div class="modal-header">' +
+           '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">&times;</button>' +
+           '        <h3>{{title}}</h3>' +
+           '    </div>' +
+           '    <div class="modal-body">' +
+           '        <p>{{message}}</p>' +
+           '    </div>' +
+           '    <div class="modal-footer">' +
+           '        <button class="btn btn-primary" data-ng-click="ok('+"'workerPrint'"+')">{{workerPrintText}}</button>' +
+           '        <button class="btn btn-primary" data-ng-click="ok('+"'workerPrintPay'"+')">{{workerPrintPayText}}</button>' +
+           '        <button class="btn btn-primary" data-ng-click="ok('+"'workerPrintAll'"+')">{{workerPrintAllText}}</button>' +
+           '    </div>' +
+           '</div>');
+
         return service;
 
         function deleteDialog(itemName) {
@@ -107,6 +124,26 @@
             return $modal.open(modalOptions).result;
         }
 
+        function workerPrintDialog(title, msg, workerPrintText, workerPrintPayText, workerPrintAllText) {
+            var modalOptions = {
+                templateUrl: 'workerPrintDialog.tpl.html',
+                controller: WorkerPrintModalInstance,
+                size: 'sm',
+                resolve: {
+                    options: function () {
+                        return {
+                            title: title,
+                            message: msg,
+                            workerPrintText: workerPrintText,
+                            workerPrintPayText: workerPrintPayText,
+                            workerPrintAllText: workerPrintAllText
+                        };
+                    }
+                }
+            };
+
+            return $modal.open(modalOptions).result;
+        }
     }
 
     
@@ -137,4 +174,17 @@
             };
         }
     ];
+
+    var WorkerPrintModalInstance = ['$scope', '$modalInstance', 'options',
+        function ($scope, $modalInstance, options) {
+            $scope.title = options.title || 'דפסת תעודות משלוח';
+            $scope.message = options.message || 'אנא בחר את סוג ההדפסה הרצוי';
+            $scope.workerPrintText = options.workerPrintText || 'תעודה ללקוח';
+            $scope.workerPrintPayText = options.workerPrintPayText || 'תעודה לתשלום';
+            $scope.workerPrintAllText = options.workerPrintAllText || 'כל הסבב';
+            $scope.ok = function(action) {
+                 $modalInstance.close(action);
+            };
+            $scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+        }];
 })();

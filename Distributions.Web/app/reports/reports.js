@@ -2,10 +2,10 @@
     'use strict';
 
     var controllerId = "reports";
-    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'reportsService', 'managementDistributionsService', 'adminService', 'print', reports]);
+    angular.module('app').controller(controllerId, ['$location', '$filter', '$scope', 'common', 'datacontext', 'reportsService', 'managementDistributionsService', 'adminService', 'print', reports]);
 
 
-    function reports($location, $filter, common, datacontext, reportsService, managementDistributionsService, adminService, print) {
+    function reports($location, $filter, $scope, common, datacontext, reportsService, managementDistributionsService, adminService, print) {
         /* jshint validthis:true */
         //reportsService.$inject = [];
 
@@ -51,6 +51,8 @@
         vm.savePrc = savePrc;
         vm.tax = 18;
         vm.getTotlalSum = getTotlalSum;
+        vm.createReportCounts = createReportCounts;
+        vm.reportCounts = {};
 
         vm.dateFilter = new Date();
         // Disable weekend selection
@@ -165,6 +167,15 @@
                   });
             }
 
+        }
+
+        function createReportCounts(round) {
+            if (round != null) {
+                // vm.customersRound = round.custRound;
+                vm.reportCounts = round;
+            } else {
+                logError("לא נבחר סבב!!!");
+            }
         }
 
         function roundSelectedChange(round) {

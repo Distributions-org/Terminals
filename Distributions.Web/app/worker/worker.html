@@ -9,7 +9,7 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <strong>בחר סבב: </strong>
-                                <select ng-model="vm.roundSelected" data-ng-change="vm.roundChange(vm.roundSelected)" ng-options="round.RoundName for round in  vm.rounds  | orderBy:round.RoundDate">
+                                <select ng-model="vm.roundSelected" data-ng-change="vm.roundChange(vm.roundSelected)" ng-options="(round.RoundName +' '+ round.RoundDate.substring(0, 10)) for round in  vm.rounds  | orderBy:round.RoundDate">
                                     <option value="">סבב</option>
                                 </select>
                             </div>
@@ -74,53 +74,125 @@
     </section>
     <section style="display:none"  class="worker-print">
         <div id="worker-print" class="container-fluid">
-            <div class="row">
-                <div class="col-sm-4 pull-right text-right">
-                        רחוב בילו 2 כ"ס<br />
-                        פל': 050-8313130<br />
-                        טלפון: 097660133
-                </div>
-                <div class="col-sm-4 pull-right text-center">
-                    <h6>
-                        אלון נתנאל <br />
-                        שיווק פיתות
-                    </h6>
-                </div>
-                <div class="col-sm-4 pull-left text-left">
+            <div data-ng-repeat="products in vm.productsPrint">
+                <div class="row">
+                    <div class="col-xs-6 pull-right text-center">
+                        <h6>
+                            אלון נתנאל <br />
+                            שיווק פיתות
+                        </h6>
+                    </div>
+                    <div class="col-xs-6 pull-left text-center">
                         ע.מ. מס' &nbsp;&nbsp;&nbsp;<br />
-                      028042232
+                        {{vm.manager.SoleProprietorship}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 pull-right text-right">
+                        {{vm.manager.address}} &nbsp;
+                        &nbsp; פל':&nbsp;  {{vm.manager.phone}}
+                        &nbsp;טלפון:&nbsp;  {{vm.manager.tel}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 print-row">
+                        <div class="text-right pull-right"> תעודת משלוח מספר: {{vm.roundSelected.RoundID + products[0].CustomerRoundProduct.CustomerID}}</div>
+                        <div class="text-left pull-left">תאריך: {{vm.date | date: 'dd-MM-yyyy'}}</div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-center"><h6>לכבוד: {{products[0].CustomerRoundProduct.CustomerName + ' ח.פ. - '+ products[0].CustomerHP }}</h6></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="worker-print-tbl" class="table date-filter table-responsive table-condensed table-bordered  table-striped">
+                            <thead>
+                                <tr>
+                                    <th>מס'</th>
+                                    <th>שם המוצר</th>
+                                    <th>כמות</th>
+                                    <th>החזרות</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="product in products">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{product.CustomerRoundProduct.ProductName}}</td>
+                                    <td>{{product.Amount}}</td>
+                                    <td>{{product.DeliveredAmount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-12 print-row">
-                    <div class="text-right pull-right"> תעודת משלוח מספר: {{vm.roundSelected.RoundID + vm.customerRoundProducts.customerRound.CustomerID}}</div>
-                    <div class="text-left pull-left">תאריך: {{vm.date | date: 'dd-MM-yyyy'}}</div>
+        </div>
+    </section>
+    
+    <section style="display:none" class="worker-print">
+        <div id="worker-print-pay" class="container-fluid">
+            <div data-ng-repeat="products in vm.productsPrint">
+                <div class="row">
+                    <div class="col-xs-6 pull-right text-center">
+                        <h6>
+                            אלון נתנאל <br />
+                            שיווק פיתות
+                        </h6>
+                    </div>
+                    <div class="col-xs-6 pull-left text-center">
+                        ע.מ. מס' &nbsp;&nbsp;&nbsp;<br />
+                        {{vm.manager.SoleProprietorship}}
+                    </div>
                 </div>
-               
-            </div>
-            <div class="row">
-                <div class="col-sm-12 text-center"><h6>לכבוד: {{vm.customerRoundProducts.customerRound.CustomerName + ' ח.פ. - '+vm.customerRoundProducts.customerRound.CustomerHP }}</h6></div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <table class="table date-filter table-responsive table-condensed table-bordered  table-striped">
-                        <thead>
-                            <tr>
-                                <th>מס' סידורי</th>
-                                <th>שם המוצר</th>
-                                <th>כמות</th>
-                                <th>החזרות</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-ng-repeat="product in vm.productsPrint">
-                                <td>{{$index+1}}</td>
-                                <td>{{product.CustomerRoundProduct.ProductName}}</td>
-                                <td>{{product.Amount}}</td>
-                                <td>{{product.DeliveredAmount}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="row">
+                    <div class="col-xs-12 pull-right text-right">
+                        {{vm.manager.address}} &nbsp;
+                        &nbsp; פל':&nbsp;  {{vm.manager.phone}}
+                        &nbsp;טלפון:&nbsp;  {{vm.manager.tel}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 print-row">
+                        <div class="text-right pull-right"> תעודת לתשלום מספר: {{vm.roundSelected.RoundID + products[0].CustomerRoundProduct.CustomerID}}</div>
+                        <div class="text-left pull-left">תאריך: {{vm.date | date: 'dd-MM-yyyy'}}</div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-center"><h6>לכבוד: {{products[0].CustomerRoundProduct.CustomerName + ' ח.פ. - '+ products[0].CustomerHP }}</h6></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table date-filter table-responsive table-condensed table-bordered  table-striped">
+                            <thead>
+                                <tr>
+                                    <th>מס'</th>
+                                    <th>שם המוצר</th>
+                                    <th>כמות</th>
+                                    <th>החזרות</th>
+                                    <th>יח'</th>
+                                    <th>סכ"ה</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="product in products">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{product.CustomerRoundProduct.ProductName}}</td>
+                                    <td>{{product.Amount}}</td>
+                                    <td>{{product.DeliveredAmount}}</td>
+                                    <td>{{product.CustomerRoundProduct.Cost}}</td>
+                                    <td>{{(product.CustomerRoundProduct.Cost * product.Amount) | number:1}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        סכ"ה לפני : {{vm.calcTotal(products) | currency:undefined:2 }}&nbsp;&nbsp;&nbsp;
+                                        סכ"ה כולל מע"מ: {{vm.calcTotal(products)+(vm.calcTotal(products)*0.18) | currency:undefined:2 }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
