@@ -17,7 +17,7 @@ using Services.Users;
 namespace Distributions.Web.Controllers
 {
     [AuthorizeUser]
-    public class AdminController : ApiController
+    public class AdminController : BaseApiController
     {
         private readonly IUserService _userService;
         private readonly IDataPersistance<User> _userStorage;
@@ -38,7 +38,8 @@ namespace Distributions.Web.Controllers
         [Route("Admin")]
         public List<ManagerUserViewModel> Get()
          {
-             var allUsers = _userService.GetAllUsers();
+             var userStorage = _userStorage.ObjectValue;
+             var allUsers = _userService.GetAllUsers(userStorage.ManagerId);
              var roles = allUsers.Select(x => x.RoleID.ToString()).ToArray();
 
             var viewModels = new List<ManagerUserViewModel>();
@@ -52,7 +53,8 @@ namespace Distributions.Web.Controllers
                     LName = user.LastName,
                     FName = user.FirstName,
                     Role = user.RoleID.ToString(),
-                    Email = user.Email
+                    Email = user.Email,
+                    ManagerId = user.ManagerId.HasValue?user.ManagerId.Value:0
                 });
             }
 
@@ -65,11 +67,13 @@ namespace Distributions.Web.Controllers
         public HttpResponseMessage SignIn()
         {
             var user = _userStorage.ObjectValue;
+            if (!ChackManagerId(user.ManagerId.Value))
+                return null;
             if (user != null)
                 return Request.CreateResponse(HttpStatusCode.OK, new {
                     userName = user.FirstName +" "+ user.LastName,
                     isAdmin = user.RoleID.ToString() == "Admin" ,
-                    userEmail = user.Email});
+                    userEmail = user.Email,managerId=user.ManagerId});
 
             return null;
         }
@@ -117,7 +121,7 @@ namespace Distributions.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (_userService.GetAllUsers().Any(x=>x.Email==model.Email)==false)
+                    if (_userService.GetAllUsers(model.ManagerId).Any(x=>x.Email==model.Email)==false)
                     {
                         var  result = _userService.AddNewUser(new User
                         {
@@ -125,7 +129,8 @@ namespace Distributions.Web.Controllers
                             FirstName = model.FirstName,
                             LastName = model.LastName,
                             Password = model.Password,
-                            RoleID = (UserRoles.userRoles)model.Role
+                            RoleID = (UserRoles.userRoles)model.Role,
+                            ManagerId = model.ManagerId!=0?model.ManagerId: _userStorage.ObjectValue.ManagerId
                         });
                         //var result = await UserManager.CreateAsync(user, model.Password);
                         if (result.ToString()=="Success")
@@ -170,9 +175,11 @@ namespace Distributions.Web.Controllers
 
         [Route("GetProducts")]
         [AuthorizeUser(AccessRole = "Admin")]
-        public HttpResponseMessage GetProducts()
+        public HttpResponseMessage GetProducts(int id)
         {
-            var products = _productsService.GetProducts();
+            if (!ChackManagerId(id))
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
+            var products = _productsService.GetProducts(id);
             if (products != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, products);
@@ -191,6 +198,15 @@ namespace Distributions.Web.Controllers
                 var errors = new List<string>();
                 errors = ModelErrorChecker.Check(ModelState);
                 return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+            }
+            if (model.ManagerId == 0)
+            {
+                if (_userStorage.ObjectValue.ManagerId != null)
+                    model.ManagerId = _userStorage.ObjectValue.ManagerId.Value;
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotAcceptable, "User Not Founds");
+                }
             }
             var result = _productsService.UpdateProduct(model);
             if (result.ToString() == "Success")
@@ -212,6 +228,15 @@ namespace Distributions.Web.Controllers
                 errors = ModelErrorChecker.Check(ModelState);
                 return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
             }
+            if (model.ManagerId == 0)
+            {
+                if (_userStorage.ObjectValue.ManagerId != null)
+                    model.ManagerId = _userStorage.ObjectValue.ManagerId.Value;
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotAcceptable, "User Not Founds");
+                }
+            }
             var result = _productsService.AddNewProduct(model);
             if (result.ToString() == "Success")
             {
@@ -223,9 +248,11 @@ namespace Distributions.Web.Controllers
 
         [Route("GetCustomers")]
         [AuthorizeUser(AccessRole = "Admin")]
-        public HttpResponseMessage GetCustomers()
+        public HttpResponseMessage GetCustomers(int id)
         {
-            var customers = _customersService.GetValidCustomers(null);
+            if (!ChackManagerId(id))
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
+            var customers = _customersService.GetValidCustomers(null, id);
             if (customers != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, customers);
@@ -244,6 +271,15 @@ namespace Distributions.Web.Controllers
                 var errors = new List<string>();
                 errors = ModelErrorChecker.Check(ModelState);
                 return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+            }
+            if (model.ManagerId == 0)
+            {
+                if (_userStorage.ObjectValue.ManagerId != null)
+                    model.ManagerId = _userStorage.ObjectValue.ManagerId.Value;
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotAcceptable, "User Not Founds");
+                }
             }
             var result = _customersService.UpdateCustomer(model.CustomerID,model);
            
@@ -265,6 +301,15 @@ namespace Distributions.Web.Controllers
                 var errors = new List<string>();
                 errors = ModelErrorChecker.Check(ModelState);
                 return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+            }
+            if (model.ManagerId == 0)
+            {
+                if (_userStorage.ObjectValue.ManagerId != null)
+                    model.ManagerId = _userStorage.ObjectValue.ManagerId.Value;
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotAcceptable, "User Not Founds");
+                }
             }
             var result = _customersService.AddNewCustomer(model);
             if (result.ToString() == "Success")

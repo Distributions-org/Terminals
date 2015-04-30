@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'admin';
-    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'adminService', admin]);
+    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', 'adminService', 'localStorage','cache', admin]);
 
-    function admin($location, common, datacontext, adminService) {
+    function admin($location, common, datacontext, adminService, localStorage,cache) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
@@ -40,12 +40,16 @@
         vm.notactiveChecked = activeChecked;
         vm.activeProducts = true;
         vm.notactiveProducts = true;
-
         //vm.deletUser = deleteUser;
         activate();
 
         function activate() {
-            var promises = [isAdminRole(),getAllUsers(), getRoles(), getProducts(),getCustomers()];
+            var promises = [isAdminRole().then(function() {
+                getAllUsers();
+                getRoles();
+                getProducts();
+                getCustomers();
+            })];
             common.activateController([promises], controllerId)
                 .then(function () {
                      log('מסך ניהול פעיל');
@@ -54,6 +58,10 @@
 
         function isAdminRole() {
             return datacontext.getUserNameAndRole().then(function (response) {
+                //localStorage.remove('managerId');
+                //localStorage.add('managerId', response.data.managerId);
+                cache.clear('managerId');
+                cache.put('managerId', response.data.managerId);
                 return vm.isAdmin = response.data.isAdmin;
             }).then(function () {
                 if (!vm.isAdmin && $location.path() === "/admin") {
@@ -88,6 +96,7 @@
                     Role: parseInt(vm.user.selectedRole),
                     FirstName: vm.user.fname,
                     LastName: vm.user.lname,
+                    ManagerId: cache.get('managerId')
                 }
                 if (angular.element('form[name=userForm] #updatedUserId') && angular.element('form[name=userForm] button').data('action') == "update") {
                     userIdToUpdate = angular.element('form[name=userForm] #updatedUserId').val();
@@ -156,7 +165,7 @@
 
         function getProducts() {
             vm.isBusy(true);
-            return adminService.getAllProducts().then(function(response) {
+            return adminService.getAllProducts(cache.get('managerId')).then(function (response) {
                 vm.products = response.data;
                     vm.productsTmp = response.data;
                 }
@@ -173,7 +182,8 @@
                 var params = {
                     ProductID:0,
                     ProductName: vm.product.productName,
-                    ProductStatus: angular.element('#productStatus').is(':checked')?1:2
+                    ProductStatus: angular.element('#productStatus').is(':checked') ? 1 : 2,
+                    ManagerId: cache.get('managerId')
             }
             var productIdToUpdate = "";
             if (angular.element('form[name=productsForm] #updatedProductId') && angular.element('form[name=productsForm] button').data('action') == "update") {
@@ -237,7 +247,7 @@
 
         function getCustomers() {
             vm.isBusy(true);
-            return adminService.getAllCustomers().then(function (response) {
+            return adminService.getAllCustomers(cache.get('managerId')).then(function (response) {
                 vm.customers = response.data;
             }
                 , function (response) {
@@ -255,7 +265,8 @@
                     CustomerID: 0,
                     CustomerName: vm.customer.customerName,
                     CustomerHP: vm.customer.customerHP,
-                    custStatus: angular.element('#customerStatus').is(':checked') ? 1 : 2
+                    custStatus: angular.element('#customerStatus').is(':checked') ? 1 : 2,
+                    ManagerId: cache.get('managerId')
                 }
                 var customerIdToUpdate = "";
                 if (angular.element('form[name=customersForm] #updatedCustomerId').length>0 && angular.element('form[name=customersForm] button').data('action') == "update") {

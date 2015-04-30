@@ -15,6 +15,6 @@ namespace Core.Domain.Users
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public UserRoles.userRoles RoleID { get; set; }
-        public int ManagerId { get; set; }
+        public int? ManagerId { get; set; }
     }
 }

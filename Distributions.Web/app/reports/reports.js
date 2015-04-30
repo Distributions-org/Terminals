@@ -2,10 +2,10 @@
     'use strict';
 
     var controllerId = "reports";
-    angular.module('app').controller(controllerId, ['$location', '$filter', '$scope', 'common', 'datacontext', 'reportsService', 'managementDistributionsService', 'adminService', 'print', reports]);
+    angular.module('app').controller(controllerId, ['$location', '$filter', '$scope', 'common', 'datacontext', 'reportsService', 'managementDistributionsService', 'adminService', 'print','cache', reports]);
 
 
-    function reports($location, $filter, $scope, common, datacontext, reportsService, managementDistributionsService, adminService, print) {
+    function reports($location, $filter, $scope, common, datacontext, reportsService, managementDistributionsService, adminService, print,cache) {
         /* jshint validthis:true */
         //reportsService.$inject = [];
 
@@ -76,7 +76,8 @@
         vm.roundFilter = {
             Today: false,
             StartDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() -2, 0).setDate(1), 'MM-dd-yyyy'),
-            EndDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() + 2, 0), 'MM-dd-yyyy')
+            EndDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() + 2, 1), 'MM-dd-yyyy'),
+            ManagerId: cache.get('managerId')
         }
 
         vm.openeStart = function ($event) {
@@ -112,7 +113,11 @@
         activate();
 
         function activate() {
-            var promises = [isAdminRole(), getValidCustomers(), toggleMin(), getRounds()];
+            var promises = [isAdminRole().then(function() {
+                getValidCustomers();
+                toggleMin();
+                getRounds();
+            }) ];
             common.activateController([promises], controllerId)
                 .then(function () {
                     log('מסך ' + vm.title + ' פעיל');
@@ -125,6 +130,11 @@
 
         function isAdminRole() {
             return datacontext.getUserNameAndRole().then(function (response) {
+                var cacheTemp = cache.get('managerId');
+                if (!cacheTemp) {
+                    cache.clear('managerId');
+                    cache.put('managerId', response.data.managerId);
+                }
                 return vm.isAdmin = response.data.isAdmin;
             }).then(function () {
                 if (!vm.isAdmin && $location.path() === "/reports") {
@@ -135,7 +145,7 @@
         }
 
         function getProducts() {
-            return adminService.getAllProducts().then(function (response) {
+            return adminService.getAllProducts(cache.get('managerId')).then(function (response) {
                 vm.roundProductCustomer = {};
                     vm.roundProductCustomerEdit = {};
                     vm.products = response.data;
@@ -189,7 +199,7 @@
         }
 
         function getValidCustomers() {
-            return managementDistributionsService.getCustomers().then(function (response) {
+            return managementDistributionsService.getCustomers(cache.get('managerId')).then(function (response) {
                 return vm.customers = response.data;
             }, function (response) {
                 logError(response.status + " " + response.statusText);

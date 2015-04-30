@@ -11,6 +11,7 @@ using Data.Maping.CustomerProduct;
 using AutoMapper;
 using Core.Domain;
 using Core.Domain.Customers;
+using Customers = Core.Domain.Customers.Customers;
 
 namespace Services.Users
 {
@@ -40,7 +41,7 @@ namespace Services.Users
             return _CustomersRepository.Add(newCustomers);
         }
 
-        public List<Core.Domain.Customers.Customers> GetValidCustomers(int? roundsCustomerID,int ManagerId)
+        public List<Customers> GetValidCustomers(int? roundsCustomerID, int? ManagerId)
         {
             Mapper.Reset();
             if (roundsCustomerID != null && roundsCustomerID.Value > 0)

@@ -26,8 +26,8 @@
 
         return service;
 
-        function getCustomers() {
-            return $http.get("/GetActiveCustomers").success(function(data) {
+        function getCustomers(id) {
+            return $http.get("/GetActiveCustomers?id="+id).success(function(data) {
                     return data;
                 })
                 .error(function(data, status) {
@@ -44,8 +44,8 @@
                 });
         }
 
-        function getWorkers() {
-            return $http.get("/GetWorkers").success(function(data) {
+        function getWorkers(id) {
+            return $http.get("/GetWorkers?id="+id).success(function(data) {
                     return data;
                 })
                 .error(function(data, status) {

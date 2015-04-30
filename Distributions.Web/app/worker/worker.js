@@ -126,6 +126,7 @@
             vm.customerRoundProducts = {};
             vm.isSaved = false;
             if (round != null) {
+                vm.date = new Date(round.RoundDate);
                 vm.customersInRound = _.without(round.custRound, _.find(round.custRound, function (r) { return r.roundcustomerProducts.length == 0; }));
                 if (vm.customersInRound.length > 0) {
                     vm.customer = vm.customersInRound[0];
@@ -170,8 +171,20 @@
             }
         }
 
-        function editRow(index) {
+        function editRow(index, deliveredAmount,amount) {
             if (index > 0) {
+                if (deliveredAmount === 0) {
+                    vm.customerRoundProducts.roundcustomerProducts[index - 1].DeliveredAmount = '';
+                }
+                else if (parseInt(deliveredAmount) === 0 || parseInt(deliveredAmount).toString() === 'NaN') {
+                    vm.customerRoundProducts.roundcustomerProducts[index - 1].DeliveredAmount = 0;
+                }
+                if (amount === 0) {
+                    vm.customerRoundProducts.roundcustomerProducts[index - 1].Amount = '';
+                }
+                else if (parseInt(amount) === 0 || parseInt(amount).toString() === 'NaN') {
+                    vm.customerRoundProducts.roundcustomerProducts[index - 1].Amount = 0;
+                }
                 var row = angular.element('.productRow' + index);
                 if (row.find('.productRowTd' + index).css('display') === 'table-cell') {
                     row.find('.productRowTd' + index).css('display', 'none');

@@ -85,6 +85,7 @@ namespace Distributions.Web.Models
         public string LastName { get; set; }
         public int Role { get; set; }  
         public int UserId { get; set; }
+         public int ManagerId { get; set; }
     }
 
     public class ResetPasswordViewModel

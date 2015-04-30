@@ -57,7 +57,7 @@ namespace Services
             return _usersRepository.Update(UpdateUser);
         }
 
-        public List<User> GetAllUsers(int ManagerId)
+        public List<User> GetAllUsers(int? ManagerId)
         {
             Mapper.CreateMap<UsersTbl, User>()
                 .ForMember(a => a.RoleID, b => b.MapFrom(c => (UserRoles.userRoles)c.RoleID));

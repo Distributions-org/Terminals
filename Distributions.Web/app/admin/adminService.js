@@ -70,8 +70,8 @@
           });
         }
 
-        function getAllProducts() {
-            return $http.get("/GetProducts").success(function (data) {
+        function getAllProducts(id) {
+            return $http.get("/GetProducts?id="+id).success(function (data) {
                 return data;
             })
             .error(function (data, status, headers, config) {
@@ -112,8 +112,8 @@
             //];
         }
 
-        function getAllCustomers() {
-            return $http.get("/GetCustomers").success(function(data) {
+        function getAllCustomers(id) {
+            return $http.get("/GetCustomers?id="+id).success(function(data) {
                     return data;
                 })
                 .error(function(data, status, headers, config) {

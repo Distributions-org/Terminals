@@ -12,7 +12,7 @@ using Services.SessionManager;
 
 namespace Distributions.Web.Controllers
 {
-    public class BaseApiController : ApiController
+    public abstract class BaseApiController : ApiController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -36,6 +36,11 @@ namespace Distributions.Web.Controllers
                 HttpContext.Current.Response.End(); 
                
             }
+        }
+
+        protected bool ChackManagerId(int id)
+        {
+            return _userStorage.ObjectValue.ManagerId != null && id == _userStorage.ObjectValue.ManagerId.Value;
         }
         //public ApplicationUserManager UserManager
         //{

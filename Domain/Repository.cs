@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using Core.Data;
 using Core.Enums;
@@ -23,7 +24,15 @@ namespace Data
         //When you expect a model back (async)
         public async Task<IList<T>> ExecWithStoreProcedureAsync<T>(string query, params object[] parameters)
         {
-            return await _context.Database.SqlQuery<T>(query, parameters).ToListAsync();
+            try
+            {
+                return await _context.Database.SqlQuery<T>(query, parameters).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+           
         }
 
         //When you expect a model back

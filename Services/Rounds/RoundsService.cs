@@ -193,73 +193,32 @@ namespace Services
         }
 
 
-        public async Task<IList<Rounds>> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate,string email,int ManagerID)
+        public async Task<IList<Rounds>> GetAllRounds(bool today,DateTime? startDate,DateTime? endDate,string email,int managerId)
         {
             IList<Rounds> rounds = new List<Rounds>();
-            IList<RoundsDbModel> roundsDb;
-            IQueryable<RoundsTbl> tmpRounds;
-
-            if (startDate != null && endDate != null)
-            {
-                roundsDb = await _RoundsRepository.ExecWithStoreProcedureAsync<RoundsDbModel>("sp_get_rounds @startDate, @endtDate, @today",
-                 new SqlParameter("startDate", startDate), new SqlParameter("endtDate", endDate), new SqlParameter("today", today));
-
-                //tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) >= DbFunctions.TruncateTime(startDate)
-                //    && DbFunctions.TruncateTime(x.RoundDate) <= DbFunctions.TruncateTime(endDate));
-            }
-            else if (!today)
-            {
-                roundsDb = await _RoundsRepository.ExecWithStoreProcedureAsync<RoundsDbModel>("sp_get_rounds @startDate, @endtDate, @today",
-                new SqlParameter("startDate", null), new SqlParameter("endtDate", null), new SqlParameter("today", today));
-                //tmpRounds = _RoundsRepository.GetAll().Where(x=>x!=null);
-            }
-            else
-            {
-                roundsDb = await _RoundsRepository.ExecWithStoreProcedureAsync<RoundsDbModel>("sp_get_rounds @startDate, @endtDate, @today",
-                new SqlParameter("startDate", DateTime.Now), new SqlParameter("endtDate", DateTime.Now), new SqlParameter("today", today));
-                //tmpRounds = _RoundsRepository.FindBy(x => DbFunctions.TruncateTime(x.RoundDate) == DbFunctions.TruncateTime(DateTime.Now)).Where(x=>x!=null);
-            }
+            var roundsDb = await RoundsDbModels(today, startDate, endDate, managerId);
             rounds = MappingToRound(roundsDb.GroupBy(x => x.RoundsID)).ToList();
-           
-
-
-            //if (tmpRounds.Any())
-            //    {
-            //        await tmpRounds.ForEachAsync(round => rounds.Add(new Rounds
-            //        {
-            //            RoundID = round.RoundsID,
-            //            roundStatus = (RoundStatus.roundStatus)round.RoundStatus.GetValueOrDefault(),
-            //            RoundDate = round.RoundDate.GetValueOrDefault(),
-            //            RoundName = round.RoundName,
-            //            RoundUser = _userService.GetAllUsers().Where(x =>
-            //            {
-            //                var firstOrDefault = _RoundsUserRepository.FindBy(u => u.RoundsID == round.RoundsID).FirstOrDefault(c => c != null);
-            //                return firstOrDefault != null && x.UserID == firstOrDefault.UserID;
-            //            }),
-            //            custRound = MapRoundCustomer(_RoundsCustomerRepository.FindBy(x => x.RoundsID == round.RoundsID).Where(r => r != null)).Result
-            //        }));
-
-                  //await  tmpRounds.ForEachAsync(round => rounds.Add(new Rounds
-                  //  {
-                  //          RoundID = round.RoundsID,
-                  //          roundStatus = (RoundStatus.roundStatus)round.RoundStatus.GetValueOrDefault(),
-                  //          RoundDate = round.RoundDate.GetValueOrDefault(),
-                  //          RoundName = round.RoundName,
-                  //          RoundUser = _userService.GetAllUsers().Where(x=>
-                  //          {
-                  //              var firstOrDefault = _RoundsUserRepository.FindBy(u=>u.RoundsID==round.RoundsID).FirstOrDefault(c => c!=null);
-                  //              return firstOrDefault != null && x.UserID==firstOrDefault.UserID;
-                  //          }).ToList(),
-                  //          custRound =  MapRoundCustomer(_RoundsCustomerRepository.FindBy(x => x.RoundsID == round.RoundsID).Where(r=>r!=null)).ToList()
-                  //  }));
-            //}
-
             if (!string.IsNullOrWhiteSpace(email))
             {
                 return rounds.Where(x => x.RoundUser.First().Email == email).ToList();
             }
 
             return rounds;
+        }
+
+        private async Task<IList<RoundsDbModel>> RoundsDbModels(bool today, DateTime? startDate, DateTime? endDate, int managerId)
+        {
+            startDate = startDate.HasValue ? startDate.Value : DateTime.Now;
+            endDate = endDate.HasValue ? endDate.Value : DateTime.Now;
+
+            IList<RoundsDbModel> roundsDb;
+            roundsDb =
+                await
+                    _RoundsRepository.ExecWithStoreProcedureAsync<RoundsDbModel>(
+                        "sp_get_rounds_by_manager_id @startDate, @endtDate, @today, @managerId",
+                        new SqlParameter("startDate", startDate), new SqlParameter("endtDate", endDate),
+                        new SqlParameter("today", today), new SqlParameter("managerId", managerId));
+            return roundsDb;
         }
 
 
@@ -467,11 +426,22 @@ namespace Services
             IList<CustomerRound> customerRoundTmp = new List<CustomerRound>();
             if (roundsCustomerTbl.Any())
             {
-                await roundsCustomerTbl.ForEachAsync(roundsCustomer => customerRoundTmp.Add(new CustomerRound
+                await roundsCustomerTbl.ForEachAsync(roundsCustomer =>
                 {
-                    customerRound = _customerService.GetValidCustomers(roundsCustomer.RoundsCustomersID).FirstOrDefault(x => x.CustomerID == roundsCustomer.CustomerID),
-                    roundcustomerProducts = GetRoundCustomerProducts(roundsCustomer.CustomerID.GetValueOrDefault(), roundsCustomer.RoundsID.GetValueOrDefault())
-                }));
+                    var firstOrDefault = _CustomersRepository.FindBy(x => x.CustomerID == roundsCustomer.CustomerID)
+                        .FirstOrDefault();
+                    if (firstOrDefault != null)
+                        customerRoundTmp.Add(new CustomerRound
+                        {
+                            customerRound =
+                                _customerService.GetValidCustomers(roundsCustomer.RoundsCustomersID,
+                                    firstOrDefault
+                                        .ManagerId).FirstOrDefault(x => x.CustomerID == roundsCustomer.CustomerID),
+                            roundcustomerProducts =
+                                GetRoundCustomerProducts(roundsCustomer.CustomerID.GetValueOrDefault(),
+                                    roundsCustomer.RoundsID.GetValueOrDefault())
+                        });
+                });
             }
 
             return customerRoundTmp;

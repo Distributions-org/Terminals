@@ -15,7 +15,7 @@ namespace Services
         FunctionReplay.functionReplay UpdateCustomerProductPrice(ProductToCustomer updateProduct);
         FunctionReplay.functionReplay RemoveProductToCustomer(int productCustomerId);
         Core.Domain.Product GetProductById(int ProductID);
-        List<Core.Domain.Product> GetProductByStatus(ProductStatus.productStatus pStatus,int ManagerId)
-        List<Core.Domain.Product> GetProducts(int ManagerId)
+        List<Core.Domain.Product> GetProductByStatus(ProductStatus.productStatus pStatus, int ManagerId);
+        List<Core.Domain.Product> GetProducts(int ManagerId);
     }
 }

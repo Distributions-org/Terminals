@@ -10,7 +10,7 @@ namespace Services
         FunctionReplay.functionReplay AddNewUser(User addUser);
         User LoginUser(string email, string Password);
         FunctionReplay.functionReplay UpdateUser(User userToUpdate);
-        List<User> GetAllUsers(int ManagerId)
+        List<User> GetAllUsers(int? ManagerId);
         User GetUserById(int UserID);
     }
 }

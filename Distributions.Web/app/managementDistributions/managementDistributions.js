@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'managementDistributions';
-    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'managementDistributionsService', 'adminService', managementDistributions]);
+    angular.module('app').controller(controllerId, ['$location', '$filter', 'common', 'datacontext', 'managementDistributionsService', 'adminService', 'cache', managementDistributions]);
 
-    function managementDistributions($location, $filter, common, datacontext, managementDistributionsService, adminService) {
+    function managementDistributions($location, $filter, common, datacontext, managementDistributionsService, adminService,cache) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
@@ -167,7 +167,14 @@
         activate();
 
         function activate() {
-            var promises = [isAdminRole(), getValidCustomers(), getProducts(), getWorkers(), getRounds(), toggleMin(), init()];
+            var promises = [isAdminRole().then(function() {
+                getValidCustomers();
+                getProducts();
+                getWorkers();
+                getRounds();
+                toggleMin();
+                init();
+            })];
             common.activateController([promises], controllerId)
                 .then(function () {
                     log('מסך ניהול הפצות פעיל');
@@ -190,7 +197,8 @@
             vm.roundFilter = {
                 Today: false,
                 StartDate: $filter('date')(vm.stratDate, 'MM-dd-yyyy'),
-                EndDate: $filter('date')(vm.endDate, 'MM-dd-yyyy')
+                EndDate: $filter('date')(vm.endDate, 'MM-dd-yyyy'),
+                ManagerId: cache.get('managerId')
             }
             getRounds();
         }
@@ -217,6 +225,11 @@
 
         function isAdminRole() {
             return datacontext.getUserNameAndRole().then(function (response) {
+                var cacheTemp = cache.get('managerId');
+                if (!cacheTemp) {
+                    cache.clear('managerId');
+                    cache.put('managerId', response.data.managerId);
+                }
                 return vm.isAdmin = response.data.isAdmin;
             }).then(function () {
                 if (!vm.isAdmin && $location.path() === "/managementDistributions") {
@@ -227,7 +240,7 @@
         }
 
         function getWorkers() {
-            return managementDistributionsService.getWorkers().then(function (response) {
+            return managementDistributionsService.getWorkers(cache.get('managerId')).then(function (response) {
                 //success
                 vm.workers = response.data;
             },
@@ -238,7 +251,7 @@
         }
 
         function getValidCustomers() {
-            return managementDistributionsService.getCustomers().then(function (response) {
+            return managementDistributionsService.getCustomers(cache.get('managerId')).then(function (response) {
                 return vm.customers = response.data;
             }, function (response) {
                 logError(response.status + " " + response.statusText);
@@ -246,7 +259,7 @@
         }
 
         function getProducts() {
-            return adminService.getAllProducts().then(function (response) {
+            return adminService.getAllProducts(cache.get('managerId')).then(function (response) {
                 vm.products = _.where(response.data, { productStatus: 1 });
             }
                 , function (response) {
@@ -396,7 +409,8 @@
         function createNewRound() {
             var round = {
                 RoundName: vm.roundName,
-                RoundDate: getRoundDate()
+                RoundDate: getRoundDate(),
+                ManagerId: cache.get('managerId')
             }
             return managementDistributionsService.newRound(round).then(function (response) {
                 //success
@@ -561,7 +575,8 @@
             var round = {
                 RoundID: roundId,
                 RoundName: vm.roundName,
-                RoundDate: getRoundDate()
+                RoundDate: getRoundDate(),
+                ManagerId: cache.get('managerId')
             }
             return managementDistributionsService.updateRound(round).then(function (response) {
                 //success
