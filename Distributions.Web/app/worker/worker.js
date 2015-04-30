@@ -2,11 +2,11 @@
     'use strict';
 
     var controllerId = 'worker';
-    angular.module('app').controller(controllerId, ['$location', '$q', '$window', '$filter', 'common', 'datacontext', 'managementDistributionsService', 'print', worker]);
+    angular.module('app').controller(controllerId, ['$location', '$q', '$window', '$filter', 'common', 'datacontext', 'managementDistributionsService', 'print','cache', worker]);
 
 
 
-    function worker($location, $q, $window, $filter, common, datacontext, managementDistributionsService, print) {
+    function worker($location, $q, $window, $filter, common, datacontext, managementDistributionsService, print,cache) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = common.logger.getLogFn(controllerId, 'success');
@@ -67,6 +67,11 @@
 
         function isAdminRole() {
             return datacontext.getUserNameAndRole().then(function (response) {
+                var cacheTemp = cache.get('managerId');
+                if (!cacheTemp) {
+                    cache.clear('managerId');
+                    cache.put('managerId', response.data.managerId);
+                }
                 return { workerEmail: response.data.userEmail, isAdmin: response.data.isAdmin };
             }).then(function (result) {
                 vm.isAdmin = result.isAdmin;
@@ -99,7 +104,8 @@
                 Today: false,
                 StartDate: $filter('date')(today, 'MM-dd-yyyy'),
                 EndDate: $filter('date')(tomorrow, 'MM-dd-yyyy'),
-                Email: vm.workerEmail
+                Email: vm.workerEmail,
+                ManagerId: cache.get('managerId')
             };
         }
 

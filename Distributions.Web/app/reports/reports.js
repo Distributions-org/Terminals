@@ -17,7 +17,6 @@
         var vm = this;
         vm.isBusy = common.serviceCallPreloader;
         vm.title = 'דוחות';
-        vm.isBusy = common.serviceCallPreloader;
         vm.isAdmin = false;
         vm.customers = {};
         vm.customerSelected = {};
@@ -174,6 +173,7 @@
                   function (response) {
                       //error
                       logError(response.status + " " + response.statusText);
+                      vm.isBusy(false);
                   });
             }
 
