@@ -71,6 +71,18 @@
             return false; //(mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
 
+        vm.opens = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.openedStart = true;
+        };
+        vm.opene = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.openedEnd = true;
+        };
         vm.open = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
@@ -80,7 +92,8 @@
 
         vm.dateOptions = {
             formatYear: 'yyyy',
-            startingDay: 1,
+            startingDay: 0,
+            showWeeks:false
         };
 
         function toggleMin() {

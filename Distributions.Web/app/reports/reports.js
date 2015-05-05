@@ -94,7 +94,8 @@
 
         vm.dateOptions = {
             formatYear: 'yyyy',
-            startingDay: 1,
+            startingDay: 0,
+            showWeeks: false
         };
 
         function toggleMin() {

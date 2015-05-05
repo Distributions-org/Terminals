@@ -16,16 +16,16 @@
                             <div ng-show="vm.showDate" class="col-sm-3">
                                 <label>מתאריך: </label>
                                 <p class="input-group date-picker">
-                                    <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart" datepicker-options="vm.dateoptions"
-                                           date-disabled="vm.disabled(date, mode)" show-button-bar="false" show-weeks="false" close-text="סגור" />
+                                    <input type="text" class="form-control" ng-click="vm.openeStart($event)" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart" datepicker-options="vm.dateOptions"
+                                           date-disabled="vm.disabled(date, mode)" show-button-bar="false" close-text="סגור" />
                                 </p>
                                 <button type="button" class="btn btn-default btn-date" ng-click="vm.openeStart($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>
                             <div ng-show="vm.showDate" class="col-sm-3">
                                 <label>עד תאריך: </label>
                                 <p class="input-group date-picker">
-                                    <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd" datepicker-options="vm.dateoptions"
-                                           date-disabled="vm.disabled(date, mode)" show-button-bar="false" show-weeks="false" close-text="סגור" />
+                                    <input type="text" class="form-control" ng-click="vm.openeEnd($event)" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd" datepicker-options="vm.dateOptions"
+                                           date-disabled="vm.disabled(date, mode)" show-button-bar="false" close-text="סגור" />
                                 </p>
                                 <button type="button" class="btn btn-default btn-date" ng-click="vm.openeEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>

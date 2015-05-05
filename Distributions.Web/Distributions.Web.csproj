@@ -264,6 +264,9 @@
     <Content Include="Scripts\bootstrap-timepicker.js" />
     <Content Include="Scripts\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\printThis.js" />
+    <Content Include="Scripts\ui-bootstrap-0.12.1.js" />
+    <Content Include="Scripts\ui-bootstrap-tpls-0.12.1.js" />
+    <Content Include="Scripts\ui-bootstrap-tpls-0.12.1.min.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\underscore.min.map" />

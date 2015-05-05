@@ -104,8 +104,8 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="input-group date-picker">
-                                                    <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart"
-                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
+                                                    <input type="text" class="form-control" ng-click="vm.opens($event)" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart"
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions"  show-button-bar="false" />
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </div>
                                             </div>
@@ -114,8 +114,8 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="input-group date-picker">
-                                                    <input type="text" class="form-control"  datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd"
-                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
+                                                    <input type="text" class="form-control" ng-click="vm.opene($event)" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd"
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions"  show-button-bar="false" />
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </div>
                                             </div>
@@ -188,8 +188,8 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="input-group date-picker">
-                                                    <input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
-                                                           date-disabled="vm.disabled(date, mode)"  datepicker-options="vm.dateOptions" show-weeks="false" show-button-bar="false" />
+                                                    <input type="text" class="form-control" ng-click="vm.open($event)" datepicker-popup="{{vm.format}}" ng-model="vm.dt" is-open="vm.opened"
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-button-bar="false" />
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </div>
                                             </div>
