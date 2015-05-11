@@ -16,5 +16,7 @@ namespace Data
     {
         public int ManagerID { get; set; }
         public string ManagerName { get; set; }
+        public string ManagerHP { get; set; }
+        public string ManagerPhone { get; set; }
     }
 }

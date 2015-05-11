@@ -8,16 +8,19 @@ using Core.MD5;
 using Core.Enums;
 using Core.Domain.Users;
 using AutoMapper;
+using Core.Domain.Managers;
 
 namespace Services
 {
     public  class UsersService : IUserService
     {
         private readonly IRepository<UsersTbl> _usersRepository;
+        private readonly IRepository<ManagersTbl> _managersRepository;
 
-        public UsersService(IRepository<UsersTbl> usersRepository)
+        public UsersService(IRepository<UsersTbl> usersRepository, IRepository<ManagersTbl> managersRepository)
         {
             _usersRepository = usersRepository;
+            _managersRepository = managersRepository;
         }
 
         public FunctionReplay.functionReplay AddNewUser(User addUser)
@@ -32,6 +35,7 @@ namespace Services
 
         public User LoginUser(string email, string Password)
         {
+            Mapper.CreateMap<ManagersTbl, Manager>();
             string decPassword = Password;
             UsersTbl user = _usersRepository.FindBy(x => x.Email == email && x.Password == decPassword).FirstOrDefault();
             if (user != null)
@@ -41,6 +45,8 @@ namespace Services
                 CurrentUser.FirstName = user.FirstName;
                 CurrentUser.LastName = user.LastName;
                 CurrentUser.RoleID = (UserRoles.userRoles)user.RoleID;
+
+                Manager currentManager =  Mapper.Map<ManagersTbl, Manager>(_managersRepository.FindBy(x => x.ManagerID == user.ManagerID).FirstOrDefault());
                 CurrentUser.ManagerId = user.ManagerID;
                 return CurrentUser;
 	        }

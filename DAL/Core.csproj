@@ -58,6 +58,7 @@
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Domain\CustomerProduct\CustomerProduct.cs" />
     <Compile Include="Domain\Customers\Customers.cs" />
+    <Compile Include="Domain\Managers\Manager.cs" />
     <Compile Include="Domain\Persons\Person.cs" />
     <Compile Include="Domain\Product\Product.cs" />
     <Compile Include="Domain\ProductTocustomer\ProductToCustomer.cs" />

@@ -21,6 +21,7 @@ using Core.Domain.Rounds;
 using Core.Domain.Customers;
 using System;
 using Services.Users;
+using Core.Domain.Managers;
 
 namespace Services
 {
@@ -34,6 +35,7 @@ namespace Services
         private readonly IRepository<RoundsUserTbl> _RoundsUserRepository;
         private readonly IRepository<RoundsCustomerTbl> _RoundsCustomerRepository;
         private readonly IRepository<RoundsCustomerProductTbl> _RoundsCustomerProductRepository;
+        private readonly IRepository<ManagersTbl> _managersRepository;
         private readonly IUserService _userService;
         private readonly ICustomerService _customerService;
 
@@ -41,7 +43,7 @@ namespace Services
             IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository
             , IRepository<Data.RoundsUserTbl> RoundsUserRepository,
             IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository,
-            IUserService userService, ICustomerService customerService)
+            IUserService userService, ICustomerService customerService, IRepository<ManagersTbl> managersRepository)
         {
             _RoundsRepository = RoundsRepository;
             _CustomersRepository = CustomersRepository;
@@ -52,6 +54,7 @@ namespace Services
             _RoundsCustomerProductRepository = RoundsCustomerProductRepository;
             _userService = userService;
             _customerService = customerService;
+            _managersRepository = managersRepository;
         }
 
         public int CreateNewRound(Rounds NewRound)
@@ -311,6 +314,14 @@ namespace Services
             }
         }
 
+        public Manager GetManagerDetails(int ManagerID)
+        {
+            Mapper.CreateMap<ManagersTbl, Manager>();
+            Manager currentManager = Mapper.Map<ManagersTbl, Manager>(_managersRepository.FindBy(x => x.ManagerID == ManagerID).FirstOrDefault());
+
+            return currentManager;
+        }
+
         public FunctionReplay.functionReplay UpdateRoundProductCustomer(List<RoundProductCustomer> updateProductToCustomerRound, int roundId)
         {
              try
@@ -537,6 +548,7 @@ namespace Services
 
         private static IEnumerable<User> MapToUser(RoundsDbModel round)
         {
+            Mapper.CreateMap<ManagersTbl, Manager>();
             return new List<User>
             {
                 new User
@@ -544,7 +556,7 @@ namespace Services
                     Email = round.Email,
                     FirstName = round.FirstName,
                     LastName = round.LastName,
-                    ManagerId = round.ManagerID.HasValue ? round.ManagerID.Value : 0,
+                    ManagerId = round.UserID,
                     Password = "",
                     RoleID = round.RoleID,
                     UserID = round.UserID

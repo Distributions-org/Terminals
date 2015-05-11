@@ -21,6 +21,8 @@
           </Key>
           <Property Name="ManagerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ManagerName" Type="nvarchar" MaxLength="350" />
+          <Property Name="ManagerHP" Type="nvarchar" MaxLength="50" />
+          <Property Name="ManagerPhone" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ProductCustomerTbl">
           <Key>
@@ -148,6 +150,8 @@
           </Key>
           <Property Name="ManagerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ManagerName" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="ManagerHP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ManagerPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProductCustomerTbl">
           <Key>
@@ -318,6 +322,8 @@
           <EntitySetMapping Name="ManagersTbls">
             <EntityTypeMapping TypeName="TerminalsModel.ManagersTbl">
               <MappingFragment StoreEntitySet="ManagersTbl">
+                <ScalarProperty Name="ManagerPhone" ColumnName="ManagerPhone" />
+                <ScalarProperty Name="ManagerHP" ColumnName="ManagerHP" />
                 <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
                 <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
               </MappingFragment>
