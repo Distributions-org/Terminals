@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Domain.Managers;
 using Core.Domain.Users;
 using Core.Enums;
 using Data;
@@ -36,5 +37,7 @@ namespace Services
         Task<IList<Rounds>> GetAllRounds(bool today, DateTime? startDate, DateTime? endDate,string email,int managerId);
 
         FunctionReplay.functionReplay DeleteProductFromRound(ProductToCustomer product,int roundId);
+
+        Manager GetManagerDetails(int ManagerID);
     }
 }

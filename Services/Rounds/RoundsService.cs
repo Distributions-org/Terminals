@@ -316,6 +316,7 @@ namespace Services
 
         public Manager GetManagerDetails(int ManagerID)
         {
+            Mapper.Reset();
             Mapper.CreateMap<ManagersTbl, Manager>();
             Manager currentManager = Mapper.Map<ManagersTbl, Manager>(_managersRepository.FindBy(x => x.ManagerID == ManagerID).FirstOrDefault());
 

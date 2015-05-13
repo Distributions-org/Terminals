@@ -52,7 +52,7 @@
         vm.getTotlalSum = getTotlalSum;
         vm.createReportCounts = createReportCounts;
         vm.reportCounts = {};
-
+        vm.managerDetails = {};
         vm.dateFilter = new Date();
         // Disable weekend selection
         vm.disabled = function (date, mode) {
@@ -117,6 +117,7 @@
                 getValidCustomers();
                 toggleMin();
                 getRounds();
+                getManagerDetails();
             }) ];
             common.activateController([promises], controllerId)
                 .then(function () {
@@ -141,6 +142,12 @@
                     logError('אינך מורשה לצפות בדף זה!!!');
                     $location.url('/worker');
                 }
+            });
+        }
+
+        function getManagerDetails() {
+            common.getManagerDetails(cache.get('managerId')).then(function(data) {
+                vm.managerDetails = data;
             });
         }
 

@@ -14,7 +14,7 @@
 
         return service;
 
-        function printThisReport(element) {
+        function printThisReport(element,managerName) {
             $("#" + element).printThis({
       debug: false,               //* show the iframe for debugging
       importCSS: true,            //* import page CSS
@@ -22,7 +22,7 @@
       printContainer: true,      // * grab outer container as well as the contents of the selector
       loadCSS: ["/content/bootstrap.min.css", "/Content/bootstrap-rtl.css", "/Content/customtheme.css"
       , "/Content/styles.css", "/Content/StyleSheet.min.css", "/Content/printWorker.css", "/Content/print.css"], // * path to additional css file - us an array [] for multiple
-      pageTitle: "אלון שיווק פיתות ודברי מאפה",              //* add title to print page
+      pageTitle: managerName,              //* add title to print page
       removeInline: false,       // * remove all inline styles from print elements
       printDelay: 333,           // * variable print delay
       header: null,              // * prefix to html
@@ -67,7 +67,7 @@
             return true;
         }
 
-        function printThisReportCount(element) {
+        function printThisReportCount(element,managerName) {
             $("#" + element).printThis({
                 debug: false,               //* show the iframe for debugging
                 importCSS: true,            //* import page CSS
@@ -75,7 +75,7 @@
                 printContainer: true,      // * grab outer container as well as the contents of the selector
                 loadCSS: ["/content/bootstrap.min.css", "/Content/bootstrap-rtl.css", "/Content/customtheme.css"
                 , "/Content/styles.css", "/Content/StyleSheet.min.css", "/Content/printCount.css"], // * path to additional css file - us an array [] for multiple
-                pageTitle: "אלון שיווק פיתות ודברי מאפה",              //* add title to print page
+                pageTitle: managerName,              //* add title to print page
                 removeInline: false,       // * remove all inline styles from print elements
                 printDelay: 555,           // * variable print delay
                 header: null,              // * prefix to html

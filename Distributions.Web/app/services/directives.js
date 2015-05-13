@@ -260,7 +260,8 @@
             scope: {
                 round: '=round',
                 products: '@',
-                printReportCount: '&'
+                printReportCount: '&',
+                managerdetails: '=managerdetails'
             },
             templateUrl: '/app/reports/templates/report-counts.html',
             link: link
@@ -277,8 +278,8 @@
             });
         }
 
-        function printReportCount() {
-            print.printThisReportCount('print-report-counts');
+        function printReportCount(managerName) {
+            print.printThisReportCount('print-report-counts',managerName);
         }
         
         function getProducts(custRound) {

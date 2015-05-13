@@ -62,7 +62,7 @@ namespace Distributions.Web.Controllers
 
             if (!ChackManagerId(model.ManagerId))
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
-            var rounds = await _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate, model.Email,model.ManagerId);
+            var rounds = await _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate, model.Email, model.ManagerId);
             if (rounds.Any())
             {
                 return Request.CreateResponse(HttpStatusCode.OK, rounds);
@@ -121,7 +121,7 @@ namespace Distributions.Web.Controllers
         [HttpPost]
         public HttpResponseMessage NewRound(Rounds round)
         {
-            if (round.ManagerId==0 && _userStorage.ObjectValue.ManagerId != null)
+            if (round.ManagerId == 0 && _userStorage.ObjectValue.ManagerId != null)
                 round.ManagerId = _userStorage.ObjectValue.ManagerId.Value;
 
             if (!ChackManagerId(round.ManagerId))
@@ -139,13 +139,13 @@ namespace Distributions.Web.Controllers
         [HttpPost]
         public HttpResponseMessage AddUserToRound(UsersToRoundModel roundModel)
         {
-            if (roundModel.RoundUser.Count>0 && roundModel.RoundUser.First().ManagerId.HasValue && roundModel.RoundUser.First().ManagerId.Value==0)
+            if (roundModel.RoundUser.Count > 0 && roundModel.RoundUser.First().ManagerId.HasValue && roundModel.RoundUser.First().ManagerId.Value == 0)
             {
                 if (_userStorage.ObjectValue.ManagerId != null)
                 {
                     roundModel.RoundUser.ForEach(x =>
                     {
-                        x.ManagerId=_userStorage.ObjectValue.ManagerId.Value;
+                        x.ManagerId = _userStorage.ObjectValue.ManagerId.Value;
                     });
                 }
                 else
@@ -228,7 +228,7 @@ namespace Distributions.Web.Controllers
                     model.ForEach(z => z.RoundCustomers.ForEach(x =>
                     {
                         _roundsService.UpdateRoundProductCustomer(x.roundcustomerProducts.ToList(), model.First().RoundId);
-                        result +=  z.RoundCustomers.First().customerRound.CustomerName+", ";
+                        result += z.RoundCustomers.First().customerRound.CustomerName + ", ";
                     })
                         );
                     return Request.CreateResponse(HttpStatusCode.OK, result);
@@ -279,6 +279,20 @@ namespace Distributions.Web.Controllers
             }
 
             return Request.CreateResponse(HttpStatusCode.Forbidden, result.ToString());
+        }
+
+        [Route("GetManagerDetails")]
+        public HttpResponseMessage GetManagerDetails(int managerId)
+        {
+            if (managerId == 0 && _userStorage.ObjectValue.ManagerId != null)
+                managerId = _userStorage.ObjectValue.ManagerId.Value;
+
+            if (!ChackManagerId(managerId))
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
+           
+            var result = _roundsService.GetManagerDetails(managerId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
     }

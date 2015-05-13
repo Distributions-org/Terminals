@@ -2,7 +2,7 @@
     <h2>דו"ח כמות מוצרים בסבב</h2>
     <h6>שם הסבב: {{round.RoundName}},&nbsp;&nbsp;&nbsp;מפיץ: {{round.RoundUser[0].FirstName + ' ' + round.RoundUser[0].LastName }},&nbsp;&nbsp;&nbsp;תאריך: {{round.RoundDate | date:'dd-MM-yyyy'}}</h6>
     <div class="print-btn">
-        <button type="button" class="btn btn-info" ng-click="printReportCount()">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
+        <button type="button" class="btn btn-info" ng-click="printReportCount(managerdetails.ManagerName)">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
     </div>
 
     <div>

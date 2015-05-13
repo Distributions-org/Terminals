@@ -45,7 +45,8 @@
             textContains: textContains,
             serviceCallPreloader: serviceCallPreloader,
             cache: cache,
-            localStorage: localStorage
+            localStorage: localStorage,
+            getManagerDetails: getManagerDetails
         };
 
         return service;
@@ -134,6 +135,14 @@
             } else {
                 throttles[key] = $timeout(callback, delay);
             }
+        }
+
+        function getManagerDetails(managerId) {
+           return  $http.get("/GetManagerDetails?managerId=" + managerId).then(function(response) {
+                return response.data;
+            }, function() {
+                return "Error";
+            });
         }
 
         function isNumber(val) {

@@ -55,7 +55,7 @@
                                         </div>
                                     </div>-->
                                     <div class="col-xs-6">
-                                        <label style="font-size: 18px;" class="text-center">אלון שיווק פיתות ודברי מאפה</label>
+                                        <label style="font-size: 18px;" class="text-center">{{vm.managerDetails.ManagerName}}</label>
                                     </div>
                                 </div>
                                 <table class="table table-condensed table-bordered  table-striped table-report">
@@ -257,7 +257,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <report-counts round="vm.reportCounts"></report-counts>
+                                <report-counts round="vm.reportCounts" managerdetails="vm.managerDetails"></report-counts>
                             </div>
                         </div>
                     </div>

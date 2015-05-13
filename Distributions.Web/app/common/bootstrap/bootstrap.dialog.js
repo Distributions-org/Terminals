@@ -128,7 +128,7 @@
             var modalOptions = {
                 templateUrl: 'workerPrintDialog.tpl.html',
                 controller: WorkerPrintModalInstance,
-                size: 'sm',
+                size: 'md',
                 resolve: {
                     options: function () {
                         return {

@@ -33,22 +33,34 @@
         vm.productsPrint = [];
         vm.closeRound = closeRound;
         vm.calcTotal = calcTotal;
-        vm.manager = getManagerDetails();
+        vm.manager = {};
+        vm.managerDetails = {};
 
         activate();
 
         function activate() {
-            var promises = [isAdminRole()];
+            var promises = [isAdminRole().then(function() {
+                getManagerDetails();
+            })];
             common.activateController([promises], controllerId)
                 .then(function () { log('מסך חלוקה פעיל'); }).then(function () { vm.isBusy(true); });
         }
 
         function getManagerDetails() {
+            common.getManagerDetails(cache.get('managerId')).then(function (data) {
+                vm.managerDetails = data;
+            }).then(function() {
+                vm.manager = getManager();
+            });
+        }
+
+        function getManager() {
             return {
-                SoleProprietorship: 028042232,
-                tel: "097660133",
-                phone: "0508313130",
-                address: "רחוב בילו 2 כ\"ס"
+                SoleProprietorship: vm.managerDetails.ManagerHP,
+                tel:  vm.managerDetails.ManagerPhone,
+                phone: vm.managerDetails.ManagerPhone2,
+                address: vm.managerDetails.ManagerAddress,
+                name: vm.managerDetails.ManagerName
             }
         }
 
