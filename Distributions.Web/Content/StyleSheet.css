@@ -310,3 +310,11 @@ header .btn-info {
   top: 10px;
   right: 12px;
 }
+@media (max-width: 1024px) {
+  .user {
+    font-size: 20px !important;
+  }
+  select {
+    font-size: 16px !important;
+  }
+}

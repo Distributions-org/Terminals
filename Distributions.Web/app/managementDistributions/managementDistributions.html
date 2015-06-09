@@ -228,6 +228,7 @@
                                                             <th>שם מוצר</th>
                                                             <th>מחיר</th>
                                                             <th>כמות</th>
+                                                            <th>חזרות</th>
                                                             <th>מחיקה</th>
                                                         </tr>
                                                     </thead>
@@ -236,7 +237,8 @@
                                                             <td>{{product.CustomerName}}</td>
                                                             <td>{{product.ProductName}}</td>
                                                             <td>{{product.Cost}}</td>
-                                                            <td><input type="text" ng-model="product.Amount" name="productAmount" value="product.Amount" /></td>
+                                                            <td><input type="text" ng-blur="vm.clearZero(product)" ng-focus="vm.clearZero(product)" ng-model="product.Amount" name="productAmount" value="product.Amount" /></td>
+                                                            <td><input type="text" ng-blur="vm.clearZeroDelivered(product)" ng-focus="vm.clearZeroDelivered(product)" ng-model="product.DeliveredAmount" name="productDeliveredAmount" value="product.DeliveredAmount" /></td>
                                                             <td><button ng-click="vm.removeProductRoundCustomer(product)" class="btn btn-xs btn-danger">מחק <i class="glyphicon glyphicon-remove"></i></button></td>
                                                         </tr>
                                                     </tbody>
@@ -254,7 +256,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -59,6 +59,8 @@
         vm.activeChecked = activeChecked;
         var tempproductsRoundCustomerSelected = [];
 
+        vm.clearZero = clearZero;
+        vm.clearZeroDelivered = clearZeroDelivered;
         ////date picker
 
         vm.today = today();
@@ -734,7 +736,20 @@
             });
         }
 
-
+        function clearZero(product) {
+            if (product.Amount === 0) {
+                product.Amount = "";
+            } else if (product.Amount === "") {
+                product.Amount = 0;
+            }
+        }
+        function clearZeroDelivered(product) {
+            if (product.DeliveredAmount === 0) {
+                product.DeliveredAmount = "";
+            } else if (product.DeliveredAmount === "") {
+                product.DeliveredAmount = 0;
+            }
+        }
 
 
         //function generateRandomItem(id) {

@@ -46,7 +46,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="productRow{{$index+1}}" data-ng-repeat="product in vm.customerRoundProducts.roundcustomerProducts">
+                                                <tr class="productRow{{$index+1}}" data-ng-repeat="product in vm.customerRoundProducts.roundcustomerProducts | orderBy: 'CustomerRoundProduct.ProductName'">
                                                     <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}}">{{$index+1}}</td>
                                                     <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}}">{{product.CustomerRoundProduct.ProductName}}</td>
                                                     <td class="{{vm.customerRoundProducts.customerRound.RoundCustomerStatus==true?'applay':''}} productRowTd productRowTd{{$index+1}}">{{product.Amount}}</td>
