@@ -164,7 +164,8 @@ namespace Distributions.Web.Controllers
                             FirstName = model.FirstName,
                             LastName = model.LastName,
                             Password = model.Password,
-                            RoleID = (UserRoles.userRoles)model.Role
+                            RoleID = (UserRoles.userRoles)model.Role,
+                            ManagerId = model.ManagerId != 0 ? model.ManagerId : _userStorage.ObjectValue.ManagerId
                         });
            if (result.ToString() == "Success")
                return Request.CreateResponse(HttpStatusCode.OK);
