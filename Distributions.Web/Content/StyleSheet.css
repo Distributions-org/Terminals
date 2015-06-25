@@ -196,6 +196,15 @@ table.date-filter thead > tr:first-child {
 .report input[type=number] {
   width: 35%;
 }
+.report #reportDiv .wrapper {
+  width: 100%;
+}
+.report #reportDiv table {
+  overflow: scroll;
+  /* Scrollbar are always visible */
+  overflow: auto;
+  display: inline-block;
+}
 .report #reportDiv table tr {
   white-space: nowrap;
 }

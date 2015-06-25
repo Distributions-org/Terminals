@@ -74,8 +74,8 @@
 
         vm.roundFilter = {
             Today: false,
-            StartDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() -2, 0).setDate(1), 'MM-dd-yyyy'),
-            EndDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth() + 2, 1), 'MM-dd-yyyy'),
+            StartDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth()+1, 0).setDate(1), 'MM-dd-yyyy'),
+            EndDate: $filter('date')(new Date(vm.dateFilter.getFullYear(), vm.dateFilter.getMonth()+1, 1), 'MM-dd-yyyy'),
             ManagerId: cache.get('managerId')
         }
 

@@ -6,14 +6,14 @@
                     <div allow-collapse="true" data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content report">
                         <div class="row date">
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <label>בחר לקוח:</label>
                                 <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers | orderBy:'CustomerName':false"
                                         ng-change="vm.customerSelectedChange(vm.customerSelected)">
                                     <option value="">לקוח</option>
                                 </select>
                             </div>
-                            <div ng-show="vm.showDate" class="col-sm-3">
+                            <div ng-show="vm.showDate" class="col-sm-2">
                                 <label>מתאריך: </label>
                                 <p class="input-group date-picker">
                                     <input type="text" class="form-control" ng-click="vm.openeStart($event)" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart" datepicker-options="vm.dateOptions"
@@ -47,61 +47,64 @@
                                         <label style="background-color: #f3f55e !important;font-size: 18px;" class="text-center">{{vm.customerSelected.CustomerName}} ח.פ: {{vm.customerSelected.CustomerHP}}</label>
                                     </div>
                                     <!--<div class="col-xs-4">
-                                        <div class="total-print">
-                                            <strong style="font-size: 16px;"> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
-                                        </div>
-                                        <div class="total-print byellow">
-                                            <strong style="font-size: 16px;" class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
-                                        </div>
-                                    </div>-->
+                                            <div class="total-print">
+                                                <strong style="font-size: 16px;"> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
+                                            </div>
+                                            <div class="total-print byellow">
+                                                <strong style="font-size: 16px;" class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
+                                            </div>
+                                        </div>-->
                                     <div class="col-xs-6">
                                         <label style="font-size: 18px;" class="text-center">{{vm.managerDetails.ManagerName}}</label>
                                     </div>
                                 </div>
-                                <table class="table table-condensed table-bordered  table-striped table-report">
-                                    <thead>
-                                        <tr>
-                                            <th style="background-color: #f3f55e !important;">תאריך</th>
-                                            <th style="background-color: #f3f55e !important;" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.ProductName}}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr data-ng-repeat="date in vm.dateRange">
-                                            <td>{{date}}</td>
-                                            <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
-                                                <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
-                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="">
-                                                        <strong>{{allCustomerProductReports.DelieverySent>0?allCustomerProductReports.DelieverySent:""}}</strong>
+
+                                <div class="table-responsive wrapper">
+                                    <table class="table table-condensed table-bordered  table-striped table-report">
+                                        <thead>
+                                            <tr>
+                                                <th style="background-color: #f3f55e !important;">תאריך</th>
+                                                <th style="background-color: #f3f55e !important;" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.ProductName}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-ng-repeat="date in vm.dateRange">
+                                                <td>{{date}}</td>
+                                                <td data-ng-repeat="report in vm.report | orderBy:'ProductName'">
+                                                    <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports">
+                                                        <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="">
+                                                            <strong>{{allCustomerProductReports.DelieverySent>0?allCustomerProductReports.DelieverySent:""}}</strong>
+                                                        </span>
+                                                        <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="red">
+                                                            <strong class="red">   {{allCustomerProductReports.DelieveryTaken>0?allCustomerProductReports.DelieveryTaken:"" }}</strong>
+                                                        </span>
                                                     </span>
-                                                    <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="red">
-                                                        <strong class="red">   {{allCustomerProductReports.DelieveryTaken>0?allCustomerProductReports.DelieveryTaken:"" }}</strong>
-                                                    </span>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td>סה"כ ק - ח</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">
-                                                <span><strong>{{report.SumOfProductsSent}}</strong></span>
-                                                <span class="red"><strong class="red">   {{report.SumOfProductsTakens>0?report.SumOfProductsTakens:""}}</strong></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>סיכום</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.SumOfProductsSent - report.SumOfProductsTakens }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>מחיר</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency:""}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>סה"כ</td>
-                                            <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency:undefined:0 }}</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td>סה"כ ק - ח</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">
+                                                    <span><strong>{{report.SumOfProductsSent}}</strong></span>
+                                                    <span class="red"><strong class="red">   {{report.SumOfProductsTakens>0?report.SumOfProductsTakens:""}}</strong></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>סיכום</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.SumOfProductsSent - report.SumOfProductsTakens }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>מחיר</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.Cost | currency:""}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>סה"כ</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName'">{{report.TotalSum | currency:undefined:0 }}</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                                 <div class="total">
                                     <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
                                 </div>
