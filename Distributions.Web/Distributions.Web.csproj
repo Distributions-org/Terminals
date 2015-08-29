@@ -260,6 +260,7 @@
     <Content Include="Content\printCount.css" />
     <Content Include="Content\printWorker.css" />
     <Content Include="Content\print.css" />
+    <Content Include="gulpfile.js" />
     <Content Include="Scripts\angular-locale_he-il.js" />
     <Content Include="Scripts\bootstrap-timepicker.js" />
     <Content Include="Scripts\bootstrap-timepicker.min.js" />

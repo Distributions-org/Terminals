@@ -279,7 +279,14 @@ table.date-filter {
     }
 
     #reportDiv {
+        .wrapper {
+            width: 100%;
+        }
+
         table {
+            overflow: scroll; /* Scrollbar are always visible */
+            overflow: auto;
+            display: inline-block;
 
             tr {
                 white-space: nowrap;
@@ -455,14 +462,25 @@ header {
 }
 
 
-/*@media (max-width: 1024px) and (min-width: 768px){
-.sidebar {  
-  display: none !important;  
+@media (max-width: 1024px) {
+    .user {
+        font-size: 14px !important;
+    }
 }
-.mainbar{
-    margin-right:0;
+
+
+.addProduct {
+    table {
+        tr {
+            td {
+                input[type="text"] {
+                    max-width: 50px !important;
+                }
+            }
+        }
+    }
 }
-}*/
+
 
 /*.ui-grid-column-menu-button
 {

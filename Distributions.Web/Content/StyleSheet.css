@@ -196,6 +196,15 @@ table.date-filter thead > tr:first-child {
 .report input[type=number] {
   width: 35%;
 }
+.report #reportDiv .wrapper {
+  width: 100%;
+}
+.report #reportDiv table {
+  overflow: scroll;
+  /* Scrollbar are always visible */
+  overflow: auto;
+  display: inline-block;
+}
 .report #reportDiv table tr {
   white-space: nowrap;
 }
@@ -309,4 +318,12 @@ header .btn-info {
   position: absolute;
   top: 10px;
   right: 12px;
+}
+@media (max-width: 1024px) {
+  .user {
+    font-size: 14px !important;
+  }
+}
+.addProduct table tr td input[type="text"] {
+  max-width: 50px !important;
 }

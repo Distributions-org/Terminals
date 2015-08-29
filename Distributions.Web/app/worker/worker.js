@@ -156,7 +156,11 @@
             vm.customerRoundProducts = {};
             vm.isSaved = false;
             if (customer != null) {
+                
                 vm.customerRoundProducts = customer;
+                var tmp = $filter('orderBy')(vm.customerRoundProducts.roundcustomerProducts, 'CustomerRoundProduct.ProductName');
+                vm.customerRoundProducts.roundcustomerProducts =[];
+                vm.customerRoundProducts.roundcustomerProducts = tmp;
             }
         }
 

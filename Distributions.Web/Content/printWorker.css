@@ -26,3 +26,11 @@ table tr {
     width: 100% !important;
     margin-bottom: 50px;
 }
+
+#reportDiv table {
+    overflow: visible;
+    display: inline-block;
+}
+#reportDiv table tr {
+   white-space: nowrap;
+}
