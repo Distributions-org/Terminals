@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Core.Data;
+using Core.Domain.Managers;
 using Core.Domain.Persons;
 using Core.Domain.Users;
 using Data;
@@ -68,6 +70,14 @@ namespace Services.Users
             Data.Customers FoundCustomer = _CustomersRepository.FindBy(x => x.CustomerID==id).FirstOrDefault();
             var customer = _roundsCustomerRepository.FindBy(x => x.CustomerID == id);
             return Mapper.Map<Data.Customers, Core.Domain.Customers.Customers>(FoundCustomer);
+        }
+
+        public Customers LoginCustomer(string email, string password)
+        {
+            Mapper.CreateMap<Data.Customers,Customers>()
+                .ForMember(a => a.custStatus, b => b.MapFrom(c => (int)c.Status));
+
+            return Mapper.Map<Data.Customers,Customers>(_CustomersRepository.FindBy(x => x.Email == email && x.Password == password).FirstOrDefault());
         }
 
         public List<ProductToCustomer> GetAllCustomerProducts(int CustomerID)

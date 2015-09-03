@@ -15,5 +15,6 @@ namespace Services.Users
         List<ProductToCustomer> GetAllCustomerProducts(int CustomerID);
         FunctionReplay.functionReplay UpdateCustomer(int CustomerID, Core.Domain.Customers.Customers UpdateCustomer);
         Core.Domain.Customers.Customers GetCustomersById(int id);
+        Customers LoginCustomer(string email, string password);
     }
 }

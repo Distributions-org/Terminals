@@ -319,7 +319,7 @@
         }
 
         function calcTotal(products) {
-            return _.reduce(products, function (total, product) { return total + (product.Amount * product.CustomerRoundProduct.Cost); }, 0);
+            return _.reduce(products, function (total, product) { return total + ((product.Amount - product.DeliveredAmount) * product.CustomerRoundProduct.Cost); }, 0);
         }
 
 

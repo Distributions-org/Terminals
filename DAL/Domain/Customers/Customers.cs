@@ -11,6 +11,8 @@ namespace Core.Domain.Customers
         public int CustomerID { get; set; }
         public string CustomerName { get; set; }
         public string CustomerHP { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public Core.Enums.CustomerStatus.customerStatus custStatus { get; set; }
         public bool RoundCustomerStatus { get; set; }
         public int ManagerId { get; set; }

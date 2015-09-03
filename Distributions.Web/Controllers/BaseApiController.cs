@@ -6,32 +6,31 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using Core.Domain.Customers;
 using Core.Domain.Users;
 using Microsoft.AspNet.Identity.Owin;
 using Services.SessionManager;
 
 namespace Distributions.Web.Controllers
 {
-    public abstract class BaseApiController : ApiController
+    public abstract class BaseCustomerApiController : ApiController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
 
-       
-        private readonly IDataPersistance<User> _userStorage;
-       
-        protected BaseApiController()
+
+        private readonly IDataPersistance<Customers> _customerStorage;
+
+        protected BaseCustomerApiController()
         {
-            _userStorage = DependencyResolver.Current.GetService<IDataPersistance<User>>();
+            _customerStorage = DependencyResolver.Current.GetService<IDataPersistance<Customers>>();
             CheckIfLogin();
         }
 
         private  void CheckIfLogin()
         {
-            if (_userStorage.ObjectValue == null)
+            if (_customerStorage.ObjectValue == null)
             {
-                _userStorage.ObjectValue = null;
-                HttpContext.Current.Response.Redirect("/", false);
+                _customerStorage.ObjectValue = null;
+                HttpContext.Current.Response.Redirect("/Customer", false);
                 HttpContext.Current.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 HttpContext.Current.Response.End(); 
                
@@ -40,29 +39,8 @@ namespace Distributions.Web.Controllers
 
         protected bool ChackManagerId(int id)
         {
-            return _userStorage.ObjectValue.ManagerId != null && id == _userStorage.ObjectValue.ManagerId.Value;
+            return id == _customerStorage.ObjectValue.ManagerId;
         }
-        //public ApplicationUserManager UserManager
-        //{
-        //    get
-        //    {
-        //        return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-        //    }
-        //    private set
-        //    {
-        //        _userManager = value;
-        //    }
-        //}
-        //public ApplicationSignInManager SignInManager
-        //{
-        //    get
-        //    {
-        //        return _signInManager ?? Request.GetOwinContext().Get<ApplicationSignInManager>();
-        //    }
-        //    private set
-        //    {
-        //        _signInManager = value;
-        //    }
-        //}
+        
     }
 }

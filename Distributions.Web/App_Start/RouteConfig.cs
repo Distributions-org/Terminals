@@ -16,11 +16,23 @@ namespace Distributions.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+               name: "Customer",
+               url: "Customer",
+               defaults: new { controller = "CustomerAccount", action = "Login" }
+           );
+            routes.MapRoute(
+               name: "CustomerCreateRound",
+               url: "CustomerCreateRound",
+               defaults: new { controller = "CustomerAccount", action = "CreateRound" }
+           );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
+           
             //RouteTable.Routes.MapHttpRoute(
             //      name: "DefaultApi",
             //    routeTemplate: "api/{controller}/{id}",

@@ -180,7 +180,7 @@
                                     <td>{{product.Amount}}</td>
                                     <td>{{product.DeliveredAmount}}</td>
                                     <td>{{product.CustomerRoundProduct.Cost}}</td>
-                                    <td>{{(product.CustomerRoundProduct.Cost * product.Amount) | number:1}}</td>
+                                    <td>{{(product.CustomerRoundProduct.Cost * (product.Amount-product.DeliveredAmount)) | number:1}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="text-center">

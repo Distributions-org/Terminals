@@ -31,6 +31,12 @@ namespace Distributions.Web
                 "~/app/admin/adminService.js", "~/app/services/datacontext.js", "~/app/services/directives.js", "~/app/managementDistributions/managementDistributionsService.js",
                 "~/app/reports/reportsService.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/customerApp").Include("~/customersApp/app.js", "~/customersApp/config.js", "~/customersApp/config.exceptionHandler.js", "~/customersApp/config.interceptor.js",
+                "~/customersApp/config.route.js", "~/customersApp/services/entityManagerFactory.js", "~/customersApp/common/common.js", "~/customersApp/common/logger.js", "~/customersApp/common/spinner.js",
+                "~/customersApp/common/cache.js", "~/customersApp/common/localStorage.js", "~/customersApp/common/print.js", "~/customersApp/common/bootstrap/bootstrap.dialog.js"
+                , "~/customersApp/dashboard/dashboard.js", "~/customersApp/dashboard/dashboardService.js", "~/customersApp/layout/shell.js"
+                , "~/customersApp/layout/sidebar.js", "~/customersApp/services/datacontext.js", "~/customersApp/services/directives.js"));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
