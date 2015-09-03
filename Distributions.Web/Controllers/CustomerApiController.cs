@@ -38,10 +38,23 @@ namespace Distributions.Web.Controllers
         {
              if (_customerStorage.ObjectValue == null)
                  return Request.CreateErrorResponse(HttpStatusCode.NoContent, "לקוח לא קיים");
+             if(date.Date<DateTime.Now.Date)
+                 return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "תאריך לא תואם");
 
              var rounds = _roundsService.GetRoundsByDate(date, date.AddDays(1), _customerStorage.ObjectValue.ManagerId);
              return Request.CreateResponse(HttpStatusCode.OK, rounds);
         }
+
+         [Route("Customer/GetProductsCustomer")]
+         public HttpResponseMessage GetProductsCustomer(int customerId)
+         {
+             var customersProdusts = _customerService.GetAllCustomerProducts(customerId);
+             if (customersProdusts != null)
+             {
+                 return Request.CreateResponse(HttpStatusCode.OK, customersProdusts);
+             }
+             return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
+         }
 
         // POST: api/CustomerApi
         public void Post([FromBody]string value)

@@ -52,7 +52,7 @@
         };
 
         //rounds
-        vm.roundSelected = {};
+        vm.roundSelected = null;
         vm.getRounds = getRounds;
         vm.rounds = [];
         vm.roundChange = roundChange;
@@ -63,8 +63,8 @@
             var promises = [];
             common.activateController(promises, controllerId)
                 .then(function () { log('אזור אישי ללקוח פעיל'); }).then(function() {
-                    
-                });
+                getProductsCustomer();
+            });
             toggleMin();
         }
 
@@ -84,23 +84,24 @@
         }
 
         function getProductsCustomer() {
-            if (datacontext.customer != null) {
-                return dashboardService.getProductsCustomer(datacontext.customer.CustomerID).then(function (response) {
-                    //success
-                    vm.productsCustomer = response.data;
-                    vm.update = true;
+             datacontext.getCustomer().then(function (data) {
+                var customer = data;
 
-                },
-                 function (response) {
-                     //error
-                     logError(response.status + " " + response.statusText);
-                 });
-
-            }
-            else {
-                vm.update = false;
-                return null;
-            }
+                if (customer != null) {
+                    return dashboardService.getProductsCustomer(customer.CustomerID).then(function (response) {
+                        //success
+                        vm.productsCustomer = response.data;
+                    },
+                     function (response) {
+                         //error
+                         logError(response.status + " " + response.statusText);
+                     });
+                }
+                else {
+                    logError("לקוח לא קיים");
+                }
+            });
+           
         }
 
         function roundChange(round) {
