@@ -31,11 +31,12 @@
         vm.saveProductsCustomer = saveProductsCustomer;
         vm.printBill = printBill;
         vm.productsPrint = [];
+        vm.productsInRound = [];
         vm.closeRound = closeRound;
         vm.calcTotal = calcTotal;
         vm.manager = {};
         vm.managerDetails = {};
-
+        vm.productChange = productChange;
         activate();
 
         function activate() {
@@ -95,6 +96,7 @@
                     if (vm.rounds.length > 0) {
                         vm.roundSelected = vm.rounds[0];
                         roundChange(vm.rounds[0]);
+                        gerProductsRound();
                     }
                 }).then(function () {
                     if (vm.customersInRound.length > 0) {
@@ -139,6 +141,35 @@
                 });
         }
 
+        function gerProductsRound() {
+            var counter = 0;
+            _.each(vm.rounds, function (round, index) {
+                counter = index;
+                _.each(round.custRound, function (custRound) {
+                    _.each(custRound.roundcustomerProducts, function(product) {
+                        vm.productsInRound.push({
+                            id: product.CustomerRoundProduct.ProductID,
+                            productName: product.CustomerRoundProduct.ProductName,
+                            amount:product.Amount,
+                            deliveredAmount: product.DeliveredAmount,
+                            customerName: product.CustomerRoundProduct.CustomerName,
+                            roundName: vm.rounds[counter].RoundName + ' ' + vm.rounds[counter].RoundDate.substring(0, 10)
+                        });
+                    });
+                });
+            });
+        }
+
+        function productChange(product) {
+            if (product != undefined) {
+            vm.productsFiltterInRound = _.filter(vm.productsInRound, function(pir) {
+                return pir.id == product.id;
+            });
+            } else {
+                vm.productsFiltterInRound = [];
+            }
+        }
+
         function roundChange(round) {
             vm.customersInRound = {};
             vm.customerRoundProducts = {};
@@ -152,6 +183,7 @@
                 }
             }
         }
+
         function customerChange(customer) {
             vm.customerRoundProducts = {};
             vm.isSaved = false;

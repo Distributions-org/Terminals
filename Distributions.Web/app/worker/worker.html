@@ -72,13 +72,55 @@
             </div>
         </div>
     </section>
-    <section style="display:none"  class="worker-print">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget wviolet">
+                    <div data-cc-widget-header title="בדיקת מוצר בסבב"></div>
+                    <div class="widget-content">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <strong>בחר מוצר: </strong>
+                                <select ng-model="vm.productSelected" data-ng-change="vm.productChange(vm.productSelected)" ng-options="(product.productName) for product in  vm.productsInRound
+                                        track by product.id | orderBy:'productName'">
+                                    <option value="">מוצר</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-9">
+                                <table data-ng-show="vm.productsFiltterInRound.length>0" class="table date-filter table-responsive table-condensed table-bordered workerTbl  table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>סבב</th>
+                                            <th>מוצר</th>
+                                            <th>לקוח</th>
+                                            <th>כמות</th>
+                                            <th>החזרות</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-ng-repeat="product in vm.productsFiltterInRound">
+                                            <td>{{product.roundName}}</td>
+                                            <td>{{product.productName}}</td>
+                                            <td>{{product.customerName}}</td>
+                                            <td>{{product.amount}}</td>
+                                            <td>{{product.deliveredAmount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section style="display:none" class="worker-print">
         <div id="worker-print" class="container-fluid">
             <div data-ng-repeat="products in vm.productsPrint">
                 <div class="row">
                     <div class="col-xs-6 pull-right text-center">
                         <h6>
-                           {{vm.manager.name}}
+                            {{vm.manager.name}}
                         </h6>
                     </div>
                     <div class="col-xs-6 pull-left text-center">
@@ -128,14 +170,14 @@
             </div>
         </div>
     </section>
-    
+
     <section style="display:none" class="worker-print">
         <div id="worker-print-pay" class="container-fluid">
             <div data-ng-repeat="products in vm.productsPrint">
                 <div class="row">
                     <div class="col-xs-6 pull-right text-center">
                         <h6>
-                           {{vm.manager.name}}
+                            {{vm.manager.name}}
                         </h6>
                     </div>
                     <div class="col-xs-6 pull-left text-center">
