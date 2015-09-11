@@ -1,0 +1,44 @@
+﻿
+<div class="col-sm-4 selectDiv">
+    <strong>בחר סבב: </strong>
+    <select ng-model="vm.roundSelected" data-ng-change="vm.roundChange(vm.roundSelected)" ng-options="(round.RoundName +' '+ round.RoundDate.substring(0, 10)) for round in  vm.rounds  | orderBy:round.RoundDate">
+        <option value="">סבב</option>
+    </select>
+</div>
+<div data-ng-show="vm.productsInRound.length>0" class="col-sm-4 selectDiv marg-b-15">
+    <strong>בחר מוצר: </strong>
+    <select ng-model="vm.productSelected" data-ng-change="vm.productChange(vm.productSelected)" ng-options="(product.productName) for product in  vm.productsInRound
+                                        track by product.id | orderBy:'productName'">
+        <option value="">מוצר</option>
+    </select>
+</div>
+
+<div class="col-sm-12">
+    <table data-ng-show="vm.productsFiltterInRound.length>0" class="table date-filter table-responsive table-condensed table-bordered workerTbl  table-striped">
+        <thead>
+            <tr>
+                <th>מוצר</th>
+                <th>לקוח</th>
+                <th>כמות</th>
+                <th>החזרות</th>
+                <th>סה"כ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="product in vm.productsFiltterInRound">
+                <td>{{product.productName}}</td>
+                <td>{{product.customerName}}</td>
+                <td>{{product.amount}}</td>
+                <td>{{product.deliveredAmount}}</td>
+                <td>{{(product.amount-product.deliveredAmount)}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>סה"כ  <strong>{{vm.totalAmount}}</strong></td>
+                <td>סה"כ <strong>{{vm.totalDeliveredAmount}}</strong> </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -27,7 +27,7 @@ namespace Distributions.Web
             bundles.Add(new ScriptBundle("~/bundles/app").Include("~/app/app.js", "~/app/config.js", "~/app/config.exceptionHandler.js", "~/app/config.interceptor.js",
                 "~/app/config.route.js", "~/app/services/entityManagerFactory.js", "~/app/common/common.js", "~/app/common/logger.js", "~/app/common/spinner.js",
                 "~/app/common/cache.js", "~/app/common/localStorage.js", "~/app/common/print.js", "~/app/common/bootstrap/bootstrap.dialog.js", "~/app/admin/admin.js", "~/app/dashboard/dashboard.js", "~/app/layout/shell.js"
-                , "~/app/layout/sidebar.js", "~/app/managementDistributions/managementDistributions.js", "~/app/reports/reports.js", "~/app/worker/worker.js",
+                , "~/app/layout/sidebar.js", "~/app/managementDistributions/managementDistributions.js", "~/app/reports/reports.js", "~/app/worker/worker.js", "~/app/worker/directives/workerDirective.js",
                 "~/app/admin/adminService.js", "~/app/services/datacontext.js", "~/app/services/directives.js", "~/app/managementDistributions/managementDistributionsService.js",
                 "~/app/reports/reportsService.js"));
 

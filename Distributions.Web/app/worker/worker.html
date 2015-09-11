@@ -1,4 +1,4 @@
-﻿<section class="mainbar" data-ng-controller="worker as vm">
+﻿<section class="mainbar worker" data-ng-controller="worker as vm">
     <section class="matter">
         <div class="container">
             <div class="row">
@@ -7,13 +7,13 @@
                     <div class="widget-content user">
                         <h3>סבבים בתאריך {{vm.date | date: 'dd-MM-yyyy'}}</h3>
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 selectDiv">
                                 <strong>בחר סבב: </strong>
                                 <select ng-model="vm.roundSelected" data-ng-change="vm.roundChange(vm.roundSelected)" ng-options="(round.RoundName +' '+ round.RoundDate.substring(0, 10)) for round in  vm.rounds  | orderBy:round.RoundDate">
                                     <option value="">סבב</option>
                                 </select>
                             </div>
-                            <div class="col-sm-3" data-ng-show="vm.customersInRound.length>0">
+                            <div class="col-sm-3 selectDiv" data-ng-show="vm.customersInRound.length>0">
                                 <strong>בחר לקוח: </strong>
                                 <select ng-model="vm.customer" data-ng-change="vm.customerChange(vm.customer)"
                                         ng-options="customer.customerRound.CustomerName for customer in  vm.customersInRound"
@@ -21,10 +21,10 @@
                                     <option value="">לקוח</option>
                                 </select>
                             </div>
-                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-2">
+                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-2 selectDiv marg-b-15">
                                 <button class="btn btn-success" data-ng-click="vm.saveProductsCustomer()">שמור <i class="glyphicon glyphicon-save"></i></button>
                             </div>
-                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-4">
+                            <div data-ng-show="vm.customerRoundProducts.roundcustomerProducts.length>0" class="col-sm-4 selectDiv">
                                 <button data-ng-disabled="!vm.isSaved" class="btn btn-info" data-ng-click="vm.printBill()">הדפסה <i class="glyphicon glyphicon-print"></i></button>
                                 <button data-ng-disabled="!vm.isSaved" class="btn btn-info" data-ng-click="vm.closeRound()">סגור סבב <i class="glyphicon glyphicon-share"></i></button>
                             </div>
@@ -79,35 +79,7 @@
                     <div data-cc-widget-header title="בדיקת מוצר בסבב"></div>
                     <div class="widget-content">
                         <div class="row">
-                            <div class="col-sm-3">
-                                <strong>בחר מוצר: </strong>
-                                <select ng-model="vm.productSelected" data-ng-change="vm.productChange(vm.productSelected)" ng-options="(product.productName) for product in  vm.productsInRound
-                                        track by product.id | orderBy:'productName'">
-                                    <option value="">מוצר</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-9">
-                                <table data-ng-show="vm.productsFiltterInRound.length>0" class="table date-filter table-responsive table-condensed table-bordered workerTbl  table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>סבב</th>
-                                            <th>מוצר</th>
-                                            <th>לקוח</th>
-                                            <th>כמות</th>
-                                            <th>החזרות</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr data-ng-repeat="product in vm.productsFiltterInRound">
-                                            <td>{{product.roundName}}</td>
-                                            <td>{{product.productName}}</td>
-                                            <td>{{product.customerName}}</td>
-                                            <td>{{product.amount}}</td>
-                                            <td>{{product.deliveredAmount}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <worker-products-round rounds="vm.rounds"></worker-products-round>
                         </div>
                     </div>
                 </div>

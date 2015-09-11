@@ -257,6 +257,9 @@
     <Content Include="app\reports\reports.js" />
     <Content Include="app\reports\reportsService.js" />
     <Content Include="app\reports\templates\report-counts.html" />
+    <Content Include="app\worker\directives\workerDirective.js" />
+    <Content Include="app\worker\directives\worker-products-round.html" />
+    <Content Include="app\worker\directives\workerProductsRoundController.js" />
     <Content Include="app\worker\worker.html" />
     <Content Include="app\worker\worker.js" />
     <Content Include="Content\bootstrap-timepicker.css" />
