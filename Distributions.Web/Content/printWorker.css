@@ -1,12 +1,15 @@
 ﻿body {
     padding: 0;
     margin: 0;
-    font-size: 20px;
+    font-size: 12px;
+}
+.reward-body {
+    font-size: 10px;
 }
 table {
      -moz-page-break-inside: auto;
     page-break-inside: auto;
-    font-size: 15px !important;
+    font-size: 12px !important;
     width: auto !important;
 }
 table tr {
@@ -34,6 +37,4 @@ table tr {
 #reportDiv table tr {
    white-space: nowrap;
 }
-h6 {
-    font-size: 30px;
-}
+

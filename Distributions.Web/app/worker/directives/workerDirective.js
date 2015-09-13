@@ -55,8 +55,14 @@
             
         }
 
-        function roundChange() {
-            gerProductsRound();
+        function roundChange(roundSelected) {
+            if (roundSelected != undefined) {
+                gerProductsRound();
+            }
+            else {
+                vm.productsFiltterInRound = [];
+                vm.productsInRound = [];
+            }
         }
 
         function productChange(product) {
@@ -73,13 +79,13 @@
 
         function getAmount() {
             vm.totalAmount = _.reduce(vm.productsFiltterInRound, function (memo, product) {
-                return memo + product.amount;
+                return parseInt(memo) + parseInt(product.amount);
             }, 0);
         }
 
         function getDeliveredAmount() {
             vm.totalDeliveredAmount = _.reduce(vm.productsFiltterInRound, function (memo, product) {
-                return memo + product.deliveredAmount;
+                return parseInt(memo) + parseInt(product.deliveredAmount);
             }, 0);
         }
     }
