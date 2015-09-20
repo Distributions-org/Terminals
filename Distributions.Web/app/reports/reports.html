@@ -132,7 +132,7 @@
                             <div class="col-sm-6">
                                 <div class="widget wlightblue">
                                     <div allow-collapse="true" data-cc-widget-header title="בחר סבב - מוצר - כמות"></div>
-                                    <div class="widget-content">
+                                    <div class="widget-content scroll-report">
                                         <div class="row">
                                             <form name="form">
                                                 <div class="col-sm-4">
@@ -144,23 +144,23 @@
                                                 </div>
                                                 <div data-ng-show="vm.products.length>0" class="col-sm-4">
                                                     <label>בחר מוצר:</label>
-                                                    <select class="form-control" ng-model="vm.productSelected" ng-options="product.ProductName for product in vm.products | orderBy:'ProductName'">
+                                                    <select class="form-control" data-ng-change="vm.productSelectedChange()" ng-model="vm.productSelected" ng-options="product.ProductName for product in vm.products | orderBy:'ProductName'">
                                                         <option value="">מוצר</option>
                                                     </select>
                                                 </div>
-                                                <div data-ng-show="vm.products.length>0 && vm.productSelected !=null" class="col-sm-3">
+                                                <!--<div data-ng-show="vm.products.length>0 && vm.productSelected !=null" class="col-sm-3">
                                                     <input type="number" required name="inputNumber" data-ng-model="vm.amount" placeholder="כמות" />
                                                 </div>
                                                 <div class="col-sm-1">
                                                     <button data-ng-disabled="!form.inputNumber.$valid" data-ng-click="vm.getCustomerRoundAmount()" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></button>
-                                                </div>
+                                                </div>-->
                                             </form>
                                         </div>
-                                        <div class="row">
+                                        <!--<div class="row">
                                             <div class="col-sm-12 text-left">
                                                 <span class="field-validation-error" ng-show="form.inputNumber.$error.number">מספרים בלבד</span>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <table ng-show="vm.roundProductCustomer.length>0" class="table table-condensed table-bordered  table-striped table-report">
@@ -220,8 +220,8 @@
                                                     <td>{{vm.roundSelected.RoundName+' '+(vm.roundSelected.RoundDate | date:'dd-MM-yyyy')}}</td>
                                                     <td>{{vm.roundProductCustomerEdit.CustomerRoundProduct.CustomerName}}</td>
                                                     <td>{{vm.roundProductCustomerEdit.CustomerRoundProduct.ProductName}}</td>
-                                                    <td><input data-ng-model="vm.roundProductCustomerEdit.Amount" type="text" /></td>
-                                                    <td><input data-ng-model="vm.roundProductCustomerEdit.DeliveredAmount" type="text" /></td>
+                                                    <td><input ng-blur="vm.clearZero(vm.roundProductCustomerEdit)" ng-focus="vm.clearZero(vm.roundProductCustomerEdit)" data-ng-model="vm.roundProductCustomerEdit.Amount" type="text" /></td>
+                                                    <td><input ng-blur="vm.clearZeroDelivered(vm.roundProductCustomerEdit)" ng-focus="vm.clearZeroDelivered(vm.roundProductCustomerEdit)" data-ng-model="vm.roundProductCustomerEdit.DeliveredAmount" type="text" /></td>
                                                     <td class="text-center"><button data-ng-click="vm.savePrc()" class="btn btn-success btn-sm">שמור <i class="glyphicon glyphicon-save"></i></button></td>
                                                 </tr>
                                             </tbody>

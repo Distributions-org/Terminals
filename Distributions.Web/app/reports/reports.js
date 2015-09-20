@@ -51,6 +51,9 @@
         vm.tax = 18;
         vm.getTotlalSum = getTotlalSum;
         vm.createReportCounts = createReportCounts;
+        vm.clearZero = clearZero;
+        vm.clearZeroDelivered = clearZeroDelivered;
+        vm.productSelectedChange = productSelectedChange;
         vm.reportCounts = {};
         vm.managerDetails = {};
         vm.dateFilter = new Date();
@@ -300,6 +303,15 @@
             return $filter('date')(date, "dd-MM-yyyy");
         }
 
+        function productSelectedChange() {
+            if (vm.productSelected != null) {
+                getCustomerRoundAmount();
+            } else {
+                logError("לא נבחר מוצר");
+                vm.roundProductCustomer = {};
+            }
+        }
+
         function getCustomerRoundAmount() {
             var model = {
                 ProductID: vm.productSelected.ProductID,
@@ -314,6 +326,7 @@
                 logSuccess("סריקת המוצר בסבב עברה בהצלחה");
             }, function (response) {
                 logError(response.status + " " + response.statusText);
+                vm.roundProductCustomer = {};
             });
         }
 
@@ -392,6 +405,21 @@
                 logError(response.status + " " + response.statusText);
                 return false;
             });
+        }
+
+        function clearZero(product) {
+            if (product.Amount === 0) {
+                product.Amount = "";
+            } else if (product.Amount === "") {
+                product.Amount = 0;
+            }
+        }
+        function clearZeroDelivered(product) {
+            if (product.DeliveredAmount === 0) {
+                product.DeliveredAmount = "";
+            } else if (product.DeliveredAmount === "") {
+                product.DeliveredAmount = 0;
+            }
         }
 
         function printReport(divName) {
