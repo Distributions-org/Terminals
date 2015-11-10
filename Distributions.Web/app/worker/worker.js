@@ -20,6 +20,7 @@
         vm.rounds = {};
         vm.closeRounds = {};
         vm.date = new Date();
+        vm.localDate = new Date();
         vm.customersInRound = {};
         vm.roundSelected = {};
         vm.customer = {};

@@ -100,12 +100,12 @@
                                     <div class="widget-content">
                                         <div class="row">
                                             <div class="col-sm-2">
-                                                סנן: מתאריך - 
+                                                סנן: מתאריך -
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="input-group date-picker">
                                                     <input type="text" class="form-control" ng-click="vm.opens($event)" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart"
-                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions"  show-button-bar="false" />
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-button-bar="false" />
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </div>
                                             </div>
@@ -115,13 +115,13 @@
                                             <div class="col-sm-3">
                                                 <div class="input-group date-picker">
                                                     <input type="text" class="form-control" ng-click="vm.opene($event)" datepicker-popup="{{vm.format}}" ng-model="vm.endDate" is-open="vm.openedEnd"
-                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions"  show-button-bar="false" />
+                                                           date-disabled="vm.disabled(date, mode)" datepicker-options="vm.dateOptions" show-button-bar="false" />
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
                                                 <button ng-click="vm.filterRoundDate()" class="btn btn-info">סנן <i class="glyphicon glyphicon-search"></i></button>
-                                               
+
                                             </div>
                                         </div>
                                         <div class="row">
@@ -140,7 +140,7 @@
                                                         <tr data-ng-repeat="round in vm.rounds | orderBy:'RoundDate':true">
                                                             <td>{{round.RoundDate | date:'dd-MM-yyyy HH:mm'}}</td>
                                                             <td>{{round.RoundName}}</td>
-                                                            <td><input type="checkbox" ng-click="vm.roundStatusChange(round)"  ng-checked="{{round.roundStatus==1?'true':'false'}}" />{{round.roundStatus==1?"פעיל":"לא פעיל"}}</td>
+                                                            <td><input type="checkbox" ng-click="vm.roundStatusChange(round)" ng-checked="{{round.roundStatus==1?'true':'false'}}" />{{round.roundStatus==1?"פעיל":"לא פעיל"}}</td>
                                                             <td>{{round.RoundUser[0].FirstName + ' '+ round.RoundUser[0].LastName}}</td>
                                                             <td>
                                                                 <button ng-click="vm.copyRound(round)" class="btn btn-xs btn-warning">שכפל <i class="glyphicon glyphicon-cloud-upload"></i></button>
@@ -180,10 +180,10 @@
                                             <div class="col-sm-4">
                                                 <button ng-show="!vm.customersRoundShow" ng-click="vm.createRound()" ng-disabled="(!vm.roundName.trim().length>0) || (vm.workerSelected.UserID==undefined)" class="btn btn-info">צור סבב <i class="glyphicon glyphicon-circle-arrow-left"></i></button>
                                             </div>
-                                           
+
                                         </div>
                                         <div class="row addProduct">
-                                            <div  class="col-sm-3">
+                                            <div class="col-sm-3">
                                                 <input ng-show="vm.customersRoundShow" type="checkbox" data-ng-model="vm.activeProductsNoAmount" data-ng-change="vm.activeChecked()" id="active" /><label ng-show="vm.customersRoundShow" for="active">הסתר כמות 0</label>
                                             </div>
                                             <div class="col-sm-4">
@@ -211,7 +211,7 @@
                                             <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
                                                 <label>בחר מוצר:</label>
                                                 <select class="form-control" data-ng-change="vm.productValueSelected()" ng-model="vm.productRoundSelected" ng-options="product.ProductName for product in vm.productsRoundCustomer track by product.ProductName">
-                                                    <option value="">בחר מוצר</option>
+                                                    <!--<option value="">בחר מוצר</option>-->
                                                 </select>
                                             </div>
                                             <div ng-show="vm.productsRoundCustomer.length>0" class="col-sm-4">
@@ -220,8 +220,14 @@
                                         </div>
                                         <div ng-show="vm.productsRoundCustomerSelected.length>0" class="row addProduct">
                                             <div class="col-sm-12">
+                                                <div data-ng-show="vm.custumersNotActive.length>0" class="text-center custumer-header-tbl alert alert-danger">
+                                                    <ul>
+                                                        <li> לקוח לא פעיל : </li>
+                                                        <li data-ng-repeat="customer in vm.custumersNotActive">{{customer.CustomerName}}</li>
+                                                    </ul>
+                                                </div>
                                                 <div class="text-center custumer-header-tbl">סבב , מפיץ: {{vm.workerSelected.FirstName + " " + vm.workerSelected.LastName}} |  תאריך ושעה: {{(vm.dt.toLocaleDateString("he-IL")!==undefined?vm.dt.toLocaleDateString("he-IL"):vm.dt | date:'dd.MM.yyyy') +","+vm.time}}</div>
-                                                <table class="table table-condensed table-bordered table-hover table-striped">
+                                               <table class="table table-condensed table-bordered table-hover table-striped">
                                                     <thead>
                                                         <tr>
                                                             <th>לקוח</th>

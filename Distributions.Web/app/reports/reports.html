@@ -12,8 +12,10 @@
                                         ng-change="vm.customerSelectedChange(vm.customerSelected)">
                                     <option value="">לקוח</option>
                                 </select>
+                                <!--<label>עמודות</label>
+                                <input ng-change="vm.colChange()" ng-model="vm.col" type="number" value="15" />-->
                             </div>
-                            <div ng-show="vm.showDate" class="col-sm-2">
+                            <div ng-show="vm.showDate" class="col-sm-3">
                                 <label>מתאריך: </label>
                                 <p class="input-group date-picker">
                                     <input type="text" class="form-control" ng-click="vm.openeStart($event)" datepicker-popup="{{vm.format}}" ng-model="vm.stratDate" is-open="vm.openedStart" datepicker-options="vm.dateOptions"
@@ -29,15 +31,31 @@
                                 </p>
                                 <button type="button" class="btn btn-default btn-date" ng-click="vm.openeEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </div>
+                            <!--<div ng-show="vm.showDate" class="col-sm-1">
+                                <label>מע"מ</label>
+                                <input ng-model="vm.tax" type="number" value="17" />
+                            </div>-->
+                            <!--<div  class="col-sm-3">
+                                <button ng-show="vm.showDate" type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
+                                <button ng-show="vm.tblShow"  type="button" class="btn btn-info" ng-click="vm.printReport('reportDiv')">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
+                            </div>-->
+                        </div>
+                        <div class="row date" ng-show="vm.showDate">
+                            <div class="col-sm-2">
+                                <label>עמודות</label>
+                                <input ng-change="vm.colChange()" ng-model="vm.col" type="number" value="25" />
+                            </div>
+                            <div class="col-sm-2">
+                                <label>גובה</label>
+                                <input ng-model="vm.margin" type="number" value="20" />
+                            </div>
                             <div ng-show="vm.showDate" class="col-sm-2">
                                 <label>מע"מ %</label>
-                                <input ng-model="vm.tax" type="number" value="18" />
+                                <input ng-model="vm.tax" type="number" value="17" />
                             </div>
-                            <div ng-show="vm.showDate" class="col-sm-1">
-                                <button type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
-                            </div>
-                            <div ng-show="vm.tblShow" class="col-sm-1">
-                                <button type="button" class="btn btn-info" ng-click="vm.printReport('reportDiv')">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
+                            <div class="col-sm-4">
+                                <button ng-show="vm.showDate" type="button" class="btn btn-success" ng-click="vm.getReport()">צור דו"ח <i class="glyphicon glyphicon-paperclip"></i></button>
+                                <button ng-show="vm.tblShow" type="button" class="btn btn-info" ng-click="vm.printReport('reportDiv')">הדפס דו"ח <i class="glyphicon glyphicon-print"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -59,18 +77,18 @@
                                     </div>
                                 </div>
 
-                                <div class="table-responsive wrapper">
-                                    <table class="table table-condensed table-bordered  table-striped table-report">
+                                <div ng-repeat="n in vm.report | range:vm.col" class="table-responsive wrapper">
+                                    <table ng-style="vm.calculateStyle(n)" class="table table-condensed table-bordered  table-striped table-report">
                                         <thead>
                                             <tr>
                                                 <th style="background-color: #f3f55e !important;">תאריך</th>
-                                                <th style="background-color: #f3f55e !important;" data-ng-repeat="report in vm.report | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.ProductName}}</th>
+                                                <th style="background-color: #f3f55e !important;" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.ProductName}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr data-ng-repeat="date in vm.dateRange">
                                                 <td>{{date}}</td>
-                                                <td data-ng-repeat="report in vm.report | orderBy:'ProductName' as filtered_report track by report.ProductID">
+                                                <td data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">
                                                     <span data-ng-repeat="allCustomerProductReports in report.AllCustomerProductReports track by allCustomerProductReports.currentDate">
                                                         <span data-ng-if="(date | date:'dd-MM-yyyy')==(allCustomerProductReports.currentDate | date:'dd-MM-yyyy')" class="">
                                                             <strong>{{allCustomerProductReports.DelieverySent>0?allCustomerProductReports.DelieverySent:""}}</strong>
@@ -85,22 +103,22 @@
                                         <tfoot>
                                             <tr>
                                                 <td>סה"כ ק - ח</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName' as filtered_report track by report.ProductID">
+                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">
                                                     <span><strong>{{report.SumOfProductsSent}}</strong></span>
                                                     <span class="red"><strong class="red">   {{report.SumOfProductsTakens>0?report.SumOfProductsTakens:""}}</strong></span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>סיכום</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.SumOfProductsSent - report.SumOfProductsTakens }}</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.SumOfProductsSent - report.SumOfProductsTakens }}</td>
                                             </tr>
                                             <tr>
                                                 <td>מחיר</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.Cost | currency:""}}</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.Cost | currency:""}}</td>
                                             </tr>
                                             <tr>
                                                 <td>סה"כ</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.TotalSum | currency:undefined:0 }}</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.TotalSum | currency:undefined:0 }}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

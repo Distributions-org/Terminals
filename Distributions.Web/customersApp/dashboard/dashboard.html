@@ -1,4 +1,4 @@
-﻿<section id="dashboard-view" class="mainbar" data-ng-controller="dashboard as vm">
+﻿<section id="dashboard-view" class="mainbar customerProducts" data-ng-controller="dashboard as vm">
     <section class="matter">
         <div class="container">
             <div class="row">
@@ -33,21 +33,23 @@
                             </div>
                             <div ng-show="vm.roundSelected!=null" class="row addProduct">
                                 <div class="col-sm-12">
-                                    <table class="table table-condensed table-bordered table-hover table-striped">
+                                    <table class="table date-filter table-condensed table-bordered  table-striped">
                                         <thead>
                                             <tr>
                                                 <th>שם מוצר</th>
-                                                <th>מחיר</th>
                                                 <th>כמות</th>
-                                                <th>מחיקה</th>
+                                                <th>אישור הוספה</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr data-ng-repeat="product in vm.productsCustomer">
                                                 <td>{{product.ProductName}}</td>
-                                                <td>{{product.Cost}}</td>
-                                                <td><input type="text" ng-blur="vm.clearZero(product)" ng-focus="vm.clearZero(product)" ng-model="product.Amount" name="productAmount" value="product.Amount" /></td>
-                                                <td><button ng-click="vm.removeProductRoundCustomer(product)" class="btn btn-xs btn-danger">מחק <i class="glyphicon glyphicon-remove"></i></button></td>
+                                                <td><input type="text" ng-blur="vm.clearZero(product)" ng-focus="vm.clearZero(product)" ng-model="product.Amount" name="productAmount" value="0" /></td>
+                                                <td>
+                                                    <button ng-click="product.inRound=!product.inRound" class="btn btn-xs" ng-class="{'btn-info':!product.inRound,'btn-success':product.inRound}">
+                                                        <i class="glyphicon" ng-class="{'glyphicon-plus':!product.inRound,'glyphicon-ok':product.inRound}"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -59,7 +61,11 @@
                             </div>
                         </div>
                         <div class="widget-foot">
-                            <div class="clearfix"></div>
+                            <div class="clearfix">
+                                <div class="col-sm-2 col-sm-offset-5" ng-show="vm.roundSelected!=null">
+                                    <button ng-click="vm.save()" class="btn btn-success"><i class="fa fa-save"></i> שמור</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

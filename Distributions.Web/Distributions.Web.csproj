@@ -250,6 +250,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\ModelErrorChecker.cs" />
+    <Content Include="app\common\filters.js" />
     <Content Include="app\common\localStorage.js" />
     <Content Include="app\common\print.js" />
     <Content Include="app\common\cache.js" />
@@ -267,6 +268,7 @@
     <Content Include="Content\printCount.css" />
     <Content Include="Content\printWorker.css" />
     <Content Include="Content\print.css" />
+    <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="customersApp\app.js" />
     <Content Include="customersApp\common\bootstrap\bootstrap.dialog.js" />
     <Content Include="customersApp\common\cache.js" />
@@ -293,6 +295,10 @@
     <Content Include="customersApp\services\entityManagerFactory.js" />
     <Content Include="gulpfile.js" />
     <Content Include="Scripts\angular-locale_he-il.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
     <Content Include="Scripts\bootstrap-timepicker.js" />
     <Content Include="Scripts\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\printThis.js" />

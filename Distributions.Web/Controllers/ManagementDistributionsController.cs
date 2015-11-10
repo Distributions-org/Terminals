@@ -170,11 +170,13 @@ namespace Distributions.Web.Controllers
             {
                 foreach (var customersToRoundModel in model)
                 {
+                    if (customersToRoundModel.RoundCustomers.First().customerRound != null) { 
                     var result = _roundsService.AddCustomersToRound(customersToRoundModel.RoundCustomers, customersToRoundModel.RoundId);
                     if (result.ToString() == "Success")
                     {
                         _roundsService.AddRoundProductCustomer(customersToRoundModel.RoundCustomers.First().roundcustomerProducts.ToList(), customersToRoundModel.RoundId);
                         roundProductsResult += customersToRoundModel.RoundCustomers.First().customerRound.CustomerName + ", ";
+                    }
                     }
                 }
             }
@@ -227,8 +229,10 @@ namespace Distributions.Web.Controllers
                     result = "";
                     model.ForEach(z => z.RoundCustomers.ForEach(x =>
                     {
+                        if (z.RoundCustomers.First().customerRound != null) { 
                         _roundsService.UpdateRoundProductCustomer(x.roundcustomerProducts.ToList(), model.First().RoundId);
                         result += z.RoundCustomers.First().customerRound.CustomerName + ", ";
+                        }
                     })
                         );
                     return Request.CreateResponse(HttpStatusCode.OK, result);

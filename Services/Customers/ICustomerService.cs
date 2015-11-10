@@ -12,6 +12,7 @@ namespace Services.Users
     {
         FunctionReplay.functionReplay AddNewCustomer(Core.Domain.Customers.Customers NewCustomer);
         List<Customers> GetValidCustomers(int? roundsCustomerID, int? ManagerId);
+        List<Customers> GetAllCustomers(int? roundsCustomerID, int? ManagerId);
         List<ProductToCustomer> GetAllCustomerProducts(int CustomerID);
         FunctionReplay.functionReplay UpdateCustomer(int CustomerID, Core.Domain.Customers.Customers UpdateCustomer);
         Core.Domain.Customers.Customers GetCustomersById(int id);

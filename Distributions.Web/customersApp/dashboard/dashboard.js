@@ -24,7 +24,7 @@
 
         // Disable weekend selection
         vm.disabled = function (date, mode) {
-            return (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
+            return 0; // (mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
         };
 
        
@@ -41,8 +41,18 @@
             showWeeks: false
         };
 
+        vm.clearZero = clearZero;
+
+        function clearZero(product) {
+            if (product.Amount === 0) {
+                product.Amount = "";
+            } else if (product.Amount === "") {
+                product.Amount = 0;
+            }
+        }
+
         function toggleMin() {
-            vm.minDate = (vm.minDate) ? null : new Date();
+            //vm.minDate = (vm.minDate) ? null : new Date();
         };
 
         function today() {
@@ -56,6 +66,7 @@
         vm.getRounds = getRounds;
         vm.rounds = [];
         vm.roundChange = roundChange;
+        vm.save = save;
 
         activate();
 
@@ -91,6 +102,12 @@
                     return dashboardService.getProductsCustomer(customer.CustomerID).then(function (response) {
                         //success
                         vm.productsCustomer = response.data;
+                        _.each(vm.productsCustomer, function (product) {
+                            if (product.Amount === undefined) {
+                                product.Amount = 0;
+                            }
+                            product.inRound = false;
+                        });
                     },
                      function (response) {
                          //error
@@ -111,13 +128,43 @@
             }
         }
 
+        function save() {
+            var productsAccept = _.filter(vm.productsCustomer, function (product) {
+                return product.inRound == true;
+            });
+            if (productsAccept.length > 0) {
+                console.log({ productsAccept: productsAccept });
+                dashboardService.addProductsToRound(createRoundcustomerProducts(productsAccept)).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+
+                });
+            } else {
+                logError("לא נבחר מוצר");
+            }
+        }
 
 
-
-
-
-
-
+        function createRoundcustomerProducts(products) {
+            var roundcustomerProducts = [];
+            _.each(products, function (product) {
+                roundcustomerProducts.push({
+                    CustomerRoundProduct: {
+                        ProductCustomerID: product.ProductCustomerID,
+                        CustomerID: product.CustomerID,
+                        ProductID: product.ProductID,
+                        dayType: product.dayType,
+                        Cost: product.Cost,
+                        ProductName: product.ProductName,
+                        CustomerName: product.CustomerName
+                    },
+                    RoundsCustomerProductID: product.RoundsCustomerProductID,
+                    Amount: product.Amount,
+                    DeliveredAmount: product.DeliveredAmount
+                });
+            });
+            return roundcustomerProducts;
+        }
 
 
 

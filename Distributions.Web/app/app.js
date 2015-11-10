@@ -18,6 +18,7 @@
         // Custom modules 
         'common',           // common functions, logger, spinner
         'common.bootstrap', // bootstrap dialog wrapper functions
+        'myfilter',         // my custom filters
 
         // 3rd Party Modules
         //'breeze.angular',    // configures breeze for an angular app

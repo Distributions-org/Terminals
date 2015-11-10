@@ -262,6 +262,21 @@ namespace Distributions.Web.Controllers
 
         }
 
+        [Route("GetAllCustomers")]
+        [AuthorizeUser(AccessRole = "Admin")]
+        public HttpResponseMessage GetAllCustomers(int id)
+        {
+            if (!ChackManagerId(id))
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
+            var customers = _customersService.GetAllCustomers(null, id);
+            if (customers != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, customers);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Customers Not Founds");
+
+        }
+
         [Route("UpdateCustomer")]
         [AuthorizeUser(AccessRole = "Admin")]
         [HttpPost]

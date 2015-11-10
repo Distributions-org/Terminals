@@ -113,7 +113,7 @@
         }
 
         function getAllCustomers(id) {
-            return $http.get("/GetCustomers?id="+id).success(function(data) {
+            return $http.get("/GetAllCustomers?id=" + id).success(function (data) {
                     return data;
                 })
                 .error(function(data, status, headers, config) {

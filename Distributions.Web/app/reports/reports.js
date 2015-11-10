@@ -28,6 +28,7 @@
         vm.endDate = today();
         vm.getReport = getReport;
         vm.report = {};
+        vm.reportDivider = [];
         vm.reportGroup = {};
         vm.tblShow = false;
         vm.printReport = printReport;
@@ -48,7 +49,11 @@
         vm.totalAmount = 0;
         vm.totalDeliveredAmount = 0;
         vm.savePrc = savePrc;
-        vm.tax = 18;
+        vm.tax = 17;
+        vm.col = 25;
+        vm.margin = 20;
+        vm.calculateStyle = calculateStyle;
+        vm.colChange = colChange;
         vm.getTotlalSum = getTotlalSum;
         vm.createReportCounts = createReportCounts;
         vm.clearZero = clearZero;
@@ -73,7 +78,15 @@
             return 0;
         }
 
-        
+        function colChange() {
+            //vm.report = {};
+        }
+
+        function calculateStyle(index) {
+            if (parseInt(index) == 0) {
+                return {'margin-bottom': vm.margin}
+            }
+        }
 
         vm.roundFilter = {
             Today: false,
@@ -241,8 +254,8 @@
 
         function getReport() {
             vm.isBusy(true);
-            var sdate = new Date(vm.stratDate).toISOString().slice(0, 10);//.toLocaleDateString();
-            var edate = new Date(vm.endDate).toISOString().slice(0, 10);//.toLocaleDateString();
+            var sdate = common.convertDate(vm.stratDate);//.toISOString().slice(0, 10);
+            var edate = common.convertDate(vm.endDate);//.toISOString().slice(0, 10);
           
             //var model = {
             //    ProductIDs: _.pluck(vm.productsCustomer, 'ProductCustomerID'),

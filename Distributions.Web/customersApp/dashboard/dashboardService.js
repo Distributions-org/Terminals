@@ -11,13 +11,15 @@
 
         var service = {
             getRoundsByDate: getRoundsByDate,
-            getProductsCustomer: getProductsCustomer
+            getProductsCustomer: getProductsCustomer,
+            addProductsToRound: addProductsToRound,
+            getRoundCustomerId: getRoundCustomerId
         };
 
         return service;
 
         function getRoundsByDate(date) {
-            return $http.get("Customer/GetRoundsByDate?date="+ date).then(function(response) {
+            return $http.get("Customer/GetRoundsByDate?date=" + date).then(function (response) {
                 return response;
             }, function (response) {
                 return response;
@@ -29,6 +31,24 @@
                 return response;
             }, function (response) {
                 return response;
+            });
+        }
+
+        function getRoundCustomerId(id) {
+            return $http.get("Customer/GetRoundCustomerId?id=" + id).then(function (response) {
+                return response;
+            }, function (response) {
+                return response;
+            });
+        }
+
+        function addProductsToRound(productsAccept) {
+            return $http.post("Customer/AddProductsToRound", productsAccept)
+                .then(function (response) {
+                    return response;
+                },
+            function (error) {
+                return error;
             });
         }
     }

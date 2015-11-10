@@ -39,10 +39,13 @@
         vm.roundChange = roundChange;
         vm.productsInRound = [];
         vm.roundSelected = {};
+
+        var productsFiltterInRoundTemp = [];
         
         function gerProductsRound() {
             _.each(vm.roundSelected.custRound, function (custRound) {
-                    _.each(custRound.roundcustomerProducts, function (product) {
+                _.each(custRound.roundcustomerProducts, function (product) {
+                    if (_.find(vm.productsInRound, function(prod) { return prod.id == product.CustomerRoundProduct.ProductID; }) == undefined) {
                         vm.productsInRound.push({
                             id: product.CustomerRoundProduct.ProductID,
                             productName: product.CustomerRoundProduct.ProductName,
@@ -50,6 +53,14 @@
                             deliveredAmount: product.DeliveredAmount,
                             customerName: product.CustomerRoundProduct.CustomerName
                         });
+                    }
+                    productsFiltterInRoundTemp.push({
+                        id: product.CustomerRoundProduct.ProductID,
+                        productName: product.CustomerRoundProduct.ProductName,
+                        amount: product.Amount,
+                        deliveredAmount: product.DeliveredAmount,
+                        customerName: product.CustomerRoundProduct.CustomerName
+                    });
                     });
                 });
             
@@ -57,17 +68,21 @@
 
         function roundChange(roundSelected) {
             if (roundSelected != undefined) {
+                vm.productsFiltterInRound = [];
+                vm.productsInRound = [];
+                productsFiltterInRoundTemp = [];
                 gerProductsRound();
             }
             else {
                 vm.productsFiltterInRound = [];
                 vm.productsInRound = [];
+                productsFiltterInRoundTemp = [];
             }
         }
 
         function productChange(product) {
             if (product != undefined) {
-                vm.productsFiltterInRound = _.filter(vm.productsInRound, function (pir) {
+                vm.productsFiltterInRound = _.filter(productsFiltterInRoundTemp, function (pir) {
                     return pir.id == product.id;
                 });
                 getAmount();
