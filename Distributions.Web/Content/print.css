@@ -36,7 +36,7 @@ tfoot {
 }
 
 .table-report {
-    margin: 0 0 20px 0;
+    margin: 0 !important;
 }
 
 .red {
@@ -68,5 +68,5 @@ tfoot {
     padding: 1px;
     display: table-cell;
     margin: 0 0 0 10px;
-    font-size: 14px;
+    font-size: 12px;
 }

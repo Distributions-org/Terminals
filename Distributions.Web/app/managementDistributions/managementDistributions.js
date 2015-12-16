@@ -104,10 +104,10 @@
         };
 
         function productValueSelected() {
-            if (vm.productRoundSelected != undefined) {
-                vm.btnAddPruduct = false;
-            } else {
+            if (vm.productRoundSelected == undefined || vm.productRoundSelected==null) {
                 vm.btnAddPruduct = true;
+            } else {
+                vm.btnAddPruduct = false;
             }
         }
 
@@ -344,7 +344,8 @@
                     vm.productRoundSelected = {};
                     tempproductsRoundCustomerSelected = [];
                     vm.productsRoundCustomer = response.data;
-                        vm.productRoundSelected = vm.productsRoundCustomer[0];
+                    vm.productRoundSelected = vm.productsRoundCustomer[0];
+                        productValueSelected();
                     if (!vm.roundBtnUpdateShow) {
                         _.each(response.data, function (product) {
                             var productTmp = _.findWhere(vm.productsRoundCustomerSelected, { ProductID: product.ProductID, CustomerID: product.CustomerID });

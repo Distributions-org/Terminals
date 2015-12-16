@@ -62,7 +62,7 @@
                             <div id="reportDiv" data-ng-show="vm.tblShow" class="col-sm-12">
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        <label style="background-color: #f3f55e !important;font-size: 18px;" class="text-center">{{vm.customerSelected.CustomerName}} ח.פ: {{vm.customerSelected.CustomerHP}}</label>
+                                        <label style="background-color: #f3f55e !important;font-size: 14px;" class="text-center">{{vm.customerSelected.CustomerName}} ח.פ: {{vm.customerSelected.CustomerHP}}</label>
                                     </div>
                                     <!--<div class="col-xs-4">
                                             <div class="total-print">
@@ -73,7 +73,7 @@
                                             </div>
                                         </div>-->
                                     <div class="col-xs-6">
-                                        <label style="font-size: 18px;" class="text-center">{{vm.managerDetails.ManagerName}}</label>
+                                        <label style="font-size: 14px;" class="text-center">{{vm.managerDetails.ManagerName}}</label>
                                     </div>
                                 </div>
 
@@ -124,10 +124,10 @@
                                     </table>
                                 </div>
                                 <div class="total">
-                                    <strong> סכ"ה לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
+                                    <strong> סה"כ לפני: {{vm.getTotlalSum() | currency:undefined:0 }}</strong>
                                 </div>
                                 <div class="total byellow">
-                                    <strong class="byellow"> סכ"ה אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
+                                    <strong class="byellow"> סה"כ אחרי: {{vm.getTotlalSum()+(vm.getTotlalSum()*(vm.tax/100)) | currency:undefined:0 }}</strong>
                                 </div>
                             </div>
                         </div>

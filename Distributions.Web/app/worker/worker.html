@@ -131,7 +131,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-ng-repeat="product in products">
+                                <tr data-ng-repeat="product in products | orderBy:'CustomerRoundProduct.ProductName' track by product.RoundsCustomerProductID">
                                     <td>{{$index+1}}</td>
                                     <td>{{product.CustomerRoundProduct.ProductName}}</td>
                                     <td>{{product.Amount}}</td>

@@ -51,7 +51,7 @@
         vm.savePrc = savePrc;
         vm.tax = 17;
         vm.col = 25;
-        vm.margin = 20;
+        vm.margin = 0;
         vm.calculateStyle = calculateStyle;
         vm.colChange = colChange;
         vm.getTotlalSum = getTotlalSum;
