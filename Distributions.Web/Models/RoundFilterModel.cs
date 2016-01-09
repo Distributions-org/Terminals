@@ -12,5 +12,6 @@ namespace Distributions.Web.Models
         public DateTime? EndDate { get; set; }
         public string Email { get; set; }
         public int ManagerId { get; set; }
+        public int? CustomerId { get; set; }
     }
 }

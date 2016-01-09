@@ -17,6 +17,7 @@
             addUserToRound: addUserToRound,
             addCustomerRound: addCustomerRound,
             getRounds: getRounds,
+            getCustomerRounds:getCustomerRounds,
             changeRoundStatus: changeRoundStatus,
             updateRound: updateRound,
             updateCustomerRound: updateCustomerRound,
@@ -43,7 +44,14 @@
                     return status;
                 });
         }
-
+        function getCustomerRounds(model) {
+            return $http.post("/GetCustomerRounds", model).success(function (data) {
+                    return data;
+                })
+                .error(function(data, status) {
+                    return status;
+                });
+        }
         function getWorkers(id) {
             return $http.get("/GetWorkers?id="+id).success(function(data) {
                     return data;

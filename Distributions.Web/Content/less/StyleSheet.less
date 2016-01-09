@@ -105,11 +105,11 @@
     margin-right: auto;
     margin-left: auto;
 }
-
+  
 @media (min-width: 768px) {
     .container-fluid {
         width: 750px;
-    }         
+    }             
 }
 
 @media(max-width:1114px){
@@ -568,6 +568,33 @@ header {
     }
 }
 
+.invoices{
+    width:100%;
+    .row{
+        div{
+            >select{
+                width:100%;
+            }
+            date-time{
+                display:inline-block;
+                vertical-align:middle;   
+                >div{
+                    display:inline-block;
+                    vertical-align:middle;   
+                }             
+            }
+        }
+        .input-group{
+            display:inline-block;
+        }
+    }
+    .invoices{
+            button{
+                margin:0;
+            }
+        }
+}
+ 
 @media(max-width:764px) {
     .worker {
         direction: rtl;
@@ -583,7 +610,7 @@ header {
                 margin: 0 15px 0 15px;
             }
         }
-    }
+    }    
 }
 
 @media(max-width:624px) {
@@ -602,6 +629,15 @@ header {
                 &:nth-child(1) {
                     margin-left: 90px;
                 }
+            }
+        }
+    }
+}
+@media(max-width:1200px){
+    .invoice{
+        .invoices{
+            button{
+                margin-top:30px;
             }
         }
     }

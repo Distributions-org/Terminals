@@ -200,6 +200,71 @@
         }
     });
 
+    app.directive('dateTime', ['$filter',
+        function ($filter) {
+            var directive = {
+                restrict: "E",
+                scope: {
+                    date: "=",
+                    onDateSelected:"&"
+                },
+                templateUrl: "/app/layout/datetime.html",
+                controller: dateCtrl,
+                controllerAs: "vm",
+                bindToController:true
+            }
+
+            return directive;
+
+            function dateCtrl() {
+                var vm = this;
+                vm.dt = today();
+                vm.dateChange = dateChange;
+                vm.isOpen = false;
+////date picker
+
+                function dateChange() {
+                    vm.onDateSelected({ date: vm.dt });
+                }
+
+                function today() {
+                    var date = new Date();
+                    //vm.dt = $filter('date')(date, 'MM.dd.yyyy'); // date.toLocaleDateString("he-IL"); //((date.getDate()) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+                    return $filter('date')(date, 'MM.dd.yyyy');
+                };
+
+                vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'MM.dd.yyyy', 'dd/MM/yyyy', 'shortDate'];
+                vm.format = vm.formats[3];
+
+                // Disable weekend selection
+                vm.disabled = function(date, mode) {
+                    return false; //(mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
+                };
+
+                vm.open = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    vm.isOpen = true;
+
+                };
+                vm.opened = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                };
+               
+                vm.dateOptions = {
+                    formatYear: 'yyyy',
+                    startingDay: 0,
+                    showWeeks: false
+                };
+
+                function toggleMin() {
+                    vm.minDate = (vm.minDate) ? null : new Date();
+                };
+            }
+        }
+    ]);
+
     app.directive('compareTo', function () {
 
         var directive = {

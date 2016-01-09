@@ -63,9 +63,53 @@ namespace Distributions.Web.Controllers
             if (!ChackManagerId(model.ManagerId))
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
             var rounds = await _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate, model.Email, model.ManagerId);
+            if (model.CustomerId.HasValue)
+            {
+                rounds = rounds.Select(x => x.custRound.Any(c => c.customerRound.CustomerID == model.CustomerId.Value) ? x : null).ToList();
+            }
             if (rounds.Any())
             {
                 return Request.CreateResponse(HttpStatusCode.OK, rounds);
+            }
+            return Request.CreateResponse(HttpStatusCode.Forbidden, "Rounds Not Founds");
+        }
+
+        [Route("GetCustomerRounds")]
+        [HttpPost]
+        public async Task<HttpResponseMessage> GetCustomerRounds(RoundFilterModel model)
+        {
+            var customerRounds = new List<CustomerRound>();
+            if (model.ManagerId == 0 && _userStorage.ObjectValue.ManagerId != null)
+                model.ManagerId = _userStorage.ObjectValue.ManagerId.Value;
+
+            if (!ChackManagerId(model.ManagerId))
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
+            var rounds = await _roundsService.GetAllRounds(model.Today, model.StartDate, model.EndDate, model.Email, model.ManagerId);
+            if (model.CustomerId.HasValue && model.CustomerId.Value>0)
+            {
+                rounds.ForEach(x => x.custRound.ForEach(c =>
+                {
+                    if (c.customerRound.CustomerID == model.CustomerId.Value)
+                    {
+                        c.RoundDate = x.RoundDate;
+                        c.RoundId = x.RoundID;
+                        customerRounds.Add(c);
+                    }
+                }));
+            }
+            else
+            {
+                rounds.ForEach(x => x.custRound.ForEach(c =>
+                {
+                    c.RoundDate = x.RoundDate;
+                    c.RoundId = x.RoundID;
+                    customerRounds.Add(c);
+
+                }));
+            }
+            if (customerRounds.Any())
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, customerRounds);
             }
             return Request.CreateResponse(HttpStatusCode.Forbidden, "Rounds Not Founds");
         }
@@ -170,13 +214,14 @@ namespace Distributions.Web.Controllers
             {
                 foreach (var customersToRoundModel in model)
                 {
-                    if (customersToRoundModel.RoundCustomers.First().customerRound != null) { 
-                    var result = _roundsService.AddCustomersToRound(customersToRoundModel.RoundCustomers, customersToRoundModel.RoundId);
-                    if (result.ToString() == "Success")
+                    if (customersToRoundModel.RoundCustomers.First().customerRound != null)
                     {
-                        _roundsService.AddRoundProductCustomer(customersToRoundModel.RoundCustomers.First().roundcustomerProducts.ToList(), customersToRoundModel.RoundId);
-                        roundProductsResult += customersToRoundModel.RoundCustomers.First().customerRound.CustomerName + ", ";
-                    }
+                        var result = _roundsService.AddCustomersToRound(customersToRoundModel.RoundCustomers, customersToRoundModel.RoundId);
+                        if (result.ToString() == "Success")
+                        {
+                            _roundsService.AddRoundProductCustomer(customersToRoundModel.RoundCustomers.First().roundcustomerProducts.ToList(), customersToRoundModel.RoundId);
+                            roundProductsResult += customersToRoundModel.RoundCustomers.First().customerRound.CustomerName + ", ";
+                        }
                     }
                 }
             }
@@ -229,9 +274,10 @@ namespace Distributions.Web.Controllers
                     result = "";
                     model.ForEach(z => z.RoundCustomers.ForEach(x =>
                     {
-                        if (z.RoundCustomers.First().customerRound != null) { 
-                        _roundsService.UpdateRoundProductCustomer(x.roundcustomerProducts.ToList(), model.First().RoundId);
-                        result += z.RoundCustomers.First().customerRound.CustomerName + ", ";
+                        if (z.RoundCustomers.First().customerRound != null)
+                        {
+                            _roundsService.UpdateRoundProductCustomer(x.roundcustomerProducts.ToList(), model.First().RoundId);
+                            result += z.RoundCustomers.First().customerRound.CustomerName + ", ";
                         }
                     })
                         );
@@ -293,7 +339,7 @@ namespace Distributions.Web.Controllers
 
             if (!ChackManagerId(managerId))
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "User Not Founds");
-           
+
             var result = _roundsService.GetManagerDetails(managerId);
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
