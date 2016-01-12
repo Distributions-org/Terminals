@@ -40,6 +40,7 @@
             createSearchThrottle: createSearchThrottle,
             debouncedThrottle: debouncedThrottle,
             isNumber: isNumber,
+            convertDate:convertDate,
             logger: logger, // for accessibility
             modalDialog: dialog,
             textContains: textContains,
@@ -148,6 +149,12 @@
         function isNumber(val) {
             // negative or positive
             return /^[-]?\d+$/.test(val);
+        }
+
+        function convertDate(inputFormat) {
+            function pad(s) { return (s < 10) ? '0' + s : s; }
+            var d = new Date(inputFormat);
+            return [pad(d.getMonth() + 1), pad(d.getDate()), d.getFullYear()].join('/');
         }
 
         function textContains(text, searchText) {

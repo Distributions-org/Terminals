@@ -19,5 +19,7 @@ namespace Data
         public string CustomerHP { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> ManagerId { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

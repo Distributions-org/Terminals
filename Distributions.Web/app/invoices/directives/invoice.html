@@ -1,0 +1,30 @@
+﻿<div class="widget wviolet">
+    <div allow-collapse="true" data-cc-widget-header title="סנן לפי תאריך / סנן לפי תאריך ולקוח"></div>
+    <div class="widget-content invoices">
+        <div class="row">
+            <div class="col-xs-3 col-sm-3">
+                <label>לקוח:</label>
+                <select class="form-control" ng-model="vm.customerSelected" ng-options="customer.CustomerName for customer in vm.customers  | orderBy:'CustomerName'"
+                        ng-change="vm.customerRoundSelectedChange(vm.customerSelected)">
+                    <option value="">בחר לקוח</option>
+                </select>
+            </div>
+            <div class="col-xs-3 col-sm-3">
+                <label>סנן: מתאריך -</label>
+                <date-time on-date-selected="vm.startDate = date"></date-time>
+            </div>
+            <div class="col-xs-3 col-sm-3">
+                <label>עד תאריך -</label>
+                <div class="input-group date-picker">
+                    <date-time on-date-selected="vm.endDate = date"></date-time>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3">
+                <button ng-click="vm.filterRoundDate()" class="btn btn-info">סנן <i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="widget-foot">
+        <div class="clearfix"></div>
+    </div>
+</div>

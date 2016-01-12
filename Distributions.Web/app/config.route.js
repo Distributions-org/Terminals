@@ -69,6 +69,16 @@
                         content: '<i class="fa fa-file-text-o"></i> חלוקה'
                     }
                 }
+            }, {
+                url: '/invoices',
+                config: {
+                    title: 'invoices - Terminal',
+                    templateUrl: '../app/invoices/invoices.html',
+                    settings: {
+                        nav: 6,
+                        content: '<i class="fa fa-building-o"></i> חשבוניות'
+                    }
+                }
             }
         ];
     }

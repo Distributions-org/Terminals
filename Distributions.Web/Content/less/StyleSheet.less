@@ -105,11 +105,36 @@
     margin-right: auto;
     margin-left: auto;
 }
-
+  
 @media (min-width: 768px) {
     .container-fluid {
         width: 750px;
+    }             
+}
+
+@media(max-width:1114px){
+    .report {
+        .col-sm-3 {
+            width: 55% !important;
+        }
+
+        .col-sm-2 {
+            width: 29% !important;
+        }
+
+        .col-sm-4 {
+            margin-top:10px;
+            width: 50%;
+        }
+
+        select {
+            margin-bottom: 10px;
+        }
     }
+}
+
+@media (max-width:768){
+   
 }
 
 @media (min-width: 992px) {
@@ -174,6 +199,27 @@ form[name=customersForm] {
 .custumer-header-tbl {
     border-bottom: 1px solid #ddd;
     font-weight: bold;
+
+    ul {
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+
+        li {
+            float: right;
+            display: inline-block;
+        }
+
+        li:first-child::after {
+            content: "";
+        }
+
+        li::after {
+            content: " | ";
+            float: left;
+            padding-right: 3px;
+        }
+    }
 }
 
 .customersProducts {
@@ -242,8 +288,10 @@ table.date-filter {
 
 .report {
     .date {
+        margin-bottom: 10px;
+
         .date-picker {
-            width: 30%;
+            width: 95px;
             display: block;
             display: inline-block;
             padding: 0 !important;
@@ -263,6 +311,7 @@ table.date-filter {
         label {
             vertical-align: top;
             padding-top: 4px;
+            width: 60px;
         }
 
         .btn-group {
@@ -271,12 +320,21 @@ table.date-filter {
     }
 
     .col-sm-3 {
-        width: 22%;
+        width: 23%;
+    }
+
+    .col-sm-1 {
+        width: 9.333333%;
     }
 
     input[type=number] {
-        width: 35%;
+        width: 45px;
     }
+
+    input[type=number]:nth-child(2) {
+        width: 45px;
+    }
+
 
     #reportDiv {
         .wrapper {
@@ -338,6 +396,11 @@ div {
         max-height: 500px;
         overflow-y: auto;
     }
+    /*&.scroll-report{
+         max-height: 420px;
+         overflow-x:hidden;
+         overflow-y:auto;
+    }*/
 }
 
 @media (max-width: 767px) {
@@ -468,20 +531,117 @@ header {
     }
 }
 
+.customerProducts, .round {
+    .addProduct {
+        table {
+            tr {
+                td {
+                    input[type="text"] {
+                        max-width: 50px !important;
+                    }
+                }
+            }
+        }
+    }
 
-.addProduct {
-    table {
-        tr {
-            td {
-                input[type="text"] {
-                    max-width: 50px !important;
+    .btn > i {
+        margin-right: 0;
+    }
+}
+
+.worker {
+
+    h3 {
+        margin-bottom: 15px;
+    }
+
+    select {
+        max-width: 200px;
+    }
+
+    .marg-b-15 {
+        margin-bottom: 15px;
+    }
+
+    input[type=text] {
+        max-width: 60px;
+    }
+}
+
+.invoices{
+    width:100%;
+    .row{
+        div{
+            >select{
+                width:100%;
+            }
+            date-time{
+                display:inline-block;
+                vertical-align:middle;   
+                >div{
+                    display:inline-block;
+                    vertical-align:middle;   
+                }             
+            }
+        }
+        .input-group{
+            display:inline-block;
+        }
+    }
+    .invoices{
+            button{
+                margin:0;
+            }
+        }
+}
+ 
+@media(max-width:764px) {
+    .worker {
+        direction: rtl;
+
+        select {
+            width: 140px;
+        }
+
+        .selectDiv {
+            display: inline-block;
+
+            > button {
+                margin: 0 15px 0 15px;
+            }
+        }
+    }    
+}
+
+@media(max-width:624px) {
+    .worker {
+        select {
+            width: 140px;
+            margin-bottom: 15px;
+        }
+
+        .selectDiv {
+            display: inline-block;
+
+            > button {
+                margin: 0 15px 0 15px;
+
+                &:nth-child(1) {
+                    margin-left: 90px;
                 }
             }
         }
     }
 }
-
-
+@media(max-width:1200px){
+    .invoice{
+        .invoices{
+            button{
+                margin-top:30px;
+            }
+        }
+    }
+}
 /*.ui-grid-column-menu-button
 {
     left:0;

@@ -28,6 +28,7 @@
         vm.endDate = today();
         vm.getReport = getReport;
         vm.report = {};
+        vm.reportDivider = [];
         vm.reportGroup = {};
         vm.tblShow = false;
         vm.printReport = printReport;
@@ -48,9 +49,16 @@
         vm.totalAmount = 0;
         vm.totalDeliveredAmount = 0;
         vm.savePrc = savePrc;
-        vm.tax = 18;
+        vm.tax = 17;
+        vm.col = 25;
+        vm.margin = 0;
+        vm.calculateStyle = calculateStyle;
+        vm.colChange = colChange;
         vm.getTotlalSum = getTotlalSum;
         vm.createReportCounts = createReportCounts;
+        vm.clearZero = clearZero;
+        vm.clearZeroDelivered = clearZeroDelivered;
+        vm.productSelectedChange = productSelectedChange;
         vm.reportCounts = {};
         vm.managerDetails = {};
         vm.dateFilter = new Date();
@@ -70,7 +78,15 @@
             return 0;
         }
 
-        
+        function colChange() {
+            //vm.report = {};
+        }
+
+        function calculateStyle(index) {
+            if (parseInt(index) == 0) {
+                return {'margin-bottom': vm.margin}
+            }
+        }
 
         vm.roundFilter = {
             Today: false,
@@ -238,8 +254,8 @@
 
         function getReport() {
             vm.isBusy(true);
-            var sdate = new Date(vm.stratDate).toISOString().slice(0, 10);//.toLocaleDateString();
-            var edate = new Date(vm.endDate).toISOString().slice(0, 10);//.toLocaleDateString();
+            var sdate = common.convertDate(vm.stratDate);//.toISOString().slice(0, 10);
+            var edate = common.convertDate(vm.endDate);//.toISOString().slice(0, 10);
           
             //var model = {
             //    ProductIDs: _.pluck(vm.productsCustomer, 'ProductCustomerID'),
@@ -300,6 +316,15 @@
             return $filter('date')(date, "dd-MM-yyyy");
         }
 
+        function productSelectedChange() {
+            if (vm.productSelected != null) {
+                getCustomerRoundAmount();
+            } else {
+                logError("לא נבחר מוצר");
+                vm.roundProductCustomer = {};
+            }
+        }
+
         function getCustomerRoundAmount() {
             var model = {
                 ProductID: vm.productSelected.ProductID,
@@ -314,6 +339,7 @@
                 logSuccess("סריקת המוצר בסבב עברה בהצלחה");
             }, function (response) {
                 logError(response.status + " " + response.statusText);
+                vm.roundProductCustomer = {};
             });
         }
 
@@ -392,6 +418,21 @@
                 logError(response.status + " " + response.statusText);
                 return false;
             });
+        }
+
+        function clearZero(product) {
+            if (product.Amount === 0) {
+                product.Amount = "";
+            } else if (product.Amount === "") {
+                product.Amount = 0;
+            }
+        }
+        function clearZeroDelivered(product) {
+            if (product.DeliveredAmount === 0) {
+                product.DeliveredAmount = "";
+            } else if (product.DeliveredAmount === "") {
+                product.DeliveredAmount = 0;
+            }
         }
 
         function printReport(divName) {

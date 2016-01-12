@@ -20,6 +20,7 @@
         vm.rounds = {};
         vm.closeRounds = {};
         vm.date = new Date();
+        vm.localDate = new Date();
         vm.customersInRound = {};
         vm.roundSelected = {};
         vm.customer = {};
@@ -31,11 +32,12 @@
         vm.saveProductsCustomer = saveProductsCustomer;
         vm.printBill = printBill;
         vm.productsPrint = [];
+        
         vm.closeRound = closeRound;
         vm.calcTotal = calcTotal;
         vm.manager = {};
         vm.managerDetails = {};
-
+        
         activate();
 
         function activate() {
@@ -95,6 +97,7 @@
                     if (vm.rounds.length > 0) {
                         vm.roundSelected = vm.rounds[0];
                         roundChange(vm.rounds[0]);
+                       
                     }
                 }).then(function () {
                     if (vm.customersInRound.length > 0) {
@@ -138,7 +141,7 @@
                     hideSideNavIpad();
                 });
         }
-
+        
         function roundChange(round) {
             vm.customersInRound = {};
             vm.customerRoundProducts = {};
@@ -152,6 +155,7 @@
                 }
             }
         }
+
         function customerChange(customer) {
             vm.customerRoundProducts = {};
             vm.isSaved = false;
@@ -319,7 +323,7 @@
         }
 
         function calcTotal(products) {
-            return _.reduce(products, function (total, product) { return total + (product.Amount * product.CustomerRoundProduct.Cost); }, 0);
+            return _.reduce(products, function (total, product) { return total + ((product.Amount - product.DeliveredAmount) * product.CustomerRoundProduct.Cost); }, 0);
         }
 
 

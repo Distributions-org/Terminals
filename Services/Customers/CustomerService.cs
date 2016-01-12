@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Core.Data;
+using Core.Domain.Managers;
 using Core.Domain.Persons;
 using Core.Domain.Users;
 using Data;
@@ -60,6 +62,25 @@ namespace Services.Users
             return Mapper.Map<List<Data.Customers>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
         }
 
+        public List<Customers> GetAllCustomers(int? roundsCustomerID, int? ManagerId)
+        {
+            Mapper.Reset();
+            if (roundsCustomerID != null && roundsCustomerID.Value > 0)
+            {
+                Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+               .ForMember(a => a.custStatus, b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status))
+               .ForMember(a => a.RoundCustomerStatus, b => b.MapFrom(c => _roundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundsCustomerID).Single().RoundCustomerStatus));
+            }
+            else
+            {
+                Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+                    .ForMember(a => a.custStatus,
+                        b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status));
+            }
+            List<Data.Customers> FoundCustomer = _CustomersRepository.FindBy(x => x.ManagerId == ManagerId).ToList();
+            return Mapper.Map<List<Data.Customers>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
+        }
+
         public Core.Domain.Customers.Customers GetCustomersById(int id)
         {
             Mapper.Reset();
@@ -68,6 +89,14 @@ namespace Services.Users
             Data.Customers FoundCustomer = _CustomersRepository.FindBy(x => x.CustomerID==id).FirstOrDefault();
             var customer = _roundsCustomerRepository.FindBy(x => x.CustomerID == id);
             return Mapper.Map<Data.Customers, Core.Domain.Customers.Customers>(FoundCustomer);
+        }
+
+        public Customers LoginCustomer(string email, string password)
+        {
+            Mapper.CreateMap<Data.Customers,Customers>()
+                .ForMember(a => a.custStatus, b => b.MapFrom(c => (int)c.Status));
+
+            return Mapper.Map<Data.Customers,Customers>(_CustomersRepository.FindBy(x => x.Email == email && x.Password == password).FirstOrDefault());
         }
 
         public List<ProductToCustomer> GetAllCustomerProducts(int CustomerID)

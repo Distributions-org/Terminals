@@ -10,5 +10,8 @@ namespace Core.Domain.Rounds
     {
         public Customers.Customers customerRound { get; set; }
         public IEnumerable<RoundProductCustomer> roundcustomerProducts { get; set; }
+
+        public int RoundId { get; set; }
+        public DateTime RoundDate { get; set; }
     }
 }
