@@ -12,12 +12,12 @@ namespace Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Customers
+    public partial class AspNetUserLogin
     {
-        public int CustomerID { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerHP { get; set; }
-        public Nullable<int> Status { get; set; }
-        public Nullable<int> ManagerId { get; set; }
+        public string LoginProvider { get; set; }
+        public string ProviderKey { get; set; }
+        public string UserId { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

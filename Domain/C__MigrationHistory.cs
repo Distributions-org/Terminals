@@ -12,12 +12,11 @@ namespace Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Customers
+    public partial class C__MigrationHistory
     {
-        public int CustomerID { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerHP { get; set; }
-        public Nullable<int> Status { get; set; }
-        public Nullable<int> ManagerId { get; set; }
+        public string MigrationId { get; set; }
+        public string ContextKey { get; set; }
+        public byte[] Model { get; set; }
+        public string ProductVersion { get; set; }
     }
 }
