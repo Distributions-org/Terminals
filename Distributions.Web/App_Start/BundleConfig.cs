@@ -30,7 +30,7 @@ namespace Distributions.Web
                 , "~/app/admin/admin.js", "~/app/dashboard/dashboard.js", "~/app/layout/shell.js"
                 , "~/app/layout/sidebar.js", "~/app/managementDistributions/managementDistributions.js", "~/app/reports/reports.js", "~/app/worker/worker.js", "~/app/worker/directives/workerDirective.js",
                 "~/app/admin/adminService.js", "~/app/services/datacontext.js", "~/app/services/directives.js", "~/app/managementDistributions/managementDistributionsService.js",
-                "~/app/reports/reportsService.js", "~/app/invoices/invoices.js", "~/app/invoices/directives/invoiceDirective.js"));
+                "~/app/reports/reportsService.js", "~/app/invoices/directives/invoiceDirective.js", "~/app/invoices/invoices.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/customerApp").Include("~/customersApp/app.js", "~/customersApp/config.js", "~/customersApp/config.exceptionHandler.js", "~/customersApp/config.interceptor.js",
                 "~/customersApp/config.route.js", "~/customersApp/services/entityManagerFactory.js", "~/customersApp/common/common.js", "~/customersApp/common/logger.js", "~/customersApp/common/spinner.js",
