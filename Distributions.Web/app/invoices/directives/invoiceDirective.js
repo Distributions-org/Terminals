@@ -5,14 +5,14 @@
         .module('app')
         .directive('invoice', invoiceDirective);
 
-    invoiceDirective.$inject = ['$window', '$filter', 'managementDistributionsService', 'cache', 'datacontext', 'common'];
+    invoiceDirective.$inject = ['$filter', 'managementDistributionsService', 'cache', 'datacontext', 'common'];
 
-    function invoiceDirective($window, $filter, managementDistributionsService, cache, datacontext, common) {
+    function invoiceDirective($filter, managementDistributionsService, cache, datacontext, common) {
 
         var directive = {
             restrict: 'EA',
             templateUrl: "/app/invoices/directives/invoice.html",
-            controller: invoiceCtrl,
+            controller: ['$scope',invoiceCtrl],
             controllerAs: 'vm',
             scope: {
                 results: '=',
