@@ -16,7 +16,8 @@
             controllerAs: 'vm',
             scope: {
                 results: '=',
-                manager: '='
+                manager: '=',
+                details:'='
             },
             bindToController: true
 
@@ -73,10 +74,16 @@
             }
 
             function getRounds() {
+               
                 vm.results = [];
                 return managementDistributionsService.getCustomerRounds(vm.roundFilter).then(function (response) {
                     //success
                     vm.results = response.data;
+                    vm.details= {
+                        startDate: vm.roundFilter.StartDate,
+                        endDate: vm.roundFilter.EndDate,
+                        customerSelected: (vm.customerSelected != null && vm.customerSelected.CustomerID)
+                    }
                 },
                     function (response) {
                         //error
