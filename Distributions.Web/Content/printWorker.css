@@ -38,3 +38,7 @@ table tr {
    white-space: nowrap;
 }
 
+ul.invoicesNumbers li {
+    float: right;
+    width: 120px;
+}

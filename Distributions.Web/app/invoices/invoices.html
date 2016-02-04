@@ -60,8 +60,8 @@
         <div class="container-fluid">
             <div class="row">
                 <h6>תעודות - {{vm.invoicesNum[0].customerName}} מ {{vm.details.startDate}} עד {{vm.details.endDate}}</h6>
-                <ul>
-                    <li ng-repeat="number in vm.invoicesNum">{{number.num}}</li>
+                <ul class="invoicesNumbers">
+                    <li ng-repeat="invoice in vm.invoicesNum">{{invoice.date+' | '+invoice.num}}</li>
                 </ul>
             </div>
         </div>

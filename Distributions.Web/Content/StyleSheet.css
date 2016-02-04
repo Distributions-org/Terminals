@@ -413,6 +413,10 @@ header .btn-info {
 .invoices .invoices button {
   margin: 0;
 }
+#invoicesNumbers ul li {
+  float: right;
+  width: 150px;
+}
 @media (max-width: 764px) {
   .worker {
     direction: rtl;

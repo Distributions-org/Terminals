@@ -6,9 +6,9 @@
         .module('app')
         .controller(controllerId, invoices);
 
-    invoices.$inject = ['common', 'print'];
+    invoices.$inject = ['common', 'print', '$filter'];
 
-    function invoices(common, print) {
+    function invoices(common, print, $filter) {
         /* jshint validthis:true */
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
@@ -54,7 +54,8 @@
                  vm.invoicesNum.push(
                  {
                      num: item.RoundId + item.customerRound.CustomerID,
-                     customerName: item.customerRound.CustomerName + ' ח.פ. - ' + item.customerRound.CustomerHP
+                     customerName: item.customerRound.CustomerName + ' ח.פ. - ' + item.customerRound.CustomerHP,
+                     date: $filter('date')(item.RoundDate, 'MM-dd-yyyy')
                  });
              });
              setTimeout(function () {
@@ -80,5 +81,7 @@
                 print.printReport('invoices');
             }, 1000);
         }
+
+
     }
 })();
