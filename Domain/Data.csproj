@@ -113,6 +113,9 @@
     <Compile Include="Product.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
+    <Compile Include="ProductCustomerPriceTbl.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
     <Compile Include="sp_get_rounds_by_manager_id_Result.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
@@ -153,6 +156,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Terminals.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="VitTbl.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
     <None Include="TestContext.cs.old" />
     <Compile Include="UsersTbl.cs">

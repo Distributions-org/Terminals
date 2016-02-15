@@ -14,14 +14,17 @@
         <AssociationConnector Association="TerminalsModel.AspNetUserRoles" />
         <EntityTypeShape EntityType="TerminalsModel.Customers" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="TerminalsModel.ManagersTbl" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="TerminalsModel.ProductCustomerTbl" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="TerminalsModel.Product" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="TerminalsModel.ProductCustomerTbl" Width="2.125" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="TerminalsModel.Product" Width="1.5" PointX="7.375" PointY="3.625" />
         <EntityTypeShape EntityType="TerminalsModel.RoundsCustomerProductTbl" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="TerminalsModel.RoundsCustomerTbl" Width="1.5" PointX="4.75" PointY="3.75" />
         <EntityTypeShape EntityType="TerminalsModel.RoundsTbl" Width="1.5" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="TerminalsModel.RoundsUserTbl" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="TerminalsModel.UsersTbl" Width="1.5" PointX="2.75" PointY="6.75" />
-      </Diagram>
+        <EntityTypeShape EntityType="TerminalsModel.ProductCustomerPriceTbl" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="TerminalsModel.C__MigrationHistory" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="TerminalsModel.VitTbl" Width="1.5" PointX="7.375" PointY="6.75" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

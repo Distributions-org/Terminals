@@ -42,43 +42,45 @@ namespace Data
         public DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public DbSet<AspNetUser> AspNetUsers { get; set; }
+        public DbSet<ProductCustomerPriceTbl> ProductCustomerPriceTbls { get; set; }
+        public DbSet<VitTbl> VitTbls { get; set; }
     
-        public virtual ObjectResult<sp_get_rounds_Result> sp_get_rounds(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endtDate, Nullable<bool> today)
-        {
-            var startDateParameter = startDate.HasValue ?
-                new ObjectParameter("startDate", startDate) :
-                new ObjectParameter("startDate", typeof(System.DateTime));
+        //public virtual ObjectResult<sp_get_rounds_Result> sp_get_rounds(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endtDate, Nullable<bool> today)
+        //{
+        //    var startDateParameter = startDate.HasValue ?
+        //        new ObjectParameter("startDate", startDate) :
+        //        new ObjectParameter("startDate", typeof(System.DateTime));
     
-            var endtDateParameter = endtDate.HasValue ?
-                new ObjectParameter("endtDate", endtDate) :
-                new ObjectParameter("endtDate", typeof(System.DateTime));
+        //    var endtDateParameter = endtDate.HasValue ?
+        //        new ObjectParameter("endtDate", endtDate) :
+        //        new ObjectParameter("endtDate", typeof(System.DateTime));
     
-            var todayParameter = today.HasValue ?
-                new ObjectParameter("today", today) :
-                new ObjectParameter("today", typeof(bool));
+        //    var todayParameter = today.HasValue ?
+        //        new ObjectParameter("today", today) :
+        //        new ObjectParameter("today", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_get_rounds_Result>("sp_get_rounds", startDateParameter, endtDateParameter, todayParameter);
-        }
+        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_get_rounds_Result>("sp_get_rounds", startDateParameter, endtDateParameter, todayParameter);
+        //}
     
-        public virtual ObjectResult<sp_get_rounds_by_manager_id_Result> sp_get_rounds_by_manager_id(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endtDate, Nullable<bool> today, Nullable<int> managerId)
-        {
-            var startDateParameter = startDate.HasValue ?
-                new ObjectParameter("startDate", startDate) :
-                new ObjectParameter("startDate", typeof(System.DateTime));
+        //public virtual ObjectResult<sp_get_rounds_by_manager_id_Result> sp_get_rounds_by_manager_id(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endtDate, Nullable<bool> today, Nullable<int> managerId)
+        //{
+        //    var startDateParameter = startDate.HasValue ?
+        //        new ObjectParameter("startDate", startDate) :
+        //        new ObjectParameter("startDate", typeof(System.DateTime));
     
-            var endtDateParameter = endtDate.HasValue ?
-                new ObjectParameter("endtDate", endtDate) :
-                new ObjectParameter("endtDate", typeof(System.DateTime));
+        //    var endtDateParameter = endtDate.HasValue ?
+        //        new ObjectParameter("endtDate", endtDate) :
+        //        new ObjectParameter("endtDate", typeof(System.DateTime));
     
-            var todayParameter = today.HasValue ?
-                new ObjectParameter("today", today) :
-                new ObjectParameter("today", typeof(bool));
+        //    var todayParameter = today.HasValue ?
+        //        new ObjectParameter("today", today) :
+        //        new ObjectParameter("today", typeof(bool));
     
-            var managerIdParameter = managerId.HasValue ?
-                new ObjectParameter("managerId", managerId) :
-                new ObjectParameter("managerId", typeof(int));
+        //    var managerIdParameter = managerId.HasValue ?
+        //        new ObjectParameter("managerId", managerId) :
+        //        new ObjectParameter("managerId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_get_rounds_by_manager_id_Result>("sp_get_rounds_by_manager_id", startDateParameter, endtDateParameter, todayParameter, managerIdParameter);
-        }
+        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_get_rounds_by_manager_id_Result>("sp_get_rounds_by_manager_id", startDateParameter, endtDateParameter, todayParameter, managerIdParameter);
+        //}
     }
 }

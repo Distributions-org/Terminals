@@ -23,14 +23,16 @@ namespace Services.Users
         private readonly IRepository<Data.Product> _ProductsRepository;
         private readonly IRepository<RoundsCustomerTbl> _roundsCustomerRepository;
         private readonly IRepository<ProductCustomerTbl> _ProductCustomerRepository;
+        private readonly IRepository<ProductCustomerPriceTbl> _ProductCustomerPriceRepository;
 
         public CustomerService(IRepository<Data.Customers> CustomersRepository,
-            IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository, IRepository<RoundsCustomerTbl> roundsCustomerRepository)
+            IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository, IRepository<RoundsCustomerTbl> roundsCustomerRepository, IRepository<ProductCustomerPriceTbl> ProductCustomerPriceRepository)
         {
             _CustomersRepository = CustomersRepository;
             _ProductCustomerRepository = ProductCustomerRepository;
             _ProductsRepository = ProductsRepository;
             _roundsCustomerRepository = roundsCustomerRepository;
+            _ProductCustomerPriceRepository = ProductCustomerPriceRepository;
         }
 
         public FunctionReplay.functionReplay AddNewCustomer(Core.Domain.Customers.Customers NewCustomer)
@@ -112,6 +114,13 @@ namespace Services.Users
 
             
             var allcustomers = Mapper.Map<List<ProductCustomerTbl>, List<ProductToCustomer>>(allCustomerProducts);
+            foreach (var item in allcustomers)
+            {
+                int currentProductCustomerId = _ProductCustomerRepository.FindBy(x => x.ProductID == item.ProductID && x.CustomerID == item.CustomerID).OrderByDescending(x => x.ProductCustomerID).FirstOrDefault().ProductCustomerID;
+                double Cost = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == currentProductCustomerId).OrderByDescending(x => x.PriceDate).FirstOrDefault().Price.Value;
+                item.Cost = Cost;
+            }
+
             return allcustomers;
             
         }

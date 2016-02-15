@@ -14,5 +14,7 @@ namespace Services
     {
         List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, int year, int month, int endYear, int endMonth);
         List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, DateTime startDate,DateTime endDate);
+        double GetVit(DateTime Vitdate);
+        FunctionReplay.functionReplay SetNewVit(double NewVit);
     }
 }
