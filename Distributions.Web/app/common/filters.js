@@ -17,4 +17,18 @@
             return arr;
         };
     }
+
+    myFilter.filter('notzerofilter', notzerofilter);
+
+    function notzerofilter() {
+        return function(products) {
+            if (products.length > 0) {
+                return products.map(function(product) {
+                    return (product.Amount > 0 || product.DeliveredAmount > 0);
+                });
+            }
+            
+        }
+    
+}
 })();

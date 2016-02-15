@@ -26,10 +26,11 @@
 
     app.value('config', config);
     
-    app.config(['$logProvider', function ($logProvider) {
+    app.config(['$logProvider', '$compileProvider', function ($logProvider, $compileProvider) {
         // turn debugging off/on (no info or warn)
         if ($logProvider.debugEnabled) {
-            $logProvider.debugEnabled(true);
+            $logProvider.debugEnabled(false);
+            $compileProvider.debugInfoEnabled(false);
         }
     }]);
     

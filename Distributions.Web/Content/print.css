@@ -5,9 +5,9 @@
 }
 
 #reportDiv {
-    -moz-page-break-inside:avoid;
-    page-break-inside:avoid;
-     page-break-after:always;
+    -moz-page-break-inside: avoid;
+    page-break-inside: avoid;
+    page-break-after: always;
 }
 
 table {
@@ -23,9 +23,10 @@ table {
         page-break-inside: avoid;
         page-break-after: auto;
     }
-     table tr td {
-         padding: 1px !important;
-    }
+
+        table tr td {
+            padding: 1px !important;
+        }
 
 thead {
     display: table-header-group;
@@ -64,9 +65,14 @@ tfoot {
 
 .total {
     /*display: none;*/
-     border: 1px solid #ccc;
+    border: 1px solid #ccc;
     padding: 1px;
     display: table-cell;
     margin: 0 0 0 10px;
     font-size: 12px;
+}
+
+ul.invoicesNumbers li {
+    float: right;
+    width: 120px;
 }

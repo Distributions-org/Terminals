@@ -5,18 +5,19 @@
         .module('app')
         .directive('invoice', invoiceDirective);
 
-    invoiceDirective.$inject = ['$window', '$filter', 'managementDistributionsService', 'cache', 'datacontext', 'common'];
+    invoiceDirective.$inject = ['$filter', 'managementDistributionsService', 'cache', 'datacontext', 'common'];
 
-    function invoiceDirective($window, $filter, managementDistributionsService, cache, datacontext, common) {
+    function invoiceDirective($filter, managementDistributionsService, cache, datacontext, common) {
 
         var directive = {
             restrict: 'EA',
             templateUrl: "/app/invoices/directives/invoice.html",
-            controller: invoiceCtrl,
+            controller: ['$scope',invoiceCtrl],
             controllerAs: 'vm',
             scope: {
                 results: '=',
-                manager: '='
+                manager: '=',
+                details:'='
             },
             bindToController: true
 
@@ -73,10 +74,16 @@
             }
 
             function getRounds() {
+               
                 vm.results = [];
                 return managementDistributionsService.getCustomerRounds(vm.roundFilter).then(function (response) {
                     //success
                     vm.results = response.data;
+                    vm.details= {
+                        startDate: vm.roundFilter.StartDate,
+                        endDate: vm.roundFilter.EndDate,
+                        customerSelected: (vm.customerSelected != null && vm.customerSelected.CustomerID)
+                    }
                 },
                     function (response) {
                         //error
