@@ -55,9 +55,13 @@
                  {
                      num: item.RoundId + item.customerRound.CustomerID,
                      customerName: item.customerRound.CustomerName + ' ח.פ. - ' + item.customerRound.CustomerHP,
-                     date: $filter('date')(item.RoundDate, 'MM-dd-yyyy')
+                     date: $filter('date')(item.RoundDate, 'dd-MM-yyyy')
                  });
              });
+
+                vm.details.startDate = $filter('date')(new Date(vm.details.startDate), 'dd-MM-yyyy');
+                vm.details.endDate = $filter('date')(new Date(vm.details.endDate), 'dd-MM-yyyy');
+
              setTimeout(function () {
                  print.printReport('invoicesNumbers');
              }, 1000);
