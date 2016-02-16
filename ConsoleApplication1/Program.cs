@@ -21,15 +21,17 @@ namespace Console.Test
 
             var reportService = kernal.Get<IReportsService>();
             List<int> ProductIds = new List<int>();
-            ProductIds.Add(3011);
-            ProductIds.Add(3012);
-            ProductIds.Add(3013);
-            ProductIds.Add(3015);
-            ProductIds.Add(3016);
-            ProductIds.Add(3017);
-            ProductIds.Add(3018);
-            reportService.GetCustomerProductsReports(ProductIds, 7, 2015, 2, 2015, 4);
+            ProductIds.Add(10);
+            ProductIds.Add(11);
+            ProductIds.Add(12);
+            ProductIds.Add(13);
+            ProductIds.Add(14);
+            ProductIds.Add(15);
+            ProductIds.Add(16);
+            //reportService.GetCustomerProductsReports(ProductIds, 7, 2015, 4, 2015, 5);
+            double vit = reportService.GetVit((DateTime.Now.AddYears(-1)));
 
+            reportService.SetNewVit(19.0);
             //var userService = kernal.Get<IUserService>();
 
             //User NewUser = new User{FirstName = "Oren",LastName = "Naftaly", Email = "Naftalywork@gmail.com",Password = "orenn1",RoleID = Core.Enums.UserRoles.userRoles.admin};
@@ -37,17 +39,18 @@ namespace Console.Test
 
             //User currentUser = userService.LoginUser("Naftalywork@gmail.com", "orenn1");
 
-            //var customerService = kernal.Get<ICustomerService>();
+            var customerService = kernal.Get<ICustomerService>();
             //Core.Domain.Customers.Customers newcustomer = new Core.Domain.Customers.Customers { CustomerName = "test2", CustomerHP = "test2", custStatus = Core.Enums.CustomerStatus.customerStatus.Active };
             //List<Core.Domain.Customers.Customers> validcust = customerService.GetValidCustomers();
-            //customerService.GetAllCustomerProducts(1);
+            //customerService.GetAllCustomerProducts(9);
             //customerService.AddNewCustomer("test", "test");
 
             //var productService = kernal.Get<IProductsService>();
             //Core.Domain.Product Producttoupdate = new Core.Domain.Product{ ProductID = 1,ProductName = "test2", productStatus = Core.Enums.ProductStatus.productStatus.NotActive};
             //productService.UpdateProduct(Producttoupdate);
             //productService.UpdateCustomerProductPrice(1, 30.5);
-            //productService.AddProductTocustomer(1, 1, Core.Enums.DaysType.DayType.SunToWen, 20.5);
+            //var RoundService = kernal.Get<IRoundsService>();
+            //productService.AddProductTocustomer(RoundService.GetCustomerProducts(1, Core.Enums.DaysType.DayType.SunToWen)[0]);
             //productService.AddNewProduct("test",Core.Enums.ProductStatus.productStatus.Active);
 
             //var RoundService = kernal.Get<IRoundsService>();

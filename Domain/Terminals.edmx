@@ -5,6 +5,67 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="TerminalsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
         <EntityType Name="Customers">
           <Key>
             <PropertyRef Name="CustomerID" />
@@ -14,7 +75,7 @@
           <Property Name="CustomerHP" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="int" />
           <Property Name="ManagerId" Type="int" />
-          <Property Name="Email" Type="nvarchar" MaxLength="350" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="350" />
         </EntityType>
         <EntityType Name="ManagersTbl">
@@ -27,6 +88,15 @@
           <Property Name="ManagerPhone" Type="nvarchar" MaxLength="50" />
           <Property Name="ManagerAddress" Type="nvarchar" MaxLength="350" />
           <Property Name="ManagerPhone2" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ProductCustomerPriceTbl">
+          <Key>
+            <PropertyRef Name="ProductCustomerPriceId" />
+          </Key>
+          <Property Name="ProductCustomerPriceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductCustomerID" Type="int" />
+          <Property Name="Price" Type="float" />
+          <Property Name="PriceDate" Type="date" />
         </EntityType>
         <EntityType Name="ProductCustomerTbl">
           <Key>
@@ -96,9 +166,91 @@
           <Property Name="RoleID" Type="int" />
           <Property Name="ManagerID" Type="int" />
         </EntityType>
+        <EntityType Name="VitTbl">
+          <Key>
+            <PropertyRef Name="VitID" />
+          </Key>
+          <Property Name="VitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Vit" Type="float" />
+          <Property Name="VitDate" Type="date" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_get_rounds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startDate" Type="datetime" Mode="In" />
+          <Parameter Name="endtDate" Type="datetime" Mode="In" />
+          <Parameter Name="today" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="sp_get_rounds_by_manager_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startDate" Type="datetime" Mode="In" />
+          <Parameter Name="endtDate" Type="datetime" Mode="In" />
+          <Parameter Name="today" Type="bit" Mode="In" />
+          <Parameter Name="managerId" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="TerminalsModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ManagersTbl" EntityType="Self.ManagersTbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductCustomerPriceTbl" EntityType="Self.ProductCustomerPriceTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductCustomerTbl" EntityType="Self.ProductCustomerTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoundsCustomerProductTbl" EntityType="Self.RoundsCustomerProductTbl" Schema="dbo" store:Type="Tables" />
@@ -106,6 +258,23 @@
           <EntitySet Name="RoundsTbl" EntityType="Self.RoundsTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoundsUserTbl" EntityType="Self.RoundsUserTbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UsersTbl" EntityType="Self.UsersTbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VitTbl" EntityType="Self.VitTbl" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -137,6 +306,36 @@
           <EntitySet Name="RoundsTbls" EntityType="TerminalsModel.RoundsTbl" />
           <EntitySet Name="RoundsUserTbls" EntityType="TerminalsModel.RoundsUserTbl" />
           <EntitySet Name="UsersTbls" EntityType="TerminalsModel.UsersTbl" />
+          <EntitySet Name="C__MigrationHistory" EntityType="TerminalsModel.C__MigrationHistory" />
+          <EntitySet Name="AspNetRoles" EntityType="TerminalsModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="TerminalsModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="TerminalsModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="TerminalsModel.AspNetUser" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="TerminalsModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="TerminalsModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="TerminalsModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <FunctionImport Name="sp_get_rounds" ReturnType="Collection(TerminalsModel.sp_get_rounds_Result)">
+            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endtDate" Mode="In" Type="DateTime" />
+            <Parameter Name="today" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sp_get_rounds_by_manager_id" ReturnType="Collection(TerminalsModel.sp_get_rounds_by_manager_id_Result)">
+            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endtDate" Mode="In" Type="DateTime" />
+            <Parameter Name="today" Mode="In" Type="Boolean" />
+            <Parameter Name="managerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="ProductCustomerPriceTbls" EntityType="TerminalsModel.ProductCustomerPriceTbl" />
+          <EntitySet Name="VitTbls" EntityType="TerminalsModel.VitTbl" />
         </EntityContainer>
         <EntityType Name="Customers">
           <Key>
@@ -147,7 +346,7 @@
           <Property Name="CustomerHP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" />
           <Property Name="ManagerId" Type="Int32" />
-          <Property Name="Email" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
           </EntityType>
         <EntityType Name="ManagersTbl">
@@ -228,6 +427,194 @@
           <Property Name="Password" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
           <Property Name="RoleID" Type="Int32" />
           <Property Name="ManagerID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="TerminalsModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="TerminalsModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="TerminalsModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="TerminalsModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="TerminalsModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetRoles" Relationship="TerminalsModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="TerminalsModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TerminalsModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="TerminalsModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TerminalsModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="TerminalsModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="TerminalsModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        <ComplexType Name="sp_get_rounds_Result">
+          <Property Type="Int32" Name="RoundsID" Nullable="false" />
+          <Property Type="String" Name="RoundName" Nullable="true" MaxLength="450" />
+          <Property Type="DateTime" Name="RoundDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="RoundStatus" Nullable="true" />
+          <Property Type="Int32" Name="ManagerID" Nullable="true" />
+          <Property Type="Int32" Name="RoundsUserID" Nullable="false" />
+          <Property Type="Int32" Name="RoundsID1" Nullable="true" />
+          <Property Type="Int32" Name="UserID" Nullable="true" />
+          <Property Type="Int32" Name="UserID1" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="550" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="550" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="350" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="350" />
+          <Property Type="Int32" Name="RoleID" Nullable="true" />
+          <Property Type="Int32" Name="ManagerID1" Nullable="true" />
+          <Property Type="Int32" Name="RoundsCustomersID" Nullable="true" />
+          <Property Type="Int32" Name="RoundsID2" Nullable="true" />
+          <Property Type="Int32" Name="CustomerID" Nullable="true" />
+          <Property Type="Boolean" Name="RoundCustomerStatus" Nullable="true" />
+          <Property Type="Int32" Name="CustomerID1" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="350" />
+          <Property Type="String" Name="CustomerHP" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="Int32" Name="ManagerId2" Nullable="true" />
+          <Property Type="Int32" Name="RoundsCustomerProductID" Nullable="false" />
+          <Property Type="Int32" Name="RoundsCustomersID1" Nullable="true" />
+          <Property Type="Int32" Name="ProductID" Nullable="true" />
+          <Property Type="Int32" Name="Amount" Nullable="true" />
+          <Property Type="Int32" Name="DelieveredAmount" Nullable="true" />
+          <Property Type="Int32" Name="ProductCustomerID" Nullable="false" />
+          <Property Type="Int32" Name="ProductID1" Nullable="true" />
+          <Property Type="Int32" Name="CustomerID2" Nullable="true" />
+          <Property Type="Int32" Name="DayTypeID" Nullable="true" />
+          <Property Type="Double" Name="Cost" Nullable="true" />
+          <Property Type="Int32" Name="ProductID2" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="850" />
+          <Property Type="Int32" Name="ProductStatus" Nullable="true" />
+          <Property Type="Int32" Name="ManagerId3" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_get_rounds_by_manager_id_Result">
+          <Property Type="Int32" Name="RoundsID" Nullable="false" />
+          <Property Type="String" Name="RoundName" Nullable="true" MaxLength="450" />
+          <Property Type="DateTime" Name="RoundDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="RoundStatus" Nullable="true" />
+          <Property Type="Int32" Name="ManagerID" Nullable="true" />
+          <Property Type="Int32" Name="RoundsUserID" Nullable="false" />
+          <Property Type="Int32" Name="RoundsID1" Nullable="true" />
+          <Property Type="Int32" Name="UserID" Nullable="true" />
+          <Property Type="Int32" Name="UserID1" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="550" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="550" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="350" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="350" />
+          <Property Type="Int32" Name="RoleID" Nullable="true" />
+          <Property Type="Int32" Name="ManagerID1" Nullable="true" />
+          <Property Type="Int32" Name="RoundsCustomersID" Nullable="true" />
+          <Property Type="Int32" Name="RoundsID2" Nullable="true" />
+          <Property Type="Int32" Name="CustomerID" Nullable="true" />
+          <Property Type="Boolean" Name="RoundCustomerStatus" Nullable="true" />
+          <Property Type="Int32" Name="CustomerID1" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="350" />
+          <Property Type="String" Name="CustomerHP" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="Int32" Name="ManagerId2" Nullable="true" />
+          <Property Type="Int32" Name="RoundsCustomerProductID" Nullable="false" />
+          <Property Type="Int32" Name="RoundsCustomersID1" Nullable="true" />
+          <Property Type="Int32" Name="ProductID" Nullable="true" />
+          <Property Type="Int32" Name="Amount" Nullable="true" />
+          <Property Type="Int32" Name="DelieveredAmount" Nullable="true" />
+          <Property Type="Int32" Name="ProductCustomerID" Nullable="false" />
+          <Property Type="Int32" Name="ProductID1" Nullable="true" />
+          <Property Type="Int32" Name="CustomerID2" Nullable="true" />
+          <Property Type="Int32" Name="DayTypeID" Nullable="true" />
+          <Property Type="Double" Name="Cost" Nullable="true" />
+          <Property Type="Int32" Name="ProductID2" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="850" />
+          <Property Type="Int32" Name="ProductStatus" Nullable="true" />
+          <Property Type="Int32" Name="ManagerId3" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="ProductCustomerPriceTbl">
+          <Key>
+            <PropertyRef Name="ProductCustomerPriceId" />
+          </Key>
+          <Property Name="ProductCustomerPriceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCustomerID" Type="Int32" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="PriceDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="VitTbl">
+          <Key>
+            <PropertyRef Name="VitID" />
+          </Key>
+          <Property Name="VitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Vit" Type="Double" />
+          <Property Name="VitDate" Type="DateTime" Precision="0" />
         </EntityType>
         <!--<EntityType Name="AspNetRole">
           <Key>
@@ -413,6 +800,176 @@
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="TerminalsModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="TerminalsModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="TerminalsModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="TerminalsModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="TerminalsModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="TerminalsModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="sp_get_rounds" FunctionName="TerminalsModel.Store.sp_get_rounds">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TerminalsModel.sp_get_rounds_Result">
+                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
+                <ScalarProperty Name="RoundName" ColumnName="RoundName" />
+                <ScalarProperty Name="RoundDate" ColumnName="RoundDate" />
+                <ScalarProperty Name="RoundStatus" ColumnName="RoundStatus" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="RoundsUserID" ColumnName="RoundsUserID" />
+                <ScalarProperty Name="RoundsID1" ColumnName="RoundsID1" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserID1" ColumnName="UserID1" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ManagerID1" ColumnName="ManagerID1" />
+                <ScalarProperty Name="RoundsCustomersID" ColumnName="RoundsCustomersID" />
+                <ScalarProperty Name="RoundsID2" ColumnName="RoundsID2" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="RoundCustomerStatus" ColumnName="RoundCustomerStatus" />
+                <ScalarProperty Name="CustomerID1" ColumnName="CustomerID1" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerHP" ColumnName="CustomerHP" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ManagerId2" ColumnName="ManagerId2" />
+                <ScalarProperty Name="RoundsCustomerProductID" ColumnName="RoundsCustomerProductID" />
+                <ScalarProperty Name="RoundsCustomersID1" ColumnName="RoundsCustomersID1" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="DelieveredAmount" ColumnName="DelieveredAmount" />
+                <ScalarProperty Name="ProductCustomerID" ColumnName="ProductCustomerID" />
+                <ScalarProperty Name="ProductID1" ColumnName="ProductID1" />
+                <ScalarProperty Name="CustomerID2" ColumnName="CustomerID2" />
+                <ScalarProperty Name="DayTypeID" ColumnName="DayTypeID" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ProductID2" ColumnName="ProductID2" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductStatus" ColumnName="ProductStatus" />
+                <ScalarProperty Name="ManagerId3" ColumnName="ManagerId3" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_get_rounds_by_manager_id" FunctionName="TerminalsModel.Store.sp_get_rounds_by_manager_id">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TerminalsModel.sp_get_rounds_by_manager_id_Result">
+                <ScalarProperty Name="RoundsID" ColumnName="RoundsID" />
+                <ScalarProperty Name="RoundName" ColumnName="RoundName" />
+                <ScalarProperty Name="RoundDate" ColumnName="RoundDate" />
+                <ScalarProperty Name="RoundStatus" ColumnName="RoundStatus" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="RoundsUserID" ColumnName="RoundsUserID" />
+                <ScalarProperty Name="RoundsID1" ColumnName="RoundsID1" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserID1" ColumnName="UserID1" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="ManagerID1" ColumnName="ManagerID1" />
+                <ScalarProperty Name="RoundsCustomersID" ColumnName="RoundsCustomersID" />
+                <ScalarProperty Name="RoundsID2" ColumnName="RoundsID2" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="RoundCustomerStatus" ColumnName="RoundCustomerStatus" />
+                <ScalarProperty Name="CustomerID1" ColumnName="CustomerID1" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerHP" ColumnName="CustomerHP" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ManagerId2" ColumnName="ManagerId2" />
+                <ScalarProperty Name="RoundsCustomerProductID" ColumnName="RoundsCustomerProductID" />
+                <ScalarProperty Name="RoundsCustomersID1" ColumnName="RoundsCustomersID1" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="DelieveredAmount" ColumnName="DelieveredAmount" />
+                <ScalarProperty Name="ProductCustomerID" ColumnName="ProductCustomerID" />
+                <ScalarProperty Name="ProductID1" ColumnName="ProductID1" />
+                <ScalarProperty Name="CustomerID2" ColumnName="CustomerID2" />
+                <ScalarProperty Name="DayTypeID" ColumnName="DayTypeID" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ProductID2" ColumnName="ProductID2" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductStatus" ColumnName="ProductStatus" />
+                <ScalarProperty Name="ManagerId3" ColumnName="ManagerId3" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ProductCustomerPriceTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.ProductCustomerPriceTbl">
+              <MappingFragment StoreEntitySet="ProductCustomerPriceTbl">
+                <ScalarProperty Name="PriceDate" ColumnName="PriceDate" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ProductCustomerID" ColumnName="ProductCustomerID" />
+                <ScalarProperty Name="ProductCustomerPriceId" ColumnName="ProductCustomerPriceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VitTbls">
+            <EntityTypeMapping TypeName="TerminalsModel.VitTbl">
+              <MappingFragment StoreEntitySet="VitTbl">
+                <ScalarProperty Name="VitDate" ColumnName="VitDate" />
+                <ScalarProperty Name="Vit" ColumnName="Vit" />
+                <ScalarProperty Name="VitID" ColumnName="VitID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

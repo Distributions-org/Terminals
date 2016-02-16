@@ -86,7 +86,22 @@
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\IdentityModels.cs" />
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
     <Compile Include="Customers.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
+    <Compile Include="C__MigrationHistory.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
     <Compile Include="ManagersTbl.cs">
@@ -96,6 +111,15 @@
     <Compile Include="Maping\Customers\CustomersMap.cs" />
     <Compile Include="Maping\Users\UsersMap.cs" />
     <Compile Include="Product.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductCustomerPriceTbl.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_get_rounds_by_manager_id_Result.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_get_rounds_Result.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
     <Compile Include="TerminalContext.cs" />
@@ -132,6 +156,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Terminals.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="VitTbl.cs">
+      <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
     <None Include="TestContext.cs.old" />
     <Compile Include="UsersTbl.cs">

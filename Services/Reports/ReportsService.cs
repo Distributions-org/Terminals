@@ -28,11 +28,14 @@ namespace Services
         private readonly IRepository<RoundsUserTbl> _RoundsUserRepository;
         private readonly IRepository<RoundsCustomerTbl> _RoundsCustomerRepository;
         private readonly IRepository<RoundsCustomerProductTbl> _RoundsCustomerProductRepository;
+        private readonly IRepository<Data.ProductCustomerPriceTbl> _ProductCustomerPriceRepository;
+        private readonly IRepository<Data.VitTbl> _VitRepository;
 
         public ReportsService(IRepository<Data.RoundsTbl> RoundsRepository, IRepository<Data.Customers> CustomersRepository,
             IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository
             , IRepository<Data.RoundsUserTbl> RoundsUserRepository,
-            IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository)
+            IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository,
+            IRepository<ProductCustomerPriceTbl> ProductCustomerPriceRepository, IRepository<VitTbl> VitRepository)
         {
             _RoundsRepository = RoundsRepository;
             _CustomersRepository = CustomersRepository;
@@ -41,6 +44,8 @@ namespace Services
             _RoundsUserRepository = RoundsUserRepository;
             _RoundsCustomerRepository = RoundsCustomerRepository;
             _RoundsCustomerProductRepository = RoundsCustomerProductRepository;
+            _ProductCustomerPriceRepository = ProductCustomerPriceRepository;
+            _VitRepository = VitRepository;
         }
 
         public List<CustmerReports> GetCustomerProductsReports(List<int> ProductIDs, int CustomerID, DateTime startDate,DateTime endDate)
@@ -70,11 +75,12 @@ namespace Services
                             x => x.CustomerID == CustomerID && x.ProductID == roundcustomerproduct.ProductID);
                     if (pct == null)
                         continue;
+                    
                     customerReport.Cost = pct.Cost.Value;
                     ProductCustomerReport newproductCustomerReport = new ProductCustomerReport();
                     int RoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                     newproductCustomerReport.currentDate = _RoundsRepository.FindBy(x => x.RoundsID == RoundID).FirstOrDefault().RoundDate.Value;
-
+                    customerReport.Cost = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).OrderBy(x => x.PriceDate).FirstOrDefault().Price.Value;
                     if (roundcustomerproduct.Amount < 0)
                     {
                         newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
@@ -108,10 +114,18 @@ namespace Services
                         customerReport.ProductName = AllProducts.FirstOrDefault(x => x.ProductID == roundcustomerproduct.ProductID).ProductName;
                         customerReport.CustomerID = CustomerID;
                         customerReport.CustomerName = CustomerName;
-                        customerReport.Cost = allProductcustomer.FirstOrDefault(x => x.CustomerID == CustomerID && x.ProductID == roundcustomerproduct.ProductID).Cost.Value;
+                        //customerReport.Cost = allProductcustomer.FirstOrDefault(x => x.CustomerID == CustomerID && x.ProductID == roundcustomerproduct.ProductID).Cost.Value;
                         ProductCustomerReport newproductCustomerReport = new ProductCustomerReport();
                         int CurrentRoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                         newproductCustomerReport.currentDate = _RoundsRepository.FindBy(x => x.RoundsID == CurrentRoundID).FirstOrDefault().RoundDate.Value;
+
+                        var pct =
+                        allProductcustomer.FirstOrDefault(
+                            x => x.CustomerID == CustomerID && x.ProductID == roundcustomerproduct.ProductID);
+                        if (pct == null)
+                            continue;
+
+                        customerReport.Cost = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).OrderBy(x => x.PriceDate).FirstOrDefault().Price.Value;
                         if (roundcustomerproduct.Amount < 0)
                         {
                             newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
@@ -251,27 +265,30 @@ namespace Services
                     ProductCustomerReport newproductCustomerReport = new ProductCustomerReport();
                     int RoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                     newproductCustomerReport.currentDate = _RoundsRepository.FindBy(x => x.RoundsID == RoundID).FirstOrDefault().RoundDate.Value;
-
-                    if (roundcustomerproduct.Amount < 0)
+                    List<ProductCustomerPriceTbl> allPRices = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).ToList();
+                    if (allPRices.Count > 0)
                     {
-                        newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
-                        newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
-                        customerReport.TotalSum -= roundcustomerproduct.Amount.Value * customerReport.Cost;
-                        customerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
+                        customerReport.Cost = allPRices.OrderBy(x => x.PriceDate).FirstOrDefault().Price.Value; 
+                        if (roundcustomerproduct.Amount < 0)
+                        {
+                            newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
+                            newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
+                            customerReport.TotalSum -= roundcustomerproduct.Amount.Value * customerReport.Cost;
+                            customerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
+                        }
+                        else
+                        {
+                            newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
+                            newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
+                            customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
+                            customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
+                        }
+                        if (newproductCustomerReport.DelieverySent != 0 || newproductCustomerReport.DelieveryTaken != 0)
+                        {
+                            customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
+                            customerReports.Add(customerReport);
+                        }
                     }
-                    else
-                    {
-                        newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
-                        newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
-                        customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
-                        customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
-                    }
-                    if (newproductCustomerReport.DelieverySent != 0 || newproductCustomerReport.DelieveryTaken != 0)
-                    {
-                        customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
-                        customerReports.Add(customerReport);
-                    }
-                   
                 }
                 else
                 {
@@ -289,6 +306,14 @@ namespace Services
                         ProductCustomerReport newproductCustomerReport = new ProductCustomerReport();
                         int CurrentRoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                         newproductCustomerReport.currentDate = _RoundsRepository.FindBy(x => x.RoundsID == CurrentRoundID).FirstOrDefault().RoundDate.Value;
+
+                        var pct =
+                        allProductcustomer.FirstOrDefault(
+                            x => x.CustomerID == CustomerID && x.ProductID == roundcustomerproduct.ProductID);
+                        if (pct == null)
+                            continue;
+                        List<ProductCustomerPriceTbl> allPRices = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).ToList();
+                        customerReport.Cost = allPRices.OrderBy(x => x.PriceDate).FirstOrDefault().Price.Value;
                         if (roundcustomerproduct.Amount < 0)
                         {
                             newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
@@ -391,6 +416,19 @@ namespace Services
             });
 
             return customerReports.ToList();
+        }
+
+        public double GetVit(DateTime Vitdate)
+        {
+            return _VitRepository.FindBy(x => x.VitDate < Vitdate).OrderByDescending(x => x.VitDate).FirstOrDefault().Vit.Value;
+        }
+
+        public FunctionReplay.functionReplay SetNewVit(double NewVit)
+        {
+            VitTbl currentnewVit = new VitTbl();
+            currentnewVit.Vit = NewVit;
+            currentnewVit.VitDate = DateTime.Now;
+            return _VitRepository.Add(currentnewVit);
         }
     }
 }

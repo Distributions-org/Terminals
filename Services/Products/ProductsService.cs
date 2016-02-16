@@ -10,6 +10,7 @@ using Core.Domain;
 using AutoMapper;
 using Core.Domain.ProductTocustomer;
 using Core.Domain;
+using System;
 
 namespace Services
 {
@@ -17,11 +18,13 @@ namespace Services
     {
         private readonly IRepository<Data.Product> _productsRepository;
         private readonly IRepository<Data.ProductCustomerTbl> _ProductCustomerRepository;
+        private readonly IRepository<Data.ProductCustomerPriceTbl> _ProductCustomerPriceRepository;
 
-        public ProductsService(IRepository<Data.Product> productsRepository, IRepository<ProductCustomerTbl> ProductCustomerRepository)
+        public ProductsService(IRepository<Data.Product> productsRepository, IRepository<ProductCustomerTbl> ProductCustomerRepository,IRepository<ProductCustomerPriceTbl> ProductCustomerPriceRepository)
         {
             _productsRepository = productsRepository;
             _ProductCustomerRepository = ProductCustomerRepository;
+            _ProductCustomerPriceRepository = ProductCustomerPriceRepository;
         }
 
         public  FunctionReplay.functionReplay AddNewProduct(Core.Domain.Product newProduct)
@@ -52,7 +55,16 @@ namespace Services
                 .ForMember(a => a.DayTypeID, b => b.MapFrom(c => (int)c.dayType));
 
             ProductCustomerTbl newProductToCustomer = Mapper.Map< ProductToCustomer,ProductCustomerTbl >(addedProduct);
-            return _ProductCustomerRepository.Add(newProductToCustomer);
+            _ProductCustomerRepository.Add(newProductToCustomer);
+
+            int currentProductCustomerId = _ProductCustomerRepository.FindBy(x => x.ProductID == newProductToCustomer.ProductID).OrderByDescending(x => x.ProductCustomerID).FirstOrDefault().ProductCustomerID;
+            ProductCustomerPriceTbl currentPrice = new ProductCustomerPriceTbl();
+            currentPrice.ProductCustomerID = currentProductCustomerId;
+            currentPrice.Price = addedProduct.Cost;
+            currentPrice.PriceDate = DateTime.Now;
+            return _ProductCustomerPriceRepository.Add(currentPrice);
+
+
         }
 
         public FunctionReplay.functionReplay UpdateCustomerProductPrice(ProductToCustomer updateProduct)
@@ -61,7 +73,12 @@ namespace Services
                 .ForMember(a => a.DayTypeID, b => b.MapFrom(c => (int)c.dayType));
 
             ProductCustomerTbl current = Mapper.Map<ProductToCustomer, ProductCustomerTbl>(updateProduct);
-            return _ProductCustomerRepository.Update(current);
+            _ProductCustomerRepository.Update(current);
+
+            ProductCustomerPriceTbl currentPrice = new ProductCustomerPriceTbl();
+            currentPrice.ProductCustomerID = current.ProductCustomerID;
+            currentPrice.Price = updateProduct.Cost;
+            return _ProductCustomerPriceRepository.Add(currentPrice);
         }
 
         public Core.Domain.Product GetProductById(int ProductID)

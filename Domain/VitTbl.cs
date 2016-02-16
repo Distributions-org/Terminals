@@ -12,14 +12,10 @@ namespace Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Customers
+    public partial class VitTbl
     {
-        public int CustomerID { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerHP { get; set; }
-        public Nullable<int> Status { get; set; }
-        public Nullable<int> ManagerId { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public int VitID { get; set; }
+        public Nullable<double> Vit { get; set; }
+        public Nullable<System.DateTime> VitDate { get; set; }
     }
 }
