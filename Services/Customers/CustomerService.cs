@@ -19,13 +19,13 @@ namespace Services.Users
 {
     public  class CustomerService : ICustomerService
     {
-        private readonly IRepository<Data.Customers> _CustomersRepository;
+        private readonly IRepository<Data.Customer> _CustomersRepository;
         private readonly IRepository<Data.Product> _ProductsRepository;
         private readonly IRepository<RoundsCustomerTbl> _roundsCustomerRepository;
         private readonly IRepository<ProductCustomerTbl> _ProductCustomerRepository;
         private readonly IRepository<ProductCustomerPriceTbl> _ProductCustomerPriceRepository;
 
-        public CustomerService(IRepository<Data.Customers> CustomersRepository,
+        public CustomerService(IRepository<Data.Customer> CustomersRepository,
             IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository, IRepository<RoundsCustomerTbl> roundsCustomerRepository, IRepository<ProductCustomerPriceTbl> ProductCustomerPriceRepository)
         {
             _CustomersRepository = CustomersRepository;
@@ -37,10 +37,10 @@ namespace Services.Users
 
         public FunctionReplay.functionReplay AddNewCustomer(Core.Domain.Customers.Customers NewCustomer)
         {
-            Mapper.CreateMap<Core.Domain.Customers.Customers, Data.Customers>()
+            Mapper.CreateMap<Core.Domain.Customers.Customers, Data.Customer>()
                 .ForMember(a => a.Status, b => b.MapFrom(z => (int)z.custStatus));
 
-            Data.Customers newCustomers = Mapper.Map<Core.Domain.Customers.Customers, Data.Customers>(NewCustomer);
+            Data.Customer newCustomers = Mapper.Map<Core.Domain.Customers.Customers, Data.Customer>(NewCustomer);
 
             return _CustomersRepository.Add(newCustomers);
         }
@@ -50,18 +50,18 @@ namespace Services.Users
             Mapper.Reset();
             if (roundsCustomerID != null && roundsCustomerID.Value > 0)
             {
-                Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+                Mapper.CreateMap<Data.Customer, Core.Domain.Customers.Customers>()
                .ForMember(a => a.custStatus, b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status))
                .ForMember(a => a.RoundCustomerStatus, b => b.MapFrom(c => _roundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundsCustomerID).Single().RoundCustomerStatus));
             }
             else
             {
-                Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+                Mapper.CreateMap<Data.Customer, Core.Domain.Customers.Customers>()
                     .ForMember(a => a.custStatus,
                         b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus) z.Status));
             }
-            List<Data.Customers> FoundCustomer = _CustomersRepository.FindBy(x => x.Status == 1 && x.ManagerId == ManagerId).ToList();
-            return Mapper.Map<List<Data.Customers>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
+            List<Data.Customer> FoundCustomer = _CustomersRepository.FindBy(x => x.Status == 1 && x.ManagerId == ManagerId).ToList();
+            return Mapper.Map<List<Data.Customer>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
         }
 
         public List<Customers> GetAllCustomers(int? roundsCustomerID, int? ManagerId)
@@ -69,36 +69,36 @@ namespace Services.Users
             Mapper.Reset();
             if (roundsCustomerID != null && roundsCustomerID.Value > 0)
             {
-                Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+                Mapper.CreateMap<Data.Customer, Core.Domain.Customers.Customers>()
                .ForMember(a => a.custStatus, b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status))
                .ForMember(a => a.RoundCustomerStatus, b => b.MapFrom(c => _roundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundsCustomerID).Single().RoundCustomerStatus));
             }
             else
             {
-                Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+                Mapper.CreateMap<Data.Customer, Core.Domain.Customers.Customers>()
                     .ForMember(a => a.custStatus,
                         b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status));
             }
-            List<Data.Customers> FoundCustomer = _CustomersRepository.FindBy(x => x.ManagerId == ManagerId).ToList();
-            return Mapper.Map<List<Data.Customers>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
+            List<Data.Customer> FoundCustomer = _CustomersRepository.FindBy(x => x.ManagerId == ManagerId).ToList();
+            return Mapper.Map<List<Data.Customer>, List<Core.Domain.Customers.Customers>>(FoundCustomer);
         }
 
         public Core.Domain.Customers.Customers GetCustomersById(int id)
         {
             Mapper.Reset();
-            Mapper.CreateMap<Data.Customers, Core.Domain.Customers.Customers>()
+            Mapper.CreateMap<Data.Customer, Core.Domain.Customers.Customers>()
                 .ForMember(a => a.custStatus, b => b.MapFrom(z => (Core.Enums.CustomerStatus.customerStatus)z.Status));
-            Data.Customers FoundCustomer = _CustomersRepository.FindBy(x => x.CustomerID==id).FirstOrDefault();
+            Data.Customer FoundCustomer = _CustomersRepository.FindBy(x => x.CustomerID==id).FirstOrDefault();
             var customer = _roundsCustomerRepository.FindBy(x => x.CustomerID == id);
-            return Mapper.Map<Data.Customers, Core.Domain.Customers.Customers>(FoundCustomer);
+            return Mapper.Map<Data.Customer, Core.Domain.Customers.Customers>(FoundCustomer);
         }
 
         public Customers LoginCustomer(string email, string password)
         {
-            Mapper.CreateMap<Data.Customers,Customers>()
+            Mapper.CreateMap<Data.Customer,Customers>()
                 .ForMember(a => a.custStatus, b => b.MapFrom(c => (int)c.Status));
 
-            return Mapper.Map<Data.Customers,Customers>(_CustomersRepository.FindBy(x => x.Email == email && x.Password == password).FirstOrDefault());
+            return Mapper.Map<Data.Customer,Customers>(_CustomersRepository.FindBy(x => x.Email == email && x.Password == password).FirstOrDefault());
         }
 
         public List<ProductToCustomer> GetAllCustomerProducts(int CustomerID)
@@ -129,9 +129,9 @@ namespace Services.Users
 
         public FunctionReplay.functionReplay UpdateCustomer(int CustomerID,Core.Domain.Customers.Customers UpdateCustomer)
         {
-            Mapper.CreateMap<Core.Domain.Customers.Customers, Data.Customers>()
+            Mapper.CreateMap<Core.Domain.Customers.Customers, Data.Customer>()
                 .ForMember(a => a.Status, b => b.MapFrom(z => (int)z.custStatus));
-            Data.Customers customerToUpdate = _CustomersRepository.FindBy(x => x.CustomerID == CustomerID).FirstOrDefault();
+            Data.Customer customerToUpdate = _CustomersRepository.FindBy(x => x.CustomerID == CustomerID).FirstOrDefault();
             customerToUpdate.CustomerName = UpdateCustomer.CustomerName;
             customerToUpdate.CustomerHP = UpdateCustomer.CustomerHP;
             customerToUpdate.Status = (int)UpdateCustomer.custStatus;

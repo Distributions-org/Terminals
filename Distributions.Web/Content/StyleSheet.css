@@ -430,6 +430,9 @@ header .btn-info {
   .worker .selectDiv > button {
     margin: 0 15px 0 15px;
   }
+  .date-picker ul {
+    position: relative;
+  }
 }
 @media (max-width: 624px) {
   .worker select {
@@ -444,6 +447,9 @@ header .btn-info {
   }
   .worker .selectDiv > button:nth-child(1) {
     margin-left: 90px;
+  }
+  .date-picker ul {
+    position: relative;
   }
 }
 @media (max-width: 1200px) {

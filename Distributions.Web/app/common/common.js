@@ -47,10 +47,13 @@
             serviceCallPreloader: serviceCallPreloader,
             cache: cache,
             localStorage: localStorage,
-            getManagerDetails: getManagerDetails
+            getManagerDetails: getManagerDetails,
+            getVit:getVit
         };
 
         return service;
+
+       
 
         function activateController(promises, controllerId) {
             return $q.all(promises).then(function (eventArgs) {
@@ -159,6 +162,15 @@
 
         function textContains(text, searchText) {
             return text && -1 !== text.toLowerCase().indexOf(searchText.toLowerCase());
+        }
+
+        function getVit(dateTime) {
+            return $http.get("/GetVit?dateTime=" + dateTime).then(function(response) {
+                    return response.data;
+                },
+                function() {
+                    return 17;
+                });
         }
     }
 })();

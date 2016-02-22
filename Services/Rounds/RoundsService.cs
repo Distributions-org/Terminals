@@ -30,7 +30,7 @@ namespace Services
         private readonly IRepository<Data.UsersTbl> _UsersRepository;
         private readonly IRepository<Data.RoundsTbl> _RoundsRepository;
         private readonly IRepository<Data.Product> _ProductsRepository;
-        private readonly IRepository<Data.Customers> _CustomersRepository;
+        private readonly IRepository<Data.Customer> _CustomersRepository;
         private readonly IRepository<ProductCustomerTbl> _ProductCustomerRepository;
         private readonly IRepository<RoundsUserTbl> _RoundsUserRepository;
         private readonly IRepository<RoundsCustomerTbl> _RoundsCustomerRepository;
@@ -39,7 +39,7 @@ namespace Services
         private readonly IUserService _userService;
         private readonly ICustomerService _customerService;
 
-        public RoundsService(IRepository<Data.RoundsTbl> RoundsRepository, IRepository<Data.Customers> CustomersRepository,
+        public RoundsService(IRepository<Data.RoundsTbl> RoundsRepository, IRepository<Data.Customer> CustomersRepository,
             IRepository<ProductCustomerTbl> ProductCustomerRepository, IRepository<Data.Product> ProductsRepository
             , IRepository<Data.RoundsUserTbl> RoundsUserRepository,
             IRepository<Data.RoundsCustomerTbl> RoundsCustomerRepository, IRepository<RoundsCustomerProductTbl> RoundsCustomerProductRepository,
@@ -429,7 +429,7 @@ namespace Services
 
         private void MapCustomer()
         {
-            Mapper.CreateMap<Core.Domain.Customers.Customers, Data.Customers>()
+            Mapper.CreateMap<Core.Domain.Customers.Customers, Data.Customer>()
                 .ForMember(a => a.Status, b => b.MapFrom(z => (int)z.custStatus));
         }
 

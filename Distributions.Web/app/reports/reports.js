@@ -49,7 +49,7 @@
         vm.totalAmount = 0;
         vm.totalDeliveredAmount = 0;
         vm.savePrc = savePrc;
-        vm.tax = 17;
+        vm.tax;
         vm.col = 25;
         vm.margin = 0;
         vm.calculateStyle = calculateStyle;
@@ -134,6 +134,7 @@
                 toggleMin();
                 getRounds();
                 getManagerDetails();
+               
             }) ];
             common.activateController([promises], controllerId)
                 .then(function () {
@@ -143,6 +144,12 @@
                         vm.isBusy(true);
                     }
                 });
+        }
+
+        function getVit(date) {
+            common.getVit(date).then(function (data) {
+                vm.tax = data;
+            });
         }
 
         function isAdminRole() {
@@ -256,7 +263,7 @@
             vm.isBusy(true);
             var sdate = common.convertDate(vm.stratDate);//.toISOString().slice(0, 10);
             var edate = common.convertDate(vm.endDate);//.toISOString().slice(0, 10);
-          
+            getVit(sdate);
             //var model = {
             //    ProductIDs: _.pluck(vm.productsCustomer, 'ProductCustomerID'),
             //    CustomerId: vm.customerSelected.CustomerID,

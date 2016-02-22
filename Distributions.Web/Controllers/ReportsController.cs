@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Distributions.Web.Authorize;
@@ -47,6 +48,14 @@ namespace Distributions.Web.Controllers
                  return Request.CreateResponse(HttpStatusCode.OK, result);
              }
              return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
+         }
+
+         [Route("GetVit")]
+         [HttpGet]
+         public HttpResponseMessage GetVit(DateTime dateTime)
+         {
+             var result = _reportsService.GetVit(dateTime);
+             return Request.CreateResponse(HttpStatusCode.OK, result);
          }
         
     }

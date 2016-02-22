@@ -98,10 +98,7 @@
     <Compile Include="AspNetUserLogin.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
-    <Compile Include="Customers.cs">
-      <DependentUpon>Terminals.tt</DependentUpon>
-    </Compile>
-    <Compile Include="C__MigrationHistory.cs">
+    <Compile Include="Customer.cs">
       <DependentUpon>Terminals.tt</DependentUpon>
     </Compile>
     <Compile Include="ManagersTbl.cs">
