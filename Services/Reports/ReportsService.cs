@@ -81,26 +81,30 @@ namespace Services
                     int RoundID = _RoundsCustomerRepository.FindBy(x => x.RoundsCustomersID == roundcustomerproduct.RoundsCustomersID).FirstOrDefault().RoundsID.Value;
                     newproductCustomerReport.currentDate = _RoundsRepository.FindBy(x => x.RoundsID == RoundID).FirstOrDefault().RoundDate.Value;
                     customerReport.Cost = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).OrderBy(x => x.PriceDate).FirstOrDefault().Price.Value;
-                    if (roundcustomerproduct.Amount < 0)
+                    List<ProductCustomerPriceTbl> allPRices = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).ToList();
+                    if (allPRices.Count > 0)
                     {
-                        newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
-                        newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
-                        customerReport.TotalSum -= roundcustomerproduct.Amount.Value * customerReport.Cost;
-                        customerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
+                        customerReport.Cost = allPRices.OrderByDescending(x => x.PriceDate).FirstOrDefault().Price.Value;
+                        if (roundcustomerproduct.Amount < 0)
+                        {
+                            newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
+                            newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
+                            customerReport.TotalSum -= roundcustomerproduct.Amount.Value * customerReport.Cost;
+                            customerReport.SumOfProducts -= roundcustomerproduct.Amount.Value;
+                        }
+                        else
+                        {
+                            newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
+                            newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
+                            customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
+                            customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
+                        }
+                        if (newproductCustomerReport.DelieverySent != 0 || newproductCustomerReport.DelieveryTaken != 0)
+                        {
+                            customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
+                            customerReports.Add(customerReport);
+                        }
                     }
-                    else
-                    {
-                        newproductCustomerReport.DelieverySent = roundcustomerproduct.Amount.Value;
-                        newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;
-                        customerReport.TotalSum += roundcustomerproduct.Amount.Value * customerReport.Cost;
-                        customerReport.SumOfProducts += roundcustomerproduct.Amount.Value;
-                    }
-                    if (newproductCustomerReport.DelieverySent != 0 || newproductCustomerReport.DelieveryTaken != 0)
-                    {
-                        customerReport.AllCustomerProductReports.Add(newproductCustomerReport);
-                        customerReports.Add(customerReport);
-                    }
-
                 }
                 else
                 {
@@ -126,6 +130,8 @@ namespace Services
                             continue;
 
                         customerReport.Cost = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).OrderBy(x => x.PriceDate).FirstOrDefault().Price.Value;
+                        List<ProductCustomerPriceTbl> allPRices = _ProductCustomerPriceRepository.FindBy(x => x.ProductCustomerID == pct.ProductCustomerID && x.PriceDate < newproductCustomerReport.currentDate).ToList();
+                        customerReport.Cost = allPRices.OrderByDescending(x => x.PriceDate).FirstOrDefault().Price.Value;
                         if (roundcustomerproduct.Amount < 0)
                         {
                             newproductCustomerReport.DelieveryTaken = roundcustomerproduct.DelieveredAmount.Value;

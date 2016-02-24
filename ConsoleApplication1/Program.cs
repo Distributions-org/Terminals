@@ -21,17 +21,13 @@ namespace Console.Test
 
             var reportService = kernal.Get<IReportsService>();
             List<int> ProductIds = new List<int>();
-            ProductIds.Add(10);
-            ProductIds.Add(11);
-            ProductIds.Add(12);
-            ProductIds.Add(13);
-            ProductIds.Add(14);
-            ProductIds.Add(15);
-            ProductIds.Add(16);
-            //reportService.GetCustomerProductsReports(ProductIds, 7, 2015, 4, 2015, 5);
-            double vit = reportService.GetVit((DateTime.Now.AddYears(-1)));
+            ProductIds.Add(41);
+            DateTime StartDate = new DateTime(2015, 6, 1);
+            DateTime EndDate = new DateTime(2015, 12, 1);
+            reportService.GetCustomerProductsReports(ProductIds, 93, StartDate, EndDate);
+            //double vit = reportService.GetVit((DateTime.Now.AddYears(-1)));
 
-            reportService.SetNewVit(19.0);
+            //reportService.SetNewVit(19.0);
             //var userService = kernal.Get<IUserService>();
 
             //User NewUser = new User{FirstName = "Oren",LastName = "Naftaly", Email = "Naftalywork@gmail.com",Password = "orenn1",RoleID = Core.Enums.UserRoles.userRoles.admin};

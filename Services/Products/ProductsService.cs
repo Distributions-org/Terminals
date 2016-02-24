@@ -78,6 +78,7 @@ namespace Services
             ProductCustomerPriceTbl currentPrice = new ProductCustomerPriceTbl();
             currentPrice.ProductCustomerID = current.ProductCustomerID;
             currentPrice.Price = updateProduct.Cost;
+            currentPrice.PriceDate = DateTime.Now;
             return _ProductCustomerPriceRepository.Add(currentPrice);
         }
 
