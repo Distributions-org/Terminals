@@ -453,7 +453,7 @@ header .btn-info {
   }
 }
 @media (max-width: 1200px) {
-  .invoice .invoices button {
+  .invoice .invoices .fillter {
     margin-top: 30px;
   }
 }

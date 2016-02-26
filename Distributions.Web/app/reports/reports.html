@@ -110,15 +110,15 @@
                                             </tr>
                                             <tr>
                                                 <td>סיכום</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.SumOfProductsSent - report.SumOfProductsTakens }}</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{::report.SumOfProductsSent - report.SumOfProductsTakens }}</td>
                                             </tr>
                                             <tr>
                                                 <td>מחיר</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.Cost | currency:""}}</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{::report.Cost | currency:""}}</td>
                                             </tr>
                                             <tr>
                                                 <td>סה"כ</td>
-                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{report.TotalSum | currency:undefined:0 }}</td>
+                                                <td class="text-center" data-ng-repeat="report in vm.report.slice((n*vm.col),((n+1)*vm.col)) | orderBy:'ProductName' as filtered_report track by report.ProductID">{{::report.TotalSum | currency:undefined:0 }}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
