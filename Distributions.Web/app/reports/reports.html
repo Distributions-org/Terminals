@@ -268,8 +268,9 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <label>בחר סבב:</label>
-                                <select class="form-control" ng-model="vm.reportCountsRoundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.allRounds | orderBy:'RoundDate':true">
-                                    <option value="">סבב</option>
+                               
+                                <select multiple class="form-control" ng-model="vm.reportCountsRoundSelected" ng-options="round.RoundName+' '+(round.RoundDate | date:'dd-MM-yyyy') for round in vm.allRounds | orderBy:'RoundDate':true">
+                                    <!--<option value="">סבב</option>-->
                                 </select>
                             </div>
                             <div class="col-sm-1">
@@ -278,7 +279,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <report-counts round="vm.reportCounts" managerdetails="vm.managerDetails"></report-counts>
+                                <report-counts rounds="vm.reportCounts" managerdetails="vm.managerDetails"></report-counts>
                             </div>
                         </div>
                     </div>

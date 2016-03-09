@@ -323,7 +323,7 @@
         var directive = {
             restrict: 'E',
             scope: {
-                round: '=round',
+                rounds: '=rounds',
                 products: '@',
                 printReportCount: '&',
                 managerdetails: '=managerdetails'
@@ -332,10 +332,18 @@
             link: link
         }
         function link(scope, element, attrs) {
-            scope.$watch("round", function () {
+            scope.$watch("rounds", function () {
                 //console.log(scope.round)
-                if (scope.round.custRound) {
-                    scope.products = getProducts(scope.round.custRound);
+                
+                
+                if (scope.rounds.length > 0) {
+                    _.each(scope.rounds, function (round) {
+                        round.arrProducts = [];
+                        var prod = getProducts(round.custRound);
+                        round.arrProducts.push(prod)
+                    });
+                    
+                    //scope.products = 
                 }
                 scope.$watch('printReportCount', function() {
                     scope.printReportCount = printReportCount;
@@ -348,42 +356,46 @@
         }
         
         function getProducts(custRound) {
-            var products = [],counts = [],productsPager = [],tmpProducts = [];
+            var products = [], arrProducts=[], counts = [], countsArr = [], productsPager = [], productsPagerArr = [], tmpProducts = [], groupsProducts = [];
             if (custRound.length > 0) {
                 _.each(custRound, function (custr) {
                     _.each(custr.roundcustomerProducts, function(product) {
                         var map = { productName: product.CustomerRoundProduct.ProductName, amount: product.Amount };
                         if (map.amount != 0) {
-                            products.push(map);
+                            arrProducts.push(map);
                         }
                     });
-                });
-                var groupProducts = _.groupBy(products, function(item) {
-                    return item.productName;
+                    //arrProducts.push(products);
+                    //products = [];
                 });
                 
-                _.each(groupProducts, function(item, index) {
-                    counts.push({
-                        productName: index,
-                        count: _.reduce(item, function (memo, item) {
-                            return memo + item.amount;
-                        }, 0)
+                var groupProducts = _.groupBy(arrProducts, function (item) {
+                        return item.productName;
                     });
-                });
-                var sortProducts = _.sortBy(counts, 'productName');
-                _.each(sortProducts, function (item, index) {
-                    if (index % 20 == 0) {
-                        if (tmpProducts.length == 20) {
+                
+                    _.each(groupProducts, function(item, index) {
+                        counts.push({
+                            productName: index,
+                            count: _.reduce(item, function(memo, item) {
+                                return memo + item.amount;
+                            }, 0)
+                        });
+                    });
+               
+                    var sortProducts = _.sortBy(counts, 'productName');
+                    _.each(sortProducts, function (item, index) {
+                        if (index % 20 == 0) {
+                            if (tmpProducts.length == 20) {
+                                productsPager.push(tmpProducts);
+                            }
+                            tmpProducts = [];
+                        }
+                        tmpProducts.push(item);
+                        if (index == sortProducts.length - 1) {
                             productsPager.push(tmpProducts);
                         }
-                         tmpProducts = [];
-                    }
-                    tmpProducts.push(item);
-                    if (index == sortProducts.length - 1) {
-                        productsPager.push(tmpProducts);
-                    }
-                });
-                return productsPager; 
+                    });
+                    return productsPager;
             }
         }
         return directive;
