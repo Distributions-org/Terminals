@@ -210,10 +210,10 @@
 
         }
 
-        function createReportCounts(round) {
-            if (round != null) {
+        function createReportCounts(rounds) {
+            if (rounds != null) {
                 // vm.customersRound = round.custRound;
-                vm.reportCounts = round;
+                vm.reportCounts = rounds;
             } else {
                 logError("לא נבחר סבב!!!");
             }
