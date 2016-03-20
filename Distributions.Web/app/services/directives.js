@@ -206,12 +206,12 @@
                 restrict: "E",
                 scope: {
                     date: "=",
-                    onDateSelected:"&"
+                    onDateSelected: "&"
                 },
                 templateUrl: "/app/layout/datetime.html",
                 controller: dateCtrl,
                 controllerAs: "vm",
-                bindToController:true
+                bindToController: true
             }
 
             return directive;
@@ -221,7 +221,7 @@
                 vm.dt = today();
                 vm.dateChange = dateChange;
                 vm.isOpen = false;
-////date picker
+                ////date picker
 
                 function dateChange() {
                     vm.onDateSelected({ date: vm.dt });
@@ -237,21 +237,21 @@
                 vm.format = vm.formats[3];
 
                 // Disable weekend selection
-                vm.disabled = function(date, mode) {
+                vm.disabled = function (date, mode) {
                     return false; //(mode === 'day' && (date.getDay() === 5 || date.getDay() === 6));
                 };
 
-                vm.open = function($event) {
+                vm.open = function ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                     vm.isOpen = true;
 
                 };
-                vm.opened = function($event) {
+                vm.opened = function ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 };
-               
+
                 vm.dateOptions = {
                     formatYear: 'yyyy',
                     startingDay: 0,
@@ -319,7 +319,7 @@
         };
     }]);
 
-    app.directive('reportCounts',['print', function (print) {
+    app.directive('reportCounts', ['print', function (print) {
         var directive = {
             restrict: 'E',
             scope: {
@@ -334,69 +334,75 @@
         function link(scope, element, attrs) {
             scope.$watch("rounds", function () {
                 //console.log(scope.round)
-                
-                
+
+
+                //if (scope.rounds.length > 0) {
+                //    _.each(scope.rounds, function (round) {
+                //        round.arrProducts = [];
+                //        var prod = getProducts(round.custRound);
+                //        round.arrProducts.push(prod)
+                //    });
+
+                //    //scope.products = 
+                //}
+
                 if (scope.rounds.length > 0) {
-                    _.each(scope.rounds, function (round) {
-                        round.arrProducts = [];
-                        var prod = getProducts(round.custRound);
-                        round.arrProducts.push(prod)
-                    });
-                    
-                    //scope.products = 
+                    scope.products = getProducts(scope.rounds);
                 }
-                scope.$watch('printReportCount', function() {
+
+                scope.$watch('printReportCount', function () {
                     scope.printReportCount = printReportCount;
                 });
             });
         }
 
         function printReportCount(managerName) {
-            print.printThisReportCount('print-report-counts',managerName);
+            print.printThisReportCount('print-report-counts', managerName);
         }
-        
-        function getProducts(custRound) {
-            var products = [], arrProducts=[], counts = [], countsArr = [], productsPager = [], productsPagerArr = [], tmpProducts = [], groupsProducts = [];
-            if (custRound.length > 0) {
-                _.each(custRound, function (custr) {
-                    _.each(custr.roundcustomerProducts, function(product) {
-                        var map = { productName: product.CustomerRoundProduct.ProductName, amount: product.Amount };
-                        if (map.amount != 0) {
-                            arrProducts.push(map);
-                        }
-                    });
-                    //arrProducts.push(products);
-                    //products = [];
-                });
-                
-                var groupProducts = _.groupBy(arrProducts, function (item) {
-                        return item.productName;
-                    });
-                
-                    _.each(groupProducts, function(item, index) {
-                        counts.push({
-                            productName: index,
-                            count: _.reduce(item, function(memo, item) {
-                                return memo + item.amount;
-                            }, 0)
-                        });
-                    });
-               
-                    var sortProducts = _.sortBy(counts, 'productName');
-                    _.each(sortProducts, function (item, index) {
-                        if (index % 20 == 0) {
-                            if (tmpProducts.length == 20) {
-                                productsPager.push(tmpProducts);
+
+        function getProducts(rounds) {
+            var products = [], arrProducts = [], counts = [], countsArr = [], productsPager = [], productsPagerArr = [], tmpProducts = [], groupsProducts = [];
+            _.each(rounds, function (round) {
+                if (round.custRound.length > 0) {
+                    _.each(round.custRound, function (custr) {
+                        _.each(custr.roundcustomerProducts, function (product) {
+                            var map = { productName: product.CustomerRoundProduct.ProductName, amount: product.Amount };
+                            if (map.amount != 0) {
+                                arrProducts.push(map);
                             }
-                            tmpProducts = [];
-                        }
-                        tmpProducts.push(item);
-                        if (index == sortProducts.length - 1) {
-                            productsPager.push(tmpProducts);
-                        }
+                        });
+                        //arrProducts.push(products);
+                        //products = [];
                     });
-                    return productsPager;
-            }
+                }
+            });
+            var groupProducts = _.groupBy(arrProducts, function (item) {
+                return item.productName;
+            });
+
+            _.each(groupProducts, function (item, index) {
+                counts.push({
+                    productName: index,
+                    count: _.reduce(item, function (memo, item) {
+                        return memo + item.amount;
+                    }, 0)
+                });
+            });
+
+            var sortProducts = _.sortBy(counts, 'productName');
+            _.each(sortProducts, function (item, index) {
+                if (index % 20 == 0) {
+                    if (tmpProducts.length == 20) {
+                        productsPager.push(tmpProducts);
+                    }
+                    tmpProducts = [];
+                }
+                tmpProducts.push(item);
+                if (index == sortProducts.length - 1) {
+                    productsPager.push(tmpProducts);
+                }
+            });
+            return productsPager;
         }
         return directive;
     }]
