@@ -61,6 +61,10 @@
 .date-picker .dropdown-menu table {
   /*margin-left: 8px;*/
 }
+.date-picker .dropdown-menu .btn {
+  margin-left: 0;
+  margin-right: 0;
+}
 .glyphicon-chevron-right {
   -ms-transform: rotate(180deg);
   /* IE 9 */
