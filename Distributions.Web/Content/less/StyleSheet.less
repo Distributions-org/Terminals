@@ -83,7 +83,7 @@
     text-align: left;
 
     table {
-        margin-left: 8px;
+        /*margin-left: 8px;*/
     }
 }
 
@@ -133,20 +133,7 @@
     }
 }
 
-@media (max-width:768) {
-}
 
-@media (min-width: 992px) {
-    .container-fluid {
-        width: 970px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .container-fluid {
-        width: 1170px;
-    }
-}
 
 .validation-summary-errors {
     > div {
@@ -402,12 +389,7 @@ div {
     }*/
 }
 
-@media (max-width: 767px) {
-    .mainbar {
-        margin-left: 0;
-        margin-right: 0;
-    }
-}
+
 
 .workerTbl {
     tr {
@@ -627,7 +609,7 @@ header {
 
     .date-picker {
         ul {
-            position: relative;
+            /*position: relative;*/
         }
     }
 }
@@ -654,7 +636,7 @@ header {
 
     .date-picker {
         ul {
-            position: relative;
+            /*position: relative;*/
         }
     }
 }
@@ -664,6 +646,91 @@ header {
         .invoices {
             .fillter {
                 margin-top: 30px;
+            }
+        }
+    }
+}
+
+@media (min-width: 992px) {
+    .container-fluid {
+        width: 970px;
+    }
+
+    .dropdown-menu {
+        table {
+            .btn {
+                margin-left: 0;
+                margin-right: 0;
+                margin: 0;
+                width: 3em;
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .container-fluid {
+        width: 1170px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        margin-left: 0;
+        margin-right: 0;
+
+        .mainbar {
+            margin-left: 0;
+            margin-right: 0;
+
+            .matter {
+                padding-left: 20px;
+            }
+        }
+         .date-picker {
+                   width:100%;
+                }
+        .dropdown-menu {
+            table {
+                .btn {
+                    margin-left: 0;
+                    margin-right: 0;
+                    margin: 0;
+                    width: 3em;
+                }
+            }
+        }          
+        .report {
+            .col-sm-3 {
+                width: 100% !important;
+                .date-picker {
+                    min-width: 72%;
+                }
+            }
+
+            .col-sm-2 {
+                width: 100% !important;
+            }
+
+            .date {
+                .date-picker {
+                    min-width: 72%;
+                }
+            }
+
+            .btn {
+                width: 0;
+                margin: 0;
+
+                &.btn-date {
+                    margin: 0;
+                    padding: 6px 10px 8px 10px;
+                    position: absolute;
+                    top: 1px;
+                    left: 17px;
+                    z-index: 55;
+                    width: 35px;
+                }
             }
         }
     }

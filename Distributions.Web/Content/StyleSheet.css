@@ -59,7 +59,7 @@
   text-align: left;
 }
 .date-picker .dropdown-menu table {
-  margin-left: 8px;
+  /*margin-left: 8px;*/
 }
 .glyphicon-chevron-right {
   -ms-transform: rotate(180deg);
@@ -99,16 +99,6 @@
   }
   .report select {
     margin-bottom: 10px;
-  }
-}
-@media (min-width: 992px) {
-  .container-fluid {
-    width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  .container-fluid {
-    width: 1170px;
   }
 }
 .validation-summary-errors > div {
@@ -281,12 +271,6 @@ div.scroll {
   max-height: 500px;
   overflow-y: auto;
 }
-@media (max-width: 767px) {
-  .mainbar {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
 .workerTbl tr td {
   width: 20%;
 }
@@ -431,7 +415,7 @@ header .btn-info {
     margin: 0 15px 0 15px;
   }
   .date-picker ul {
-    position: relative;
+    /*position: relative;*/
   }
 }
 @media (max-width: 624px) {
@@ -449,12 +433,75 @@ header .btn-info {
     margin-left: 90px;
   }
   .date-picker ul {
-    position: relative;
+    /*position: relative;*/
   }
 }
 @media (max-width: 1200px) {
   .invoice .invoices .fillter {
     margin-top: 30px;
+  }
+}
+@media (min-width: 992px) {
+  .container-fluid {
+    width: 970px;
+  }
+  .dropdown-menu table .btn {
+    margin-left: 0;
+    margin-right: 0;
+    margin: 0;
+    width: 3em;
+  }
+}
+@media (min-width: 1200px) {
+  .container-fluid {
+    width: 1170px;
+  }
+}
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .content .mainbar {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .content .mainbar .matter {
+    padding-left: 20px;
+  }
+  .content .date-picker {
+    width: 100%;
+  }
+  .content .dropdown-menu table .btn {
+    margin-left: 0;
+    margin-right: 0;
+    margin: 0;
+    width: 3em;
+  }
+  .content .report .col-sm-3 {
+    width: 100% !important;
+  }
+  .content .report .col-sm-3 .date-picker {
+    min-width: 72%;
+  }
+  .content .report .col-sm-2 {
+    width: 100% !important;
+  }
+  .content .report .date .date-picker {
+    min-width: 72%;
+  }
+  .content .report .btn {
+    width: 0;
+    margin: 0;
+  }
+  .content .report .btn.btn-date {
+    margin: 0;
+    padding: 6px 10px 8px 10px;
+    position: absolute;
+    top: 1px;
+    left: 17px;
+    z-index: 55;
+    width: 35px;
   }
 }
 /*.ui-grid-column-menu-button
